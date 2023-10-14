@@ -2,18 +2,11 @@ from django.db import models
 import datetime
 
 
-import os
-
-def get_file_path(request, filename):
-    orginal_filename = filename
-    nowTime = datetime.datetime.now().strftime('%Y%m%d%H:%H::%S')
-    filename = "%s%s" % (nowTime, orginal_filename)
-    return os.path.join('uploads/', filename)
 
 class Category(models.Model):
     slug = models.CharField(max_length=150, null=False, blank=False)
     name = models.CharField(max_length=150, null=False, blank=False)
-    image = models.ImageField(upload_to=get_file_path, null=True, blank=True )
+    image = models.ImageField(upload_to='category', null=True, blank=True )
     description = models.TextField(max_length=500, null=False, blank=False)
     status = models.BooleanField(default=False, help_text="0=default, 1=Hidden")
     trending = models.BooleanField(default=False, help_text="0=default, 1=Trending")
@@ -29,7 +22,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)    
     slug = models.CharField(max_length=150, null=False, blank=False)
     name = models.CharField(max_length=150, null=False, blank=False)
-    Product_image = models.ImageField(upload_to=get_file_path, null=True, blank=True )
+    product_image = models.ImageField(upload_to='product', null=True, blank=True )
     small_description = models.CharField(max_length=250, null=False, blank=False)
     quantity = models.IntegerField(null=False, blank=False) 
     description = models.TextField(max_length=500, null=False, blank=False)

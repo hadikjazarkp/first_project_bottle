@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'Usbot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'usbot', 
+        'NAME': 'usbot1', 
         'USER': 'ammu',
         'PASSWORD': '123',
         'HOST': '127.0.0.1', 
@@ -136,13 +136,13 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-MIDEA_URL = '/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
-MIDEA_ROOT = BASE_DIR / '/static'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 
 TAILWIND_APP_NAME = 'theme'
 
