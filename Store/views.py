@@ -1,34 +1,54 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
+
 
 
 def home(request):
     return render(request,"store/index.html")
 
 
+
+
+
+
 def shop(request):
-    category = Category.objects.filter(status=0)
+    category = Category.objects.all()
     context = {'category':category}
     return render(request, "store/shop.html", context)
 
 
+
+
+
 def shopview(request,slug):
-    
+    print(slug)
     template="store/products/index.html"
     
-    categories=Category.objects.get(slug=slug)
-    products=Product.objects.filter(category=categories)
+    category=Category.objects.get(slug=slug)
+    products=Product.objects.filter(category=category)
     context={
+        "category":category,
         "products":products,
     }
     return render(request,template,context)
-    
-    # if(Category.objects.filter(slug=slug, status=0)):
-    #     products = Product.objects.filter(category__slug=slug)
-    #     category_name = Category.objects.filter(slug=slug).first()
-    #     context = {'products': products, 'category_name':category_name}
-    #     return render(request, "store/products/index.html", context)
-    # else:
-    #     messages.warning(request, "No search category found")
-    #     return redirect('shop')
+
+
+
+
+
+
+def Productview(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    context = {'product': product}
+    return render(request, "store/products/view.html", context)   
+
+  
+
+        
+        
+        
+        
+        
+        

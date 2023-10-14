@@ -9,7 +9,9 @@
     <div class="container mx-auto text-white">
         <a href="{% url 'home' %}"> HOME /</a>
         <a href="{% url 'shop' %}"> SHOP /</a>
-        <a href="{% url 'shopview'  products.category.slug %}"> {{ 'category.name '}}</a>
+        {% comment %} <a href="{% url 'shopview' slug=products.category.slug %}"> {{ products.category.name }}</a> {% endcomment %}
+        {{ category}}
+
     </div>
 </div>
      
@@ -17,12 +19,13 @@
 <div class="container mx-auto">
     <div class="flex flex-wrap">
         <div class="w-full">
-            <h1 class="text-2xl font-bold mb-4">{{ products.category.name }}</h1>
+            <h1 class="text-2xl font-bold mb-4">{{ category }}</h1>
             <hr>
             <div class="flex flex-wrap">
                 {% for product in products %}
                 <div class="w-full md:w-1/4 p-2">
-                <a href="">
+                    {{product.slug}}
+                <a href="{% url 'productview' slug=product.slug %}">
                     <div class="bg-white shadow-lg rounded-lg p-4">
                         <div class="category-images">
                             

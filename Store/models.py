@@ -1,10 +1,12 @@
 from django.db import models
 import datetime
+from django.utils.text import slugify
 
 
 
 class Category(models.Model):
-    slug = models.CharField(max_length=150, null=False, blank=False)
+    
+    slug = models.SlugField(max_length=150, unique=True, null=True, blank=True)
     name = models.CharField(max_length=150, null=False, blank=False)
     image = models.ImageField(upload_to='category', null=True, blank=True )
     description = models.TextField(max_length=500, null=False, blank=False)
@@ -15,12 +17,17 @@ class Category(models.Model):
     meta_description = models.TextField(max_length=500, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug=slugify(self.name)
+        super(Category, self).save(*args, **kwargs)    
+    
     def __str__(self):
         return self.name
     
 class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)    
-    slug = models.CharField(max_length=150, null=False, blank=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')    
+    slug = models.SlugField(max_length=150, null=True, unique=True,blank=True)
     name = models.CharField(max_length=150, null=False, blank=False)
     product_image = models.ImageField(upload_to='product', null=True, blank=True )
     small_description = models.CharField(max_length=250, null=False, blank=False)
@@ -35,6 +42,12 @@ class Product(models.Model):
     meta_keywords = models.CharField(max_length=150, null=False, blank=False)
     meta_description = models.TextField(max_length=500, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug=slugify(self.name)
+        super(Product, self).save(*args, **kwargs)    
+    
    
     
     def __str__(self):
