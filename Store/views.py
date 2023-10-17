@@ -22,7 +22,7 @@ def shop(request):
 
 
 
-def shopview(request,slug):
+def categoryview(request,slug):
     print(slug)
     template="store/products/index.html"
     
