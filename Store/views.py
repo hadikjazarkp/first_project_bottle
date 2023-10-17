@@ -48,7 +48,4 @@ def Productview(request, slug):
 
         
         
-        
-        
-        
-        
+ 

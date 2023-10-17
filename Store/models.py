@@ -3,6 +3,8 @@ import datetime
 from django.utils.text import slugify
 
 
+from django.contrib.auth.models import User
+
 
 class Category(models.Model):
     
@@ -53,4 +55,8 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-    
+
+
+
+
+
