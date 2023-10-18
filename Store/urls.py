@@ -10,5 +10,8 @@ urlpatterns = [
     path("category/<slug:slug>/", views.categoryview, name="categoryview"),
     path('product/<str:slug>/', views.Productview, name="productview"),
    
+   
     path('register/', authview.register, name="register"),
+    path('login/',authview.loginpage, name="loginpage"),
+    path('logout/', authview.logoutpage, name="logout"),
 ]
