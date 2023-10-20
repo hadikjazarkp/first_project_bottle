@@ -7,8 +7,8 @@ urlpatterns = [
      
     path("", views.home, name="home"),
     path("shop/", views.shop, name="shop"),
-    path("category/<slug:slug>/", views.categoryview, name="categoryview"),
-    path('product/<str:slug>/', views.Productview, name="productview"),
+    path("category/<slug:slug>/", views.category_view, name="category_view"),
+    path('sub_category/<str:slug>/', views.sub_category, name="sub_categoryw"),
    
    
     path('register/', authview.register, name="register"),

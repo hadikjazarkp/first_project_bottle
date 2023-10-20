@@ -66,7 +66,7 @@
                 {% if request.user.is_authenticated %}
                     <!-- Dropdown Button -->
                     <div class="dropdown">
-                        <button class="dropbtn">{{ request.user }}</button>
+                        <button class="dropbtn">{{ user.username }}</button>
                         <div class="dropdown-content">
                             <a href="#">Settings</a>
                             <a href="#">About</a>
@@ -74,12 +74,12 @@
                         </div>
                     </div>
                 {% else %}
-                    <li class="nav-item">
+                   <div>
                         <a class="nav-link" href="{% url 'loginpage' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
+                   </div>
+                    <div>
                         <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </li>
+                    </div>
                 {% endif %}
                 <!-- Cart -->
                 <div class="relative group">
@@ -160,7 +160,7 @@
     {% comment %}js quer{% endcomment %}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {% comment %}custom{% endcomment %}
-    <script src="{% static 'js/custom1.js' %}"></script>
+    
     
 
        

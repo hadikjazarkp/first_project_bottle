@@ -21,7 +21,7 @@
             <div class="flex flex-wrap">
                 {% for item in category %}
                 <div class="w-full md:w-1/4 p-2">
-                <a href="{% url 'categoryview' slug=item.slug %}">
+                <a href="{% url 'category_view' slug=item.slug %}">
                     <div class="bg-white shadow-lg rounded-lg p-4">
                         <div class="category-images">
                             <img src="{{ item.image.url }}" alt="Category image" class="w-full h-auto" />
