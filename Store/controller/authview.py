@@ -13,7 +13,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request,"Register Seccessfully! Login to Continue")
-            return redirect('login')
+            return redirect('loginpage')
     context = {'form':form}
     return render(request, "store/auth/register.html", context )
 

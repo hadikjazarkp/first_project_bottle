@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+from typing import Any
 from django.db import models
 import datetime
 from django.utils.text import slugify
@@ -8,57 +10,9 @@ from Store.manager import UserProfileManager
 
 
 
-# class Category(models.Model):
+class Main_Images(BaseModel):
+    cover_image = models.ImageField(upload_to='main_img/' )
     
-#     slug = models.SlugField(max_length=150, unique=True, null=True, blank=True)
-#     name = models.CharField(max_length=150, null=False, blank=False)
-#     image = models.ImageField(upload_to='category', null=True, blank=True )
-#     description = models.TextField(max_length=500, null=False, blank=False)
-#     status = models.BooleanField(default=False, help_text="0=default, 1=Hidden")
-#     trending = models.BooleanField(default=False, help_text="0=default, 1=Trending")
-#     meta_title = models.CharField(max_length=150, null=False, blank=False)
-#     meta_keywords = models.CharField(max_length=150, null=False, blank=False)
-#     meta_description = models.TextField(max_length=500, null=False, blank=False)
-#     created_at = models.DateTimeField(auto_now_add=True)
-    
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug=slugify(self.name)
-    #     super(Category, self).save(*args, **kwargs)    
-    
-    # def __str__(self):
-    #     return self.name
-    
-# class Product(models.Model):
-#     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')    
-#     slug = models.SlugField(max_length=150, null=True, unique=True,blank=True)
-#     name = models.CharField(max_length=150, null=False, blank=False)
-#     product_image = models.ImageField(upload_to='product', null=True, blank=True )
-#     small_description = models.CharField(max_length=250, null=False, blank=False)
-#     quantity = models.IntegerField(null=False, blank=False) 
-#     description = models.TextField(max_length=500, null=False, blank=False)
-#     orginal_price = models.FloatField(null=False, blank=False)
-#     selling_price = models.FloatField(null=False, blank=False)
-#     status = models.BooleanField(default=False, help_text="0=default, 1=Hidden")
-#     trending = models.BooleanField(default=False, help_text="0=default, 1=Trending")
-#     tag = models.CharField(max_length=150, null=False, blank=False)
-#     meta_title = models.CharField(max_length=150, null=False, blank=False)
-#     meta_keywords = models.CharField(max_length=150, null=False, blank=False)
-#     meta_description = models.TextField(max_length=500, null=False, blank=False)
-#     created_at = models.DateTimeField(auto_now_add=True)
-    
-#     def save(self, *args, **kwargs):
-#         if not self.slug:
-#             self.slug=slugify(self.name)
-#         super(Product, self).save(*args, **kwargs)    
-    
-   
-    
-#     def __str__(self):
-#         return self.name
-
-
-
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
@@ -97,6 +51,7 @@ class Category(BaseModel):
     name = models.CharField(max_length=150, )
     image = models.ImageField(upload_to='category/', null=True, blank=True )
     description = models.TextField(max_length=500, null=False, blank=False)
+   
     
     
     
@@ -112,7 +67,7 @@ class Category(BaseModel):
 class Sub_Category(BaseModel):
     
     name = models.CharField(max_length=150, unique=True)
-    category_id = models.ForeignKey(Category,on_delete=models.CASCADE, related_name="sub_categories")
+    category = models.ForeignKey(Category,on_delete=models.CASCADE, related_name="sub_categories")
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -125,7 +80,7 @@ class Sub_Category(BaseModel):
 class Product(BaseModel):
           
     description = models.TextField(max_length=500) 
-    sub_category_id = models.ForeignKey(Sub_Category,on_delete=models.CASCADE, related_name="products")
+    sub_category = models.ForeignKey(Sub_Category,on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=150, unique=True)
     
     def save(self, *args, **kwargs):
@@ -144,7 +99,7 @@ class Variant(BaseModel):
     ]
     
     
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
     orginal_price = models.FloatField()
     selling_price = models.FloatField()
     quantity = models.IntegerField()
