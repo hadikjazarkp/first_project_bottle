@@ -149,3 +149,15 @@ TAILWIND_APP_NAME = 'theme'
 
 
 AUTH_USER_MODEL = 'Store.UserProfile'
+
+
+# Email Verification
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_USE_TLS=True
+EMAIL_PORT=587
+EMAIL_HOST_USER='usbotbottle@gmail.com'
+EMAIL_HOST_PASSWORD='amny bqog bjyy ozmu'
+DEFAULT_FROM_EMAIL='usbotbottle@gmail.com'
+

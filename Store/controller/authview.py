@@ -1,7 +1,14 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from .email import *
+from Store.models import UserProfile
+from Store.forms import CustomUserForm
 
+from django.core.cache import cache
+import hashlib
+import random
+from django.views import View
 from Store.forms import CustomUserForm
 
 def register(request):
@@ -12,8 +19,17 @@ def register(request):
         form =CustomUserForm(request.POST)
         if form.is_valid():
             form.save()
+            otp = str(random.rendint(100000, 999999))
+            send_otyp_email(form.email, form.username, otp)
+            key = hashlib.sha256(form.email.encode()).hexdigest()
+            cache.set(
+                key,
+                {"email": form.email, "username": form.username, "password":form.password1, "otp": otp},
+                timeout=600,
+            )
             messages.success(request,"Register Seccessfully! Login to Continue")
-            return redirect('loginpage')
+            return redirect('')
+        
     context = {'form':form}
     return render(request, "store/auth/register.html", context )
 
