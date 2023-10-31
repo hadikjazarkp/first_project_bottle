@@ -13,7 +13,8 @@ urlpatterns = [
     
    
     path('register/', authview.register, name="register"),
-    path('verify/<str:key/',authview.VerifyOtpView.as_view(), name='otp'),
+    path('verify/<str:key>/',authview.VerifyOtpView.as_view(),name='otp'),
+    path('resend_otp/<str:key>/', authview.ResendOTP.as_view(), name='resend_otp'),
     path('login/',authview.loginpage, name="loginpage"),
     path('logout/', authview.logoutpage, name="logout"),
 ]

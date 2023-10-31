@@ -7,10 +7,10 @@ from django.conf import settings
 
 
 
-def send_otyp_email(email, name, otp):
+def send_otp_email(email, username, otp):
     
     html_content = render_to_string(
-        'emailOTP.html', {'username': name, 'otp': otp})
+        'store/auth/emailOTP.html', {'username': username, 'otp': otp})
     
     subject = 'Account verification OTP'
     send_mail(subject, '',settings.EMAIL_HOST_USER,

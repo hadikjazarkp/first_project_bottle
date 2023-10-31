@@ -40,7 +40,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         super(UserProfile, self).save(*args, **kwargs)    
     
     def __str__(self):
-        return self.name
+        return self.username
     
 
     

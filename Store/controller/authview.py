@@ -11,27 +11,89 @@ import random
 from django.views import View
 from Store.forms import CustomUserForm
 
+
+
+
+
+
+
 def register(request):
     if request.user.is_authenticated:
         return redirect('home')
-    form =CustomUserForm()
+    
+    form = CustomUserForm()
+
     if request.method == 'POST':
-        form =CustomUserForm(request.POST)
+        form = CustomUserForm(request.POST)
         if form.is_valid():
-            form.save()
-            otp = str(random.rendint(100000, 999999))
-            send_otyp_email(form.email, form.username, otp)
-            key = hashlib.sha256(form.email.encode()).hexdigest()
+            # Save the user
+            user = form.save()
+
+            # Send success message and OTP email
+            messages.success(request, "Registered Successfully! Login to Continue")
+            otp = str(random.randint(100000, 999999))
+            send_otp_email(user.email, user.username, otp)
+
+            # Generate cache key and store registration data
+            key = hashlib.sha256(user.email.encode()).hexdigest()
             cache.set(
                 key,
-                {"email": form.email, "username": form.username, "password":form.password1, "otp": otp},
-                timeout=600,
+                {"email": user.email, "username": user.username, "password": form.cleaned_data['password1'], "otp": otp},
+                timeout=600
             )
-            messages.success(request,"Register Seccessfully! Login to Continue")
-            return redirect('')
-        
-    context = {'form':form}
+
+            # Redirect to OTP verification
+            return redirect("otp", key=key) 
+
+    context = {'form': form}
     return render(request, "store/auth/register.html", context )
+
+class VerifyOtpView(View):
+    def get(self, request, key):
+        # Render the OTP verification form
+        return render(request, "store/auth/otp.html", {"key": key})
+
+    def post(self, request, key):
+        receivedotp = request.POST.get("otp")
+
+        signup_data = cache.get(key)
+        print(signup_data)
+        if not signup_data:
+            messages.warning(request, "OTP expired or invalid")
+            return redirect("otp", key=key)
+        otp = signup_data.get("otp")
+        username = signup_data.get("username")
+        email = signup_data.get("email")
+        password = signup_data.get("password")
+        print(receivedotp, otp)
+        if receivedotp != otp:
+            messages.warning(request, "OTP mismatch")
+            return redirect("otp", key=key)
+
+        user = UserProfile.objects.create_user(
+            username=username, email=email, password=password
+        )
+        user.save()
+        cache.delete(key)
+        return redirect("login")
+
+
+
+class ResendOTP(View):
+    def get(self, request, key):
+        signup_data = cache.get(key)
+        if signup_data:
+            email = signup_data.get("email")
+            username = signup_data.get("username")
+            otp = str(random.randint(100000, 999999))
+            print(otp)
+            send_otp_email(email, username, otp)
+            signup_data["otp"] = otp
+            existing_timeout = signup_data.get("timeout", None)
+            cache.set(key, signup_data, timeout=existing_timeout)
+            return redirect("otp", key=key)
+        return redirect("signup")
+
 
 def loginpage(request):
     if request.user.is_authenticated:
