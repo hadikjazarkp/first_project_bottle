@@ -17,36 +17,39 @@ from Store.forms import CustomUserForm
 
 
 
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('home')
+class Register(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            messages.success(request, "Already Registered! Login to Continue")
+            return redirect('home')
+        else:
     
-    form = CustomUserForm()
+            form = CustomUserForm()
+            context = {'form': form}
+            return render(request, "store/auth/register.html", context )
+    def post(self, request):
 
-    if request.method == 'POST':
+    # if request.method == 'POST':
         form = CustomUserForm(request.POST)
         if form.is_valid():
-            # Save the user
-            user = form.save()
-
             # Send success message and OTP email
             messages.success(request, "Registered Successfully! Login to Continue")
             otp = str(random.randint(100000, 999999))
-            send_otp_email(user.email, user.username, otp)
+            send_otp_email(form.cleaned_data['email'], form.cleaned_data['username'], otp)
 
             # Generate cache key and store registration data
-            key = hashlib.sha256(user.email.encode()).hexdigest()
+            key = hashlib.sha256(form.cleaned_data['email'].encode()).hexdigest()
             cache.set(
                 key,
-                {"email": user.email, "username": user.username, "password": form.cleaned_data['password1'], "otp": otp},
+                {"email": form.cleaned_data['email'], "username": form.cleaned_data['username'], "password": form.cleaned_data['password1'], "otp": otp},
                 timeout=600
             )
 
             # Redirect to OTP verification
-            return redirect("otp", key=key) 
+            return redirect("otp", key=key)
+        return redirect('register')
 
-    context = {'form': form}
-    return render(request, "store/auth/register.html", context )
+
 
 class VerifyOtpView(View):
     def get(self, request, key):
@@ -75,7 +78,7 @@ class VerifyOtpView(View):
         )
         user.save()
         cache.delete(key)
-        return redirect("login")
+        return redirect("loginpage")
 
 
 
@@ -92,33 +95,39 @@ class ResendOTP(View):
             existing_timeout = signup_data.get("timeout", None)
             cache.set(key, signup_data, timeout=existing_timeout)
             return redirect("otp", key=key)
-        return redirect("signup")
+        return redirect("register")
 
 
-def loginpage(request):
-    if request.user.is_authenticated:
-        messages.warning(request, "YOU are already logged in")
-        return redirect('home')
-    else: 
-        if request.method == 'POST':
-            email = request.POST.get('email')
-            passwd = request.POST.get('password')
+class SignIn(View):
+    def get(self, request):
+
+        if request.user.is_authenticated:
+            messages.warning(request, "YOU are already logged in")
+            return redirect('home')
+        else: 
+            return render(request, "store/auth/login.html")
         
-            user = authenticate(request, email=email, password=passwd)
-        
-            if user is not None:
-               login(request, user)
-               messages.success(request, "Logged in Successfully")
-               return redirect("home")
-            else:
-               messages.error(request, "Invalid Username or Password")
-        return render(request, "store/auth/login.html")
+    def post(self, request):
 
-def logoutpage(request):
-    if request.user.is_authenticated:
-        logout(request)
-        messages.success(request, "Logged out Successfully ")
-        return redirect("home")
+        # if request.method == 'POST':
+        email = request.POST.get('email')
+        passwd = request.POST.get('password')
+    
+        user = authenticate(request, email=email, password=passwd)
+    
+        if user is not None:
+            login(request, user)
+            messages.success(request, "Logged in Successfully")
+            return redirect("home")
+        else:
+            messages.error(request, "Invalid Username or Password")
+
+class Logoutpage(View):
+    def get (self, request):
+        if request.user.is_authenticated:
+            logout(request)
+            messages.success(request, "Logged out Successfully ")
+            return redirect("home")
     
            
     
