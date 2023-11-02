@@ -116,12 +116,16 @@ class SignIn(View):
         user = authenticate(request, email=email, password=passwd)
     
         if user is not None:
-            login(request, user)
-            messages.success(request, "Logged in Successfully")
-            return redirect("home")
+            if user.is_active:
+                login(request, user)
+                messages.success(request, "Logged in Successfully")
+                return redirect("home")
+            else:
+                messages.error(request, "Account is Banned")
+                return redirect("loginpage")
         else:
             messages.error(request, "Invalid Username or Password")
-
+            return redirect("loginpage")
 class Logoutpage(View):
     def get (self, request):
         if request.user.is_authenticated:

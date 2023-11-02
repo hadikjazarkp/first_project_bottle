@@ -13,17 +13,21 @@ from Store.manager import UserProfileManager
 class Main_Images(BaseModel):
     cover_image = models.ImageField(upload_to='main_img/' )
     
-
+    
+class Logo(BaseModel):
+    cover_image = models.ImageField(upload_to='Logo_img/' )
+   
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
-    id = models.UUIDField(primary_key=True,editable=False,default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     slug = models.SlugField(max_length=150, unique=True, null=True, blank=True)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, editable=True)
     is_staff = models.BooleanField(default=False)
 
     objects = UserProfileManager()
+    
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

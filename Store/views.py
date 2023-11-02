@@ -49,8 +49,13 @@ def categoryview(request,slug):
 
 
 def productview(request, slug):
-
-      print(slug)
+    template="store/products/product_view.html"
+    sub_category = Sub_Category.objects.get(slug=slug)
+    context={
+        'sub_product':sub_category
+    }
+    return render(request,template,context)
+    print(slug)
 #     product = get_object_or_404(Product, slug=slug)
 #     context = {'product': product}
 #     return render(request, "store/products/view.html", context)   

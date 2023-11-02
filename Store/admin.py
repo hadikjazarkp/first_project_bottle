@@ -32,7 +32,7 @@ admin.site.register(Sub_Category,sub_CategoryAdmin)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Variant,VariantAdmin)
 admin.site.register(Main_Images)
-
+admin.site.register(Logo)
 admin.site.register(UserProfile,UserAdmin)
 
 admin.site.register(Cart)

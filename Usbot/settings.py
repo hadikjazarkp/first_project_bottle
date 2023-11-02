@@ -142,8 +142,11 @@ MEDIA_URL = '/media/'
 
 
 
+# This is the directory where collectstatic will copy all your static files.
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = 'static/'
+
+# This is the URL prefix used when referring to static files (CSS, JavaScript, images, etc.).
+STATIC_URL = '/static/'
 
 TAILWIND_APP_NAME = 'theme'
 
