@@ -7,8 +7,8 @@ from django.shortcuts import get_object_or_404
 
 def home(request):
     print(request.user.username)
-    main_image = Main_Images.objects.first()
-    return render(request,"store/index.html", {'main_image': main_image})
+    main_images = Main_Images.objects.first()
+    return render(request,"store/index.html", {'main_images': main_images})
 
 
 
