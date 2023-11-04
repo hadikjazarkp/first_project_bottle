@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404
 
 
 
+
+
 def home(request):
     print(request.user.username)
     main_images = Main_Images.objects.first()
@@ -13,7 +15,6 @@ def home(request):
 
 
 def my_view(request):
-      # Get the first instance of Main_Images
     return render(request, 'my_template.html')
 
 
@@ -32,16 +33,10 @@ def categoryview(request,slug):
     
     category=Category.objects.get(slug=slug)
 
-    # for sub_category in sub_categoris:
-    #     sub_category
-    #     products = Product.objects.filter(sub_category=sub_category)
-    #     for product in products:
-    #         print(product)
-    # products=Product.objects.filter(category=category)
-    
+   
     context={
         "category":category
-        # "products":products,
+       
     }
     return render(request,template,context)
 
@@ -50,15 +45,12 @@ def categoryview(request,slug):
 
 def productview(request, slug):
     template="store/products/product_view.html"
-    sub_category = Sub_Category.objects.get(slug=slug)
+    product = Product.objects.get(slug=slug)
     context={
-        'sub_product':sub_category
+        'product':product
     }
     return render(request,template,context)
-    print(slug)
-#     product = get_object_or_404(Product, slug=slug)
-#     context = {'product': product}
-#     return render(request, "store/products/view.html", context)   
+  
 
   
 

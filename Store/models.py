@@ -114,6 +114,7 @@ class Variant(BaseModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug=slugify(self.color)
+  
         super(Variant, self).save(*args, **kwargs)    
     
     def __str__(self):
@@ -128,4 +129,10 @@ class Cart(BaseModel):
     # product = models.ForeignKey(Product, on_delete=models.CASCADE)
     # product_qty = models.IntegerField(null=False, blank=False)
     # created_at = models.DateTimeField(auto_now_add=True)
+  
+  
+  
+  
+  
+  
   
