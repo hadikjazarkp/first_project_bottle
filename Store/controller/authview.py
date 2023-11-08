@@ -2,8 +2,10 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .email import *
+from django.urls import reverse
 from Store.models import UserProfile
 from Store.forms import CustomUserForm
+from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 
 from django.core.cache import cache
 import hashlib
@@ -44,9 +46,13 @@ class Register(View):
                 {"email": form.cleaned_data['email'], "username": form.cleaned_data['username'], "password": form.cleaned_data['password1'], "otp": otp},
                 timeout=600
             )
-
+            print(otp) 
             # Redirect to OTP verification
             return redirect("otp", key=key)
+        else:
+            # Add an error message
+            messages.error(request, "Please correct the errors below.")
+            return render(request, "store/auth/register.html", {'form': form})
         return redirect('register')
 
 
@@ -114,7 +120,7 @@ class SignIn(View):
         passwd = request.POST.get('password')
     
         user = authenticate(request, email=email, password=passwd)
-    
+        
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -123,9 +129,32 @@ class SignIn(View):
             else:
                 messages.error(request, "Account is Banned")
                 return redirect("loginpage")
+            
         else:
             messages.error(request, "Invalid Username or Password")
             return redirect("loginpage")
+        
+        
+        
+class ForgotPassword(View):
+    def get(self, request):
+        return render(request, "password_forgot_form.html")
+    
+    def post(self, request):
+        email = request.POST.get("email")
+        try:
+            user = UserProfile.objects.get(email=email)
+        except:
+            messages.warning(request, "You are not registerd, please sign up")
+            return redirect("register")
+        encrypt_id = urlsafe_base64_encode(str(user.email).encode())
+        reset_link = f"{request.scheme}://{request.get_host()}{reverse('reset', args=[encrypt_id])}"
+        print(reset_link)
+        cache_key = f"reset_link_{encrypt_id}"
+        cache.set(cache_key, {"reset_link": reset_link}, timeout=20)
+        reset_password_email(email, reset_link)
+        
+        
 class Logoutpage(View):
     def get (self, request):
         if request.user.is_authenticated:

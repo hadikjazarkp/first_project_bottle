@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 from typing import Any
 from django.db import models
+from django.contrib.auth.models import UserManager
 import datetime
 from django.utils.text import slugify
 import uuid
@@ -45,7 +46,15 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.username
-    
+ 
+ 
+ 
+ 
+class CustomUserManager(UserManager):
+     def _create_user(self, email, password, **extra_fields):
+         if not email:
+             raise ValueError("You have not provided a valid email")
+            
 
     
 
