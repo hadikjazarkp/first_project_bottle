@@ -15,9 +15,7 @@
       <div class="flex flex-col md:flex-row -mx-4">
           <div class="md:flex-1 px-4">
 
-            {% for variant in product.variants.all  %}
-            {{variant}}
-            {% if forloop.first %}
+           
               <div class="h-100px rounded-lg  dark:bg-gray-700 mb-4">
                   <img class="h-full w-full object-cover object-center lg:h-full lg:w-full" src="{{ variant.cover_image.url }}" alt="Product Image">
               </div>
@@ -45,15 +43,16 @@
               <div class="mb-4">
                   <span class="font-bold text-gray-700 dark:text-gray-300">Select Color:</span>
                   <div class="flex items-center mt-2">
-                    <div class="row ps-2">
+                    <div class="flex ps-2">
                       {% for similar_variant in variant.product.variants.all %}
-                      <div class="col-1 m-1 p-0 bg-secondary-subtle rounded-1 border border-2 {% if similar_variant == variant %} border-warning {% endif %}">
-                        <a href="{% url 'productview' slug=similar_variant.slug %}">
-                          <img src="{{ similar_variant.cover_image.url }}" class="img-fluid" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ similar_variant.color_name }}">
-                        </a>
-                      </div>
+                        <div class="col-1 m-1 p-0 bg-secondary-subtle rounded-1 border border-2 border-color: rgb(255 255 255); {% if similar_variant == variant %}  {% endif %}">
+                          <a href="{%  url 'productview' slug=similar_variant.slug  %}">
+                            <img src="{{ similar_variant.cover_image.url }}" class="img-fluid" style="width: 100px; height: 100px;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ similar_variant.color }}">
+                          </a>
+                        </div>
                       {% endfor %}
                     </div>
+                    
                   </div>
               </div>
               <div class="mb-4">
@@ -73,15 +72,17 @@
             </div>
               <div>
                   <span class="font-bold text-gray-700 dark:text-gray-300">Product Description:</span>
-                  <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ product.product.description }}
+                  <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ variant.product.description }}
                       </p>
               </div>
-             {% endif %}
-              {% endfor %}
+         
           </div>
       </div>
   </div>
 </div>
+
+
+
 
 
   

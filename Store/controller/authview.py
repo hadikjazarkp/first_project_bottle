@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import Http404
 from .email import *
 from django.urls import reverse
 from Store.models import UserProfile
@@ -138,7 +139,7 @@ class SignIn(View):
         
 class ForgotPassword(View):
     def get(self, request):
-        return render(request, "password_forgot_form.html")
+        return render(request, "store/auth/password_forgot_form.html")
     
     def post(self, request):
         email = request.POST.get("email")
@@ -151,9 +152,34 @@ class ForgotPassword(View):
         reset_link = f"{request.scheme}://{request.get_host()}{reverse('reset', args=[encrypt_id])}"
         print(reset_link)
         cache_key = f"reset_link_{encrypt_id}"
-        cache.set(cache_key, {"reset_link": reset_link}, timeout=20)
+        cache.set(cache_key, {"reset_link": reset_link}, timeout=200)
         reset_password_email(email, reset_link)
-        
+        messages.success(request, "Password reset link sent to your email.")
+        return redirect("loginpage")
+
+class UserResetPassword(View):
+    def get(self, request, encrypt_id):
+        cache_key = f"reset_link_{encrypt_id}"
+        cache_data = cache.get(cache_key)
+        if not cache_data:
+            raise Http404("Reset link has expired") 
+        reset_id = cache_data.get("reset_link")
+        return render(request, "store/auth/password_reset.html",{"reset": reset_id})
+    
+    def post(self, request, encrypt_id ):
+        cache_key = f"reset_link_{encrypt_id}"
+        email = str(urlsafe_base64_decode(encrypt_id), "utf-8")
+        user = UserProfile.objects.get(email=email)
+        new_password = request.POST.get("pass1") 
+        print(new_password)
+        user.set_password(new_password)
+        user.save()
+        cache.delete(cache_key) 
+        messages.success(
+            request,
+            "Password reset successful. You can now log in with your new password.",
+        ) 
+        return redirect("loginpage")
         
 class Logoutpage(View):
     def get (self, request):

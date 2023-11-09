@@ -45,9 +45,10 @@ def categoryview(request,slug):
 
 def productview(request, slug):
     template="store/products/product_view.html"
-    product = Product.objects.get(slug=slug)
+    print(slug)
+    variant = Variant.objects.get(slug=slug)
     context={
-        'product':product
+        'variant' : variant
     }
     return render(request,template,context)
   
