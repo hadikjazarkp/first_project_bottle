@@ -37,3 +37,16 @@ admin.site.register(UserProfile,UserAdmin)
 
 admin.site.register(Cart)
 
+
+
+admin.site.register(Categoryy)
+admin.site.register(Brand)
+admin.site.register(Colorr)
+admin.site.register(Sizee)
+
+
+class ProducttAdmin(admin.ModelAdmin):
+    list_display=('id','title','brand','status','sizee','colorr','price')
+
+
+admin.site.register(Productt, ProducttAdmin)
