@@ -46,7 +46,19 @@ admin.site.register(Sizee)
 
 
 class ProducttAdmin(admin.ModelAdmin):
-    list_display=('id','title','brand','status','sizee','colorr','price')
+    list_display=('id','title','brand','status','sizee','colorr')
+    list_editable=('status',)
 
 
 admin.site.register(Productt, ProducttAdmin)
+
+
+# product Attribute
+
+
+class ProductAttributeAdmin(admin.ModelAdmin):
+    list_display=('id','productt','colorr','sizee','price') 
+
+
+admin.site.register(ProductAttribute,ProductAttributeAdmin)
+

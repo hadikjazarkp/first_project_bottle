@@ -197,4 +197,20 @@ class Productt(models.Model):
     def __str__(self):
         return self.title
     
-           
+
+
+#product Attribute
+
+class ProductAttribute(models.Model):
+    productt=models.ForeignKey(Productt,on_delete=models.CASCADE)
+    colorr=models.ForeignKey(Colorr,on_delete=models.CASCADE) 
+    sizee=models.ForeignKey(Sizee,on_delete=models.CASCADE) 
+    price=models.PositiveIntegerField()
+    
+    def __str__(self):
+        return self.productt.title
+    
+    
+    
+    
+             
