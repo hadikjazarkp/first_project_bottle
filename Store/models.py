@@ -8,6 +8,7 @@ import uuid
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from base.models import BaseModel
 from Store.manager import UserProfileManager
+from django.utils.html import mark_safe
 
 
 
@@ -150,6 +151,13 @@ class Cart(BaseModel):
 class Categoryy(models.Model):
     title=models.CharField(max_length=100)
     image=models.ImageField(upload_to="cat_imgs/") 
+    
+    
+    class Meta:
+        verbose_name_plural='Categoriess'
+        
+    def image_tag(self):
+        return mark_safe('<img src="%s" />' %(self.image.url))    
     
     def __str__(self):
         return self.title 

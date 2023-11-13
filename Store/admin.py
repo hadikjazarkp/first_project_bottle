@@ -39,10 +39,17 @@ admin.site.register(Cart)
 
 
 
-admin.site.register(Categoryy)
+
 admin.site.register(Brand)
 admin.site.register(Colorr)
 admin.site.register(Sizee)
+
+
+class CategoryyAdmin(admin.ModelAdmin):
+    list_display=('title','image_tag')
+
+
+admin.site.register(Categoryy, CategoryyAdmin)
 
 
 class ProducttAdmin(admin.ModelAdmin):

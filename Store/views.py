@@ -54,7 +54,10 @@ def productview(request, slug):
   
 
   
-
+def sizefilter(request, slug):
+    size=request.POST.get('selectedValue')
+    variant = Variant.objects.filter(size=size)
+    
         
         
  
