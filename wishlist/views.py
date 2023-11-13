@@ -35,16 +35,11 @@ class AddToWishlistView(View):
         
 
 class RemoveFromWishlistView(View):
-    def post(self, request, product_id):
-        if request.user.is_authenticated:
-            product = get_object_or_404(product, pk=product_id)
-            wishlist = WishlistModel.objects.get(user=request.user)
-            wishlist.product.remove(product)
-            # Remove the product from the wishlist
-            return redirect('wishlist_view') 
-        else:
-            # Handle the case when the user is not authneticated, e.g., redirect to a login page.
-            return redirect('loginpage')       
+    def post(self, request, slug):
         
+        product = get_object_or_404(Product, slug=slug)
+        wishlist = WishlistModel.objects.get(user=request.user)
+        wishlist.product.remove(product)
+        # Remove the product from the wishlist
+        return redirect('wishlist_view') 
         
-                        
