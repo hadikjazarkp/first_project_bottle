@@ -20,11 +20,9 @@
       <div class="flex flex-col">
       
         <div class="relative">
-        {% for product_item in item.productitem.all %}
-          {% with image=product_item.image.first %}
-          <img class="" src="{{ image.image.url }}" alt="image" />
-          {% endwith %}
-    {% endfor %}
+   
+          <img class="w-60 h-60" src="{{ item.variants.first.cover_image.url }}" alt="image" />
+      
         <form method="post" action="{% url 'remove_from_wishlist' slug=item.slug %}">
         {% csrf_token %}
         <button type="submit" aria-label="close" class="top-4 right-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 absolute p-1.5 bg-gray-800 dark:bg-white dark:text-gray-800 text-white hover:text-gray-400">
@@ -56,11 +54,16 @@
           {% comment %} <div>
             <p class="tracking-tight text-xs leading-3 text-gray-800 dark:text-white">{{ }}</p>
           </div> {% endcomment %}
-          <div class="mt-2">
-            <p class="tracking-tight text-base font-medium leading-4 text-gray-800 dark:text-white">{{item.club_id.name}}{{item.coutry_id.name}}</p>
-          </div>
+          
           <div class="mt-6">
-            <p class="tracking-tight text-base font-medium leading-4 text-gray-800 dark:text-white">{{item.price}}₹</p>
+            <p class="tracking-tight text-base font-medium leading-4 text-gray-800 dark:text-white">{{ item.variants.first.size}}</p>
+          </div>
+          <div class="mr-4 flex justify-start">
+            <p class="font-bold text-gray-700 dark:text-gray-300">Price :</p>
+            <del class="text-red-500">
+              <p class="text-gray-600 dark:text-gray-300 overline ml-2">{{ item.variants.first.orginal_price }}</p>
+            </del>
+            <p class="text-gray-600 dark:text-gray-300 overline ml-2">{{ variant.selling_price }}</p>
           </div>
           <div class="mt-6">
             <p class="tracking-tight text-base font-medium leading-4 text-gray-800 dark:text-white"></p>

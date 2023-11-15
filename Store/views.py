@@ -43,20 +43,31 @@ def categoryview(request,slug):
 
 
 
-def productview(request, slug):
+def productview(request, pslug, vslug):
     template="store/products/product_view.html"
-    print(slug)
-    variant = Variant.objects.get(slug=slug)
+    # size = request.GET.get('size', '500ml')
+    # request.GET = request.GET.copy()
+    # request.GET['size'] = size
+
+    # # try:
+    # #     size = request.GET['size']
+    # # except:
+    # #     size='500ml'    
+    # print(size)
+    
+    product = Product.objects.get(slug=pslug)
+    variant = Variant.objects.get(product=product,slug=vslug)
+    
+    # sizevariants = Variant.objects.filter(product=product, size=size)
+    # print(sizevariants)
     context={
         'variant' : variant
+        # 'sizevariants' : sizevariants
     }
     return render(request,template,context)
   
 
-  
-def sizefilter(request, slug):
-    size=request.POST.get('selectedValue')
-    variant = Variant.objects.filter(size=size)
+
     
         
         

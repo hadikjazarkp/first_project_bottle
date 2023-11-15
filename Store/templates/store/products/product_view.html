@@ -70,7 +70,7 @@
                     <div class="flex ps-2">
                       {% for similar_variant in variant.product.variants.all %}
                         <div class="col-1 m-1 p-0 bg-secondary-subtle rounded-1 border border-2 border-color: rgb(255 255 255); {% if similar_variant == variant %}  {% endif %}">
-                          <a href="{%  url 'productview' slug=similar_variant.slug  %}">
+                          <a href="{%  url 'productview' pslug=similar_variant.product.slug vslug=similar_variant.slug  %}">
                             <img src="{{ similar_variant.cover_image.url }}" class="img-fluid" style="width: 100px; height: 100px;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ similar_variant.color }}">
                           </a>
                         </div>
@@ -83,27 +83,37 @@
               
               <div class="mb-4">
                   <span class="font-bold text-gray-700 dark:text-gray-300">Select Size:</span>
-                  <div class="dropdown">
-                    <button class="border-2" >{{variant.size}}</button>
-  
-                    
-                </div>
+                  <button>{{variant.size}}</button>
+                  {% comment %} <button class="{% if request.GET.size == '500ml' %}border-2{% endif %}  border-black p-1" onclick="changesize('500ml')">500ml</button>
+                  <button class="{% if request.GET.size == '1000ml' %}border-2{% endif %} border-black p-1" onclick="changesize('1000ml')">1000ml</button> {% endcomment %}
+                  {% comment %} <div class="dropdown">
+                    <form id="sizeForm" method="get" action=".">
+                      <select id="size" name="selectedSize" onchange="changesize()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="500ml" {% if request.GET.selectedSize %}selected{% endif %}>500ml</option>
+                        <option value="1000ml" {% if request.GET.selectedSize %}selected{% endif %}>1000ml</option>
+                      </select>
+                      <p>{{ request.GET.selectedSize }}</p>
+
+                    </form>
+                </div> {% endcomment %}
+                
               </div>
               <div class="flex -mx-2 mb-4">
                 <div class="w-1/2 px-2">
                   
-                    <button class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">Add to Cart</button>
+                    <button class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700">Add to Cart</button>
                    
                 </div>
                 <div class="w-1/2 px-2">
                   <form method="post" action="{% url 'add_to_wishlist' slug=variant.product.slug %}">
                     {% csrf_token %}
-                <button
+               
+    
                     
-                    class=" bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-sm font-semibold transition duration-300 ease-in-out transform hover:scale-105 float-right" > Add to wishlist
 
+                    <button class="w-full bg-white dark:bg-white py-2 px-4 rounded-full font-bold hover:bg-gray-400 dark:hover:bg-gray-300 border border-black">Add to wishlist</button>
                    
-                </button>
+                     
             </form>
                 </div>
             </div>
@@ -119,6 +129,28 @@
 </div>
 
 
+{% comment %} 
+<script>
+
+
+  let currentUrl = new URL(window.location.href);
+  let urlparams = new URLSearchParams(currentUrl.search);
+  if (!urlparams.get('size')){
+    urlparams.set('size',"500ml")
+    currentUrl.search = urlparams.toString();
+   // window.location.href = currentUrl.toString();
+  }
+
+  function changesize(size){
+    urlparams.set('size',size)
+    currentUrl.search = urlparams.toString();
+    window.location.href = currentUrl.toString();
+
+  }
+
+
+
+</script> {% endcomment %}
 
 
   

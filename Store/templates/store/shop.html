@@ -7,16 +7,16 @@
 {% block content %}
 
 
-<div class="py-3 bg-blue-500">
+{% comment %} <div class="py-3 bg-blue-500">
     <div class="container mx-auto text-white">
         <a href="{% url 'home' %}"> HOME /</a>
         <a href="{% url 'shop' %}"> SHOP /</a>
     </div>
-</div>
+</div> {% endcomment %}
 <div class="container mx-auto">
     <div class="flex flex-wrap">
         <div class="w-full">
-            <h1 class="text-2xl font-bold mb-4">SHOP</h1>
+            <h1 class="text-2xl font-bold mb-4">All Category</h1>
             <hr>
             <div class="flex flex-wrap">
                 {% for item in category %}

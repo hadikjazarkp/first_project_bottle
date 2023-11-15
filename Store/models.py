@@ -113,7 +113,7 @@ class Variant(BaseModel):
         ('500ml', '500ml'),
         ('1000ml', '1000ml'),
     ]
-    
+
     
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
     orginal_price = models.FloatField()
@@ -132,9 +132,11 @@ class Variant(BaseModel):
     def __str__(self):
         return self.color
     
+
+
    
  
- 
+
 class Cart(BaseModel):
     pass
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -145,80 +147,3 @@ class Cart(BaseModel):
   
   
 
-
-
-# category
-class Categoryy(models.Model):
-    title=models.CharField(max_length=100)
-    image=models.ImageField(upload_to="cat_imgs/") 
-    
-    
-    class Meta:
-        verbose_name_plural='Categoriess'
-        
-    def image_tag(self):
-        return mark_safe('<img src="%s" />' %(self.image.url))    
-    
-    def __str__(self):
-        return self.title 
-    
-  
-# brand
-class Brand(models.Model):
-    title=models.CharField(max_length=100)
-    image=models.ImageField(upload_to="brand_imgs/") 
-    
-    def __str__(self):
-        return self.title 
-      
-  
-# color
-class Colorr(models.Model):
-    title=models.CharField(max_length=100)
-    color_code = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.title  
-    
-#size    
-class Sizee(models.Model):
-    title=models.CharField(max_length=100)
-    
-    
-    def __str__(self):
-        return self.title  
-    
-#productmodel    
-class Productt(models.Model):
-    title=models.CharField(max_length=200)
-    image=models.ImageField(upload_to="product_imgs/") 
-    slug=models.CharField(max_length=100)
-    detail=models.TextField()
-    specs=models.TextField()
-    price=models.PositiveIntegerField()
-    categoryy=models.ForeignKey(Categoryy,on_delete=models.CASCADE)
-    brand=models.ForeignKey(Brand,on_delete=models.CASCADE)
-    colorr=models.ForeignKey(Colorr,on_delete=models.CASCADE)
-    sizee=models.ForeignKey(Sizee,on_delete=models.CASCADE)
-    status=models.BooleanField(default=True)
-    
-    def __str__(self):
-        return self.title
-    
-
-
-#product Attribute
-
-class ProductAttribute(models.Model):
-    productt=models.ForeignKey(Productt,on_delete=models.CASCADE)
-    colorr=models.ForeignKey(Colorr,on_delete=models.CASCADE) 
-    sizee=models.ForeignKey(Sizee,on_delete=models.CASCADE) 
-    price=models.PositiveIntegerField()
-    
-    def __str__(self):
-        return self.productt.title
-    
-    
-    
-    
-             

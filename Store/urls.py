@@ -8,8 +8,7 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("shop/", views.shop, name="shop"),
     path("category/<slug:slug>/", views.categoryview, name="categoryview"),
-    path("product/<slug:slug>/", views.productview, name="productview"),
-  
+    path("product/<slug:pslug>/<slug:vslug>/", views.productview, name="productview"),
     
    
     path('register/', authview.Register.as_view(), name="register"),
