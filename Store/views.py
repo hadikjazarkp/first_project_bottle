@@ -10,7 +10,9 @@ from django.shortcuts import get_object_or_404
 def home(request):
     print(request.user.username)
     main_images = Main_Images.objects.first()
-    return render(request,"store/index.html", {'main_images': main_images})
+    category = Category.objects.all()
+    
+    return render(request,"store/index.html", {'main_images': main_images, 'category': category})
 
 
 
