@@ -83,6 +83,29 @@ def productview(request, pslug, vslug):
 
 
     
+def add_to_cart(request):
+    if request.method == 'POST':
+        variant_id = request.POST.get('variant_id')
+        quantity = request.POST.get('quantity', 1)
+
+        try:
+            variant = Variant.objects.get(pk=variant_id)
+        except Variant.DoesNotExist:
+            messages.error(request, 'Variant not found.')
+            return redirect('home')  # Redirect to the home page or another appropriate URL
+
+        # TODO: Implement your logic to add the item to the cart
+        # You can use Django's session to store cart information
+        # Example: 
+        # cart = request.session.get('cart', [])
+        # cart.append({'variant_id': variant.id, 'quantity': quantity})
+        # request.session['cart'] = cart
+
+        messages.success(request, 'Item added to the cart successfully.')
+        return render(request,'store/products/cart.html')  # Redirect to the home page or another appropriate URL
+
+    # Handle cases where the request method is not POST
+    return redirect('home')  # Redirect to the home page or another appropriate URL
         
         
  
