@@ -63,17 +63,20 @@
 <body class="bg-gray-100 font-sans">
     {% csrf_token %}
     <!-- Header -->
-    <nav class="bg-white border-b border-gray-200 fixed w-full">
+   
     <header class="bg-white shadow-lg p-4">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo -->
             <!-- Navigation -->
             <nav class="hidden md:flex space-x-12">
                 <a href="{% url 'shop' %}" class="hover:text-gray-500">SHOP</a>
-                <a href="#" class="hover:text-gray-500">COMBO</a>
+                <a href="{% url 'categoryview' slug='combo-packs'%}" class="hover:text-gray-500">COMBO</a>
+               
             </nav>
             <div class="flex">
-               <img src="{% static 'logos.png' %}" alt="Logoghjk" class=" h-12" >                
+                <a href="{% url 'home' %}">
+               <img src="{% static 'logos.png' %}" alt="Logoghjk" class=" h-12" >     
+            </a>           
             </div>
 
 
@@ -84,7 +87,7 @@
                     <div class="dropdown">
                         <button class="dropbtn">{{ user.username }}</button>
                         <div class="dropdown-content">
-                            <a href="#">Settings</a>
+                            <a href="{% url "settingsview" %}">Settings</a>
                             <a href="#">About</a>
                             <a href="{% url 'logout' %}">Logout</a>
                         </div>
@@ -143,7 +146,7 @@
   
           
     </header>
-</nav>
+
 
     {% block content %}
     {% endblock %}

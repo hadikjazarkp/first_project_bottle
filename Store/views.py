@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import *
+from .forms import *
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
@@ -11,8 +12,10 @@ def home(request):
     print(request.user.username)
     main_images = Main_Images.objects.first()
     category = Category.objects.all()
+    product = Product.objects.all()
+    # variant = Variant.objects.all()
     
-    return render(request,"store/index.html", {'main_images': main_images, 'category': category})
+    return render(request,"store/index.html", {'main_images': main_images, 'category': category, 'product':product})
 
 
 
@@ -24,6 +27,13 @@ def shop(request):
     category = Category.objects.all()
     context = {'category':category}
     return render(request, "store/shop.html", context)
+
+
+
+
+
+def settingsview(request):
+    return render(request,'store/auth/settings.html')
 
 
 
@@ -60,10 +70,12 @@ def productview(request, pslug, vslug):
     product = Product.objects.get(slug=pslug)
     variant = Variant.objects.get(product=product,slug=vslug)
     
+    
     # sizevariants = Variant.objects.filter(product=product, size=size)
     # print(sizevariants)
     context={
         'variant' : variant
+        
         # 'sizevariants' : sizevariants
     }
     return render(request,template,context)

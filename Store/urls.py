@@ -10,6 +10,9 @@ urlpatterns = [
     path("category/<slug:slug>/", views.categoryview, name="categoryview"),
     path("product/<slug:pslug>/<slug:vslug>/", views.productview, name="productview"),
     
+    
+    path("settings/", views.settingsview, name='settingsview'),
+    
    
     path('register/', authview.Register.as_view(), name="register"),
     path('verify/<str:key>/',authview.VerifyOtpView.as_view(),name='otp'),

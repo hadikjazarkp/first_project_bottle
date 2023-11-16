@@ -9,15 +9,31 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from base.models import BaseModel
 from Store.manager import UserProfileManager
 from django.utils.html import mark_safe
+from django.core.exceptions import ValidationError
+import os
 
+
+
+
+def validate_image_type(value):
+    # Get the file extension
+    _, extension = os.path.splitext(value.name)
+    extension = extension.lower().lstrip('.')
+
+    # Define a whitelist of allowed image types
+    allowed_extensions = ['jpeg', 'jpg', 'png']
+
+    # Check if the extension is in the whitelist
+    if extension not in allowed_extensions:
+        raise ValidationError(f"Unsupported file type: {extension}. Only {', '.join(allowed_extensions)} are allowed.")
 
 
 class Main_Images(BaseModel):
-    cover_image = models.ImageField(upload_to='main_img/' )
+    cover_image = models.ImageField(upload_to='main_img/',validators=[validate_image_type] )
     
     
 class Logo(BaseModel):
-    cover_image = models.ImageField(upload_to='Logo_img/' )
+    cover_image = models.ImageField(upload_to='Logo_img/',  validators=[validate_image_type] )
    
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
@@ -57,7 +73,8 @@ class CustomUserManager(UserManager):
              raise ValueError("You have not provided a valid email")
          
     
-            
+
+
 
     
 
@@ -65,7 +82,7 @@ class CustomUserManager(UserManager):
 class Category(BaseModel):
     
     name = models.CharField(max_length=150, )
-    image = models.ImageField(upload_to='category/', null=True, blank=True )
+    image = models.ImageField(upload_to='category/', null=True, blank=True, validators=[validate_image_type] )
     description = models.TextField(max_length=500, null=False, blank=False)
    
     
@@ -119,7 +136,7 @@ class Variant(BaseModel):
     orginal_price = models.FloatField()
     selling_price = models.FloatField()
     quantity = models.IntegerField()
-    cover_image = models.ImageField(upload_to='product/' )
+    cover_image = models.ImageField(upload_to='product/', validators=[validate_image_type] )
     size = models.CharField(max_length=10, choices=SIZE_CHOICES)
     color =models.CharField(max_length=150)
 
@@ -137,12 +154,11 @@ class Variant(BaseModel):
    
  
 
-class Cart(BaseModel):
-    pass
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    # product_qty = models.IntegerField(null=False, blank=False)
-    # created_at = models.DateTimeField(auto_now_add=True)
+class Cart(BaseModel): 
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    variant = models.ForeignKey(Variant, on_delete=models.CASCADE, null=True)
+    variant_qty = models.IntegerField(null=True, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
   
   
   

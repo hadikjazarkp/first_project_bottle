@@ -34,3 +34,4 @@ class CustomUserForm(UserCreationForm):
             raise forms.ValidationError("Passwords do not match.")
         return password2
     
+
