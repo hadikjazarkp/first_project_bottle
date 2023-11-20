@@ -43,7 +43,11 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150)
     is_active = models.BooleanField(default=True, editable=True)
     is_staff = models.BooleanField(default=False)
+    
+      # New field for the user's profile image
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
 
+     
     objects = UserProfileManager()
 
 
@@ -150,7 +154,10 @@ class Variant(BaseModel):
         return self.color
     
 
-
+class ColorImage(BaseModel):
+    variant = models.ForeignKey(Variant, on_delete=models.CASCADE, related_name="colorimages")
+    variantimg = models.ImageField(upload_to='variant/', validators=[validate_image_type] )
+    
    
  
 

@@ -4,6 +4,7 @@ from .forms import *
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -32,10 +33,12 @@ def shop(request):
 
 
 
+@login_required
 def settingsview(request):
-    return render(request,'store/auth/settings.html')
-
-
+    # Assuming the user is logged in, you can access the UserProfile through request.user
+    user_profile = request.user.userprofile if hasattr(request.user, 'userprofile') else None
+    
+    return render(request, 'store/auth/settings.html', {'user_profile': user_profile})
 
 
 

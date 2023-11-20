@@ -7,10 +7,16 @@ class CustomUserForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control my-2', 'placeholder': 'Enter email'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control my-2', 'placeholder': 'Enter password'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control my-2', 'placeholder': 'Confirm password'}))
+    
+    
+     
+    # New field for the user's profile image
+    profile_image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control my-2'}))
 
+    
     class Meta:
         model = UserProfile
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'profile_image']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')

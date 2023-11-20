@@ -20,8 +20,13 @@ class VariantAdmin(admin.ModelAdmin):
     exclude = ['slug']
     
     
+class ColorImageAdmin(admin.ModelAdmin):
+    # list_display = []  
+    exclude = ['slug']     
+    
+    
 class UserAdmin(admin.ModelAdmin):
-    list_display=['id','username','email','is_active','is_superuser']
+    list_display=['id','username','email', 'profile_image', 'is_active','is_superuser']
     search_fields=['email','username']
     readonly_fields=['last_login','password']
     list_filter=['last_login']
@@ -35,6 +40,7 @@ admin.site.register(Variant,VariantAdmin)
 admin.site.register(Main_Images)
 admin.site.register(Logo)
 admin.site.register(UserProfile,UserAdmin)
+admin.site.register(ColorImage,ColorImageAdmin)
 
 admin.site.register(Cart)
 
