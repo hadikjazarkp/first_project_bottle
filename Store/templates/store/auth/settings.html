@@ -2,18 +2,20 @@
 {% load static %}
 
 {% block content %}
-    <h1 class="py-20 text-7xl">SETTINGS</h1>
+    <h1 class="py-20 text-7xl text-center">SETTINGS</h1>
 
-                <div class="mb-4">
+                <div class="mb-4 px-12 grid place-items-center">
                     <!-- settings.html -->
-            {% if user_profile %}
-            <p>User Profile Found: {{ user_profile }}</p>
-            <img src="{{ user_profile.profile_image.url }}" alt="Profile Image" class="rounded-full h-40 w-40">
-            {% else %}
-            <p>No user profile found.</p>
-            {% endif %}
-
+          
+                {% if user_profile.profile_image %}
+                     <img  src="{{ user_profile.profile_image.url }}" alt="Profile Image" class="rounded-full h-40 w-40">
+                 {% else %}
+                 <img src="{% static 'profile-circle-icon-512x512-zxne30hp.png' %}" alt="default_image" class="rounded-full h-40 w-40" >
+                {% endif %} 
+            
+           <h1 class=" text-xl">{{ user_profile.username }}</h1>
+           <h1 class=" text-xl">{{ user_profile.email }}</h1>
     </div>
 
-    <h1 class="py-20 text-3xl">THANKS</h1>
+    <h1 class="py-20 text-3xl text-center">THANKS</h1>
 {% endblock content %}

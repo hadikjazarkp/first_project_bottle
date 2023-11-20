@@ -36,9 +36,10 @@ def shop(request):
 @login_required
 def settingsview(request):
     # Assuming the user is logged in, you can access the UserProfile through request.user
-    user_profile = request.user.userprofile if hasattr(request.user, 'userprofile') else None
+    user= request.user
     
-    return render(request, 'store/auth/settings.html', {'user_profile': user_profile})
+    
+    return render(request, 'store/auth/settings.html', {'user_profile': user})
 
 
 

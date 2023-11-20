@@ -31,7 +31,11 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields=['last_login','password']
     list_filter=['last_login']
     list_editable=('is_active',)
-      
+ 
+ 
+class UserdpAdmin(admin.ModelAdmin):
+    # list_display = []  
+    exclude = ['slug']       
 
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Sub_Category,sub_CategoryAdmin)
@@ -41,6 +45,9 @@ admin.site.register(Main_Images)
 admin.site.register(Logo)
 admin.site.register(UserProfile,UserAdmin)
 admin.site.register(ColorImage,ColorImageAdmin)
+admin.site.register(Userdp,UserdpAdmin)
+
+
 
 admin.site.register(Cart)
 

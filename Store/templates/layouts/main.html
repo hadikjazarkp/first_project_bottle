@@ -85,8 +85,15 @@
                 {% if request.user.is_authenticated %}
                     <!-- Dropdown Button -->
                     <div class="dropdown">
-                        <button class="dropbtn">{{ user.username }}</button>
-                        <div class="dropdown-content">
+                        {% if user.profile_image %}
+   
+                          
+                            <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-full h-10 w-10">
+                        {% else %}
+                            <img src="{% static 'profile-circle-icon-512x512-zxne30hp.png' %}" alt="default_image" class="rounded-full h-10 w-10" >
+                        {% endif %}
+                        
+                            <div class="dropdown-content">
                             <a href="{% url "settingsview" %}">Settings</a>
                             <a href="#">About</a>
                             <a href="{% url 'logout' %}">Logout</a>
@@ -94,7 +101,7 @@
                     </div>
                 {% else %}
                    <div>
-                        <a class="nav-link" href="{% url 'loginpage' %}">Login</a>
+                        <a class="nav-link" href="{% url 'loginpage' %}">Login</a>c 
                    </div>
                     <div>
                         <a class="nav-link" href="{% url 'register' %}">Register</a>

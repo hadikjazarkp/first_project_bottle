@@ -34,7 +34,17 @@ class Main_Images(BaseModel):
     
 class Logo(BaseModel):
     cover_image = models.ImageField(upload_to='Logo_img/',  validators=[validate_image_type] )
-   
+    
+    
+class Userdp(BaseModel):
+    image= models.ImageField(upload_to='user_img/',  validators=[validate_image_type] ) 
+    
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug=slugify(self.image)
+        super(Userdp, self).save(*args, **kwargs)    
+    
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
@@ -43,8 +53,11 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150)
     is_active = models.BooleanField(default=True, editable=True)
     is_staff = models.BooleanField(default=False)
-    
-      # New field for the user's profile image
+    # phone_number = models.CharField(max_length=12 , unique=True)
+    # is_phone_verified = models.BooleanField(default=False)
+    # ootp = models.CharField(max_length=6)
+
+    # New field for the user's profile image
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
 
      
