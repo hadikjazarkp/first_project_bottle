@@ -57,7 +57,10 @@
     <title>eCommerce Homepage</title>
 
    
-
+    <link rel="stylesheet" type="text/css" href="path/to/xzoom.css" />
+    <script type="text/javascript" src="path/to/jquery.js"></script>
+    <script type="text/javascript" src="path/to/xzoom.min.js"></script>
+    
     
 </head>
 <body class="bg-gray-100 font-sans">
@@ -101,7 +104,7 @@
                     </div>
                 {% else %}
                    <div>
-                        <a class="nav-link" href="{% url 'loginpage' %}">Login</a>c 
+                        <a class="nav-link" href="{% url 'loginpage' %}">Login</a>
                    </div>
                     <div>
                         <a class="nav-link" href="{% url 'register' %}">Register</a>
