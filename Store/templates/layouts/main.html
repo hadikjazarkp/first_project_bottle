@@ -7,7 +7,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" />
-    
+   
+    <link rel="stylesheet" href="{% static 'css/magnify.css' %}">
     <style>
         /* Dropdown Styles */
         .dropdown {
@@ -51,15 +52,26 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        #image{
+            width: 100%;
+            max-width: 360px;
+            margin: 20px;
+            border-radius: 5px;
+        
+         
+            
+        
+        
+        }
 
         
     </style>
     <title>eCommerce Homepage</title>
 
    
-    <link rel="stylesheet" type="text/css" href="path/to/xzoom.css" />
-    <script type="text/javascript" src="path/to/jquery.js"></script>
-    <script type="text/javascript" src="path/to/xzoom.min.js"></script>
+    {% comment %} <link rel="stylesheet" type="text/css" href="path/to/xzoom.css" /> {% endcomment %}
+    {% comment %} <script type="text/javascript" src="path/to/jquery.js"></script> {% endcomment %}
+    {% comment %} <script type="text/javascript" src="path/to/xzoom.min.js"></script> {% endcomment %}
     
     
 </head>
@@ -68,7 +80,12 @@
     <!-- Header -->
    
     <header class="bg-white shadow-lg p-4">
-        <div class="container mx-auto flex justify-between items-center">
+    
+
+
+
+
+        <div class="container mx-auto flex justify-between items-center ">
             <!-- Logo -->
             <!-- Navigation -->
             <nav class="hidden md:flex space-x-12">
@@ -81,7 +98,6 @@
                <img src="{% static 'logos.png' %}" alt="Logoghjk" class=" h-12" >     
             </a>           
             </div>
-
 
             <!-- Login/Logout (Change the link and text based on user authentication status) -->
             <div class="flex items-center space-x-4">
@@ -131,8 +147,10 @@
             </div>
         </div>
 
+
+
+
         <!-- alert message -->
-  
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         {% for message in messages %}
           <script>

@@ -8,20 +8,6 @@
     box-sizing: border-box;
   }
   
-  .zoom {
-    padding: 12px;
-   
-    transition: transform .4s;
-    width: 150px;
-    height: 260px;
-    margin: 0 auto;
-  } 
-
-  .zoom:hover {
-    -ms-transform: scale(2.5); /* IE 9 */
-    -webkit-transform: scale(2.5); /* Safari 3-8 */
-    transform: scale(2.5); 
-  }
   </style>
 
 
@@ -42,18 +28,41 @@
       <div class="flex flex-col md:flex-row -mx-4">
         
         <div class="grid-flow-row ">
+          <img src="{{ variant.cover_image.url }}" onclick="change_cover_image('{{variant.cover_image.url}}', '.magnify-lens')" class="img-fluid border-2" style="width: 100px; height: 100px;" data-bs-toggle="tooltip" data-bs-placement="bottom">
           {% for img in variant.colorimages.all %}
-            <img src="{{ img.variantimg.url }}" class="img-fluid border-2" style="width: 100px; height: 100px;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ similar_variant.color }}" >
-            {% endfor %}
+          <img  src="{{ img.variantimg.url }}" onclick="change_cover_image('{{img.variantimg.url}}')" class="img-fluid border-2" style="width: 100px; height: 100px;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ similar_variant.color }}"   >
+          {% endfor %}
         </div>
        
        
           <div class="md:flex-1 px-4 ">
+             
 
-           
-              <div class="h-100px rounded-lg  dark:bg-gray-700 mb-4">
-                  <img class=" zoom  w-80 object-cover object-center " src="{{ variant.cover_image.url }}" alt="Product Image">
-              </div>
+
+            <div class="h-100px rounded-lg  dark:bg-gray-700 mb-4">
+              <img id="main_image" class="zoom w-80  object-center " src="{{ variant.cover_image.url }}" alt="Product Image"  data-magnify-src="{{ variant.cover_image.url }}" >
+            </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="{% static 'js/jquery_magnify.js' %}" charset="utf-8"></script>
+            
+              {% comment %} <script>
+              $(document).ready(function() {
+                $('.zoom').magnify();
+              });
+              </script> {% endcomment %}
+              <script>
+                {% comment %} $.noConflict(); {% endcomment %}
+               // jQuery(document).ready(function($) {
+                    //$('.zoom').magnify();
+               // });
+               {% comment %} jQuery(function($) {
+                $('.zoom').magnify();
+            });  {% endcomment %}
+
+                {% comment %} (function ($) {
+                })(jQuery); {% endcomment %}
+                </script>
+            
               
           </div>
          
@@ -158,85 +167,7 @@
 </div>
 
 
-{% comment %} 
-<script>
 
-
-  let currentUrl = new URL(window.location.href);
-  let urlparams = new URLSearchParams(currentUrl.search);
-  if (!urlparams.get('size')){
-    urlparams.set('size',"500ml")
-    currentUrl.search = urlparams.toString();
-   // window.location.href = currentUrl.toString();
-  }
-
-  function changesize(size){
-    urlparams.set('size',size)
-    currentUrl.search = urlparams.toString();
-    window.location.href = currentUrl.toString();
-
-  }
-
-
-
-</script> {% endcomment %}
-<script>
-  function imageZoom(imgID, resultID) {
-    var img, lens, result, cx, cy;
-    img = document.getElementById(imgID);
-    result = document.getElementById(resultID);
-    /*create lens:*/
-    lens = document.createElement("DIV");
-    lens.setAttribute("class", "img-zoom-lens");
-    /*insert lens:*/
-    img.parentElement.insertBefore(lens, img);
-    /*calculate the ratio between result DIV and lens:*/
-    cx = result.offsetWidth / lens.offsetWidth;
-    cy = result.offsetHeight / lens.offsetHeight;
-    /*set background properties for the result DIV:*/
-    result.style.backgroundImage = "url('" + img.src + "')";
-    result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
-    /*execute a function when someone moves the cursor over the image, or the lens:*/
-    lens.addEventListener("mousemove", moveLens);
-    img.addEventListener("mousemove", moveLens);
-    /*and also for touch screens:*/
-    lens.addEventListener("touchmove", moveLens);
-    img.addEventListener("touchmove", moveLens);
-    function moveLens(e) {
-      var pos, x, y;
-      /*prevent any other actions that may occur when moving over the image:*/
-      e.preventDefault();
-      /*get the cursor's x and y positions:*/
-      pos = getCursorPos(e);
-      /*calculate the position of the lens:*/
-      x = pos.x - (lens.offsetWidth / 2);
-      y = pos.y - (lens.offsetHeight / 2);
-      /*prevent the lens from being positioned outside the image:*/
-      if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
-      if (x < 0) {x = 0;}
-      if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
-      if (y < 0) {y = 0;}
-      /*set the position of the lens:*/
-      lens.style.left = x + "px";
-      lens.style.top = y + "px";
-      /*display what the lens "sees":*/
-      result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
-    }
-    function getCursorPos(e) {
-      var a, x = 0, y = 0;
-      e = e || window.event;
-      /*get the x and y positions of the image:*/
-      a = img.getBoundingClientRect();
-      /*calculate the cursor's x and y coordinates, relative to the image:*/
-      x = e.pageX - a.left;
-      y = e.pageY - a.top;
-      /*consider any page scrolling:*/
-      x = x - window.pageXOffset;
-      y = y - window.pageYOffset;
-      return {x : x, y : y};
-    }
-  }
-  </script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
@@ -254,7 +185,32 @@
           quantityInput.value = parseInt(quantityInput.value) + 1;
       });
   });
-</script>
+
+
+  
+
+ jQuery(function($) {
+    // Initialize magnify on page load
+    $('#main_image').magnify();
+
+    // Function to change the cover image and update magnify
+    window.change_cover_image = function(cover_img_src, magnify_lens_selector) {
+        $('#main_image')
+            .attr('src', cover_img_src)
+            .attr('data-magnify-src', cover_img_src)
+            .off('load') // Remove previous load event handlers
+            .on('load', function() {
+                // Update the background URL of the magnify lens
+                $(magnify_lens_selector).css('background-image', 'url("' + cover_img_src + '")');
+                $('#main_image').magnify({
+                    destroy: true // Destroy previous magnify instance before reinitializing
+                });
+            });
+    };
+});
+
+</script> 
+
 {% endblock %}
 
 
