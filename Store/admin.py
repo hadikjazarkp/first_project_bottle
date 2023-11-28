@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from .forms import *
 
 # Register your models here.
 
@@ -17,12 +18,12 @@ class ProductAdmin(admin.ModelAdmin):
 
 class VariantAdmin(admin.ModelAdmin):
     # list_display = []  
-    exclude = ['slug']
+    exclude = ['slug',]
     
     
 class ColorImageAdmin(admin.ModelAdmin):
     # list_display = []  
-    exclude = ['slug']     
+    exclude = ['slug',]     
     
     
 class UserAdmin(admin.ModelAdmin):
@@ -38,7 +39,8 @@ class UserdpAdmin(admin.ModelAdmin):
     exclude = ['slug']       
 
 class PeromoCodeAdmin(admin.ModelAdmin):
-    list_display=['peromocode','discount_price',]
+    form = PeromoCodeForm
+    list_display=['peromocode','discount_price','purchase_price','expaire_date',]
  
 
 
@@ -51,7 +53,7 @@ admin.site.register(Logo)
 admin.site.register(UserProfile,UserAdmin)
 admin.site.register(ColorImage,ColorImageAdmin)
 admin.site.register(Userdp,UserdpAdmin)
-admin.site.register(PeromoCode)
+admin.site.register(PeromoCode,PeromoCodeAdmin)
 
 
 

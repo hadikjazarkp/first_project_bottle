@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile
+from .models import UserProfile, PeromoCode
 
 class CustomUserForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control my-2',  'placeholder': 'Enter username', "id":"username"}))
@@ -41,3 +41,11 @@ class CustomUserForm(UserCreationForm):
         return password2
     
 
+
+class PeromoCodeForm(forms.ModelForm):
+    class Meta:
+        model = PeromoCode
+        fields = '__all__'
+        widgets = {
+            'expaire_date': forms.DateInput(attrs={'type': 'date'}),
+        }

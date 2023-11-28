@@ -188,7 +188,7 @@ class Cart(BaseModel):
 
   
   
-class PeromoCode(BaseModel):
+class PeromoCode(models.Model):
     peromocode = models.CharField(max_length=10)
     discount_price = models.IntegerField()
     purchase_price = models.IntegerField()

@@ -88,6 +88,7 @@ def productview(request, pslug, vslug):
 
 @login_required 
 def cart(request):
+    
     cart_items = Cart.objects.filter(user=request.user)
     cart_total = 0
     for item in cart_items:
@@ -95,9 +96,9 @@ def cart(request):
         cart_total=cart_total+item.total_price
      
      
+    promocode = PeromoCode.objects.filter(purchase_price__lte=cart_total)
     
-    
-    return render(request, 'store/products/cart.html', {'cart_items':cart_items, 'cart_total':cart_total} )
+    return render(request, 'store/products/cart.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocode':promocode} )
       
      
 def cart_count_increase(request, id):
