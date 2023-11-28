@@ -7,6 +7,11 @@
   * {
     box-sizing: border-box;
   }
+  .out-of-stock-button {
+    border: 1px solid #000;
+    color: gray;
+    font-size: 14px;
+  }
   
   </style>
 
@@ -33,37 +38,17 @@
           <img  src="{{ img.variantimg.url }}" onclick="change_cover_image('{{img.variantimg.url}}')" class="img-fluid border-2" style="width: 100px; height: 100px;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ similar_variant.color }}"   >
           {% endfor %}
         </div>
-       
-       
+        
+        
           <div class="md:flex-1 px-4 ">
-             
-
+        
+         
 
             <div class="h-100px rounded-lg  dark:bg-gray-700 mb-4">
               <img id="main_image" class="zoom w-80  object-center " src="{{ variant.cover_image.url }}" alt="Product Image"  data-magnify-src="{{ variant.cover_image.url }}" >
             </div>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
             <script src="{% static 'js/jquery_magnify.js' %}" charset="utf-8"></script>
-            
-              {% comment %} <script>
-              $(document).ready(function() {
-                $('.zoom').magnify();
-              });
-              </script> {% endcomment %}
-              <script>
-                {% comment %} $.noConflict(); {% endcomment %}
-               // jQuery(document).ready(function($) {
-                    //$('.zoom').magnify();
-               // });
-               {% comment %} jQuery(function($) {
-                $('.zoom').magnify();
-            });  {% endcomment %}
-
-                {% comment %} (function ($) {
-                })(jQuery); {% endcomment %}
-                </script>
-            
-              
           </div>
          
           <div class="md:flex-1 px-4  ">
@@ -105,55 +90,42 @@
               <div class="mb-4">
                   <span class="font-bold text-gray-700 dark:text-gray-300">Select Size:</span>
                   <button>{{variant.size}}</button>
-                  {% comment %} <button class="{% if request.GET.size == '500ml' %}border-2{% endif %}  border-black p-1" onclick="changesize('500ml')">500ml</button>
-                  <button class="{% if request.GET.size == '1000ml' %}border-2{% endif %} border-black p-1" onclick="changesize('1000ml')">1000ml</button> {% endcomment %}
-                  {% comment %} <div class="dropdown">
-                    <form id="sizeForm" method="get" action=".">
-                      <select id="size" name="selectedSize" onchange="changesize()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="500ml" {% if request.GET.selectedSize %}selected{% endif %}>500ml</option>
-                        <option value="1000ml" {% if request.GET.selectedSize %}selected{% endif %}>1000ml</option>
-                      </select>
-                      <p>{{ request.GET.selectedSize }}</p>
-
-                    </form>
-                </div> {% endcomment %}
                 
               </div>
               <div class="flex -mx-2 mb-4">
                 <div class="w-1/2 px-2">
-                  <form method="post" action="{% url 'add_to_cart' %}">
-                    {% csrf_token %}
+                  {% comment %} <form method="post" action="{% url 'add_to_cart' slug=variant.slug %}">
+                    {% csrf_token %} {% endcomment %}
                     <input type="hidden" name="variant_id" value="{{ variant.id }}">
                     <div class="mb-4">
                         <label for="quantity">Quantity:</label>
+                        {% if variant.quantity > 0 %}
                         <div class="flex items-center">
                             <button type="button" class="quantity-button" id="quantity-minus">-</button>
                             <input type="number" name="quantity" id="quantity" value="1" min="1" class="w-16 text-center" required>
                             <button type="button" class="quantity-button" id="quantity-plus">+</button>
                         </div>
-                    </div>
-                    <button class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700">Add to Cart</button>
-                    
-                </form>
-                    
-                   
-                </div>
-                <div class="w-1/2 px-2">
-                  <form method="post" action="{% url 'add_to_wishlist' slug=variant.product.slug %}">
-                    {% csrf_token %}
-               
-    
-                    
+                        {% else %}
+                        <div>
+                          <button class="out-of-stock-button">Out of Stock</button>
 
-                    <button class="w-full bg-white dark:bg-white py-2 px-4 rounded-full font-bold hover:bg-gray-400 dark:hover:bg-gray-300 border border-black">Add to wishlist</button>
+                        </div>
+
+                        {% endif %}
+                    </div>
+                    <a class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700" href="{% url "add_to_cart" slug=variant.slug %}">Add to cart</a>
+                    
+                  {% comment %} </form> {% endcomment %}
+                    
                    
-                     
-            </form>
-            
-            
-          
                 </div>
-            </div>
+                  <div class="w-1/2 px-2">
+                    <form method="post" action="{% url 'add_to_wishlist' slug=variant.product.slug %}">
+                      {% csrf_token %}
+                      <button class="w-full bg-white dark:bg-white py-2 px-4 rounded-full font-bold hover:bg-gray-400 dark:hover:bg-gray-300 border border-black">Add to wishlist</button>     
+                    </form>
+                  </div>
+              </div>
           
               <div>
                   <span class="font-bold text-gray-700 dark:text-gray-300">Product Description:</span>

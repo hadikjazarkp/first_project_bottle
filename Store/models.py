@@ -177,9 +177,20 @@ class ColorImage(BaseModel):
 class Cart(BaseModel): 
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE, null=True)
-    variant_qty = models.IntegerField(null=True, blank=False)
+    variant_qty = models.IntegerField(default=1, null=True, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
-  
-  
-  
+    total_price = models.IntegerField(default=0)
+    
+    
+    def save(self, *args, **kwargs):
+        self.total_price = self.variant_qty * self.variant.selling_price
+        super(Cart, self).save(*args, **kwargs)    
 
+  
+  
+class PeromoCode(BaseModel):
+    peromocode = models.CharField(max_length=10)
+    discount_price = models.IntegerField()
+    purchase_price = models.IntegerField()
+    expaire_date = models.DateField()
+    

@@ -37,6 +37,11 @@ class UserdpAdmin(admin.ModelAdmin):
     # list_display = []  
     exclude = ['slug']       
 
+class PeromoCodeAdmin(admin.ModelAdmin):
+    list_display=['peromocode','discount_price',]
+ 
+
+
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Sub_Category,sub_CategoryAdmin)
 admin.site.register(Product,ProductAdmin)
@@ -46,6 +51,7 @@ admin.site.register(Logo)
 admin.site.register(UserProfile,UserAdmin)
 admin.site.register(ColorImage,ColorImageAdmin)
 admin.site.register(Userdp,UserdpAdmin)
+admin.site.register(PeromoCode)
 
 
 

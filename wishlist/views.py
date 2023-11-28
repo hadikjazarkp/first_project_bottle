@@ -6,40 +6,32 @@ from django.shortcuts import redirect, render, get_object_or_404
 
 # Create your views here.
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class WishlistView(View):
+    @method_decorator(login_required(login_url='loginpage'))  # Redirect to the login page if not authenticated
     def get(self, request):
-    
-        # Try to retreve the user's wishlist, or created one if it doesn't exist
         wishlist, created = WishlistModel.objects.get_or_create(user=request.user)
-            
-         # Check if wishlist is None or if it's created and product field is None
         if wishlist is not None and wishlist.product is not None:
             wishlist_items = wishlist.product.all()
         else:
-            wishlist_items = [] # Initialize an emty list if wishlist or product is None 
+            wishlist_items = []
         print(wishlist_items)
         return render(request, 'store/products/wishlist.html', {'wishlist_items': wishlist_items})
-        
-
 
 class AddToWishlistView(View):
+    @method_decorator(login_required(login_url='loginpage'))
     def post(self, request, slug):
-    
-           #this view is only accessible to authenticated users.
         product = get_object_or_404(Product, slug=slug)
         wishlist, created = WishlistModel.objects.get_or_create(user=request.user)
-        wishlist.product.add(product) # Assuming you have a 'products' filed for the wishlist
+        wishlist.product.add(product)
         return redirect('wishlist_view')
-       
-        
 
 class RemoveFromWishlistView(View):
+    @method_decorator(login_required(login_url='loginpage'))
     def post(self, request, slug):
-        
         product = get_object_or_404(Product, slug=slug)
         wishlist = WishlistModel.objects.get(user=request.user)
         wishlist.product.remove(product)
-        # Remove the product from the wishlist
-        return redirect('wishlist_view') 
-        
+        return redirect('wishlist_view')

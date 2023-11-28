@@ -83,33 +83,64 @@ def productview(request, pslug, vslug):
         # 'sizevariants' : sizevariants
     }
     return render(request,template,context)
-  
 
 
-    
-def add_to_cart(request):
-    if request.method == 'POST':
-        variant_id = request.POST.get('variant_id')
-        quantity = request.POST.get('quantity', 1)
 
-        try:
-            variant = Variant.objects.get(pk=variant_id)
-        except Variant.DoesNotExist:
-            messages.error(request, 'Variant not found.')
-            return redirect('home')  # Redirect to the home page or another appropriate URL
-
-        # TODO: Implement your logic to add the item to the cart
-        # You can use Django's session to store cart information
-        # Example: 
-        # cart = request.session.get('cart', [])
-        # cart.append({'variant_id': variant.id, 'quantity': quantity})
-        # request.session['cart'] = cart
-
-        messages.success(request, 'Item added to the cart successfully.')
-        return render(request,'store/products/cart.html')  # Redirect to the home page or another appropriate URL
-
-    # Handle cases where the request method is not POST
-    return redirect('home')  # Redirect to the home page or another appropriate URL
+@login_required 
+def cart(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    cart_total = 0
+    for item in cart_items:
         
+        cart_total=cart_total+item.total_price
+     
+     
+    
+    
+    return render(request, 'store/products/cart.html', {'cart_items':cart_items, 'cart_total':cart_total} )
+      
+     
+def cart_count_increase(request, id):
+    print(id)
+    cart_item = Cart.objects.get(id=id)
+    cart_item.variant_qty += 1
+    cart_item.save()
+    return redirect('cart_page')     
+     
+     
+def cart_count_decrease(request, id):
+    print(id)
+    cart_item = Cart.objects.get(id=id)
+    if cart_item.variant_qty > 1:
+       cart_item.variant_qty -= 1
+       cart_item.save()
+    
+    
+    return redirect('cart_page')     
+          
+     
+@login_required          
+def add_to_cart(request, slug ):
+    
+    print(slug)
+    
+    variant = Variant.objects.get(slug=slug)
+    
+    cart_iteam = Cart.objects.get_or_create(variant=variant, user=request.user)
+    
+    
+    return redirect('cart_page')
+    
+@login_required
+def remove_from_cart(request, id):
+    item = Cart.objects.get(id=id)
+    item.delete()
+    
+    return redirect('cart_page')
+        
+    
+    
+    
+    
         
  
