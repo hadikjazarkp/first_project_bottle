@@ -80,6 +80,19 @@
             <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
             <input type="text" id="promo" placeholder="Enter your code" class="p-2 text-sm w-full">
           </div>
+
+          <!-- modal trigger -->
+          <div>
+            <label for="tw-modal" id="tw-modal" class="cursor-pointer rounded bg-black px-8 py-4 text-white active:bg-slate-400">Open Modal</label>
+          </div>
+          
+          <!-- hidden toggle -->
+         
+          <input type="checkbox" id="tw-modal" class="peer fixed appearance-none opacity-0">
+
+          <!-- modal-->
+          
+          <label for="tw-modal" class="pointer-events-none invisible fixed inset-0 flex cursor-pointer items-center justify-center overflow-hidden overscroll-contain bg-slate-700/30 opacity-0 transition-all duration-200 ease-in-out peer-checked:pointer-events-auto peer-checked:visible peer-checked:opacity-100 peer-checked:[&>*]:translate-y-0 peer-checked:[&>*]:scale-100"></label>
           <button class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">Apply</button>
 
 
