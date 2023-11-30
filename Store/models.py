@@ -86,11 +86,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
 
 class ShippingAddress(models.Model):
-    GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
-    )
     ADDRESS_TYPE = (
         ('h', 'Home'),
         ('o', 'Office')
@@ -102,7 +97,6 @@ class ShippingAddress(models.Model):
     address = models.CharField(max_length=300)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
-    gender = models.CharField(max_length=1, choices = GENDER_CHOICES,)
     phone_number = PhoneNumberField()
     pincode = models.IntegerField()
     

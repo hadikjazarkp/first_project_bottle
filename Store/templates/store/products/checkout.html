@@ -5,8 +5,8 @@
 
 
 
-<div class="flex flex-col items-center border-b bg-white  sm:flex-row sm:px-10 lg:px-20 xl:px-32">
-    {% comment %}<a href="#" class="text-2xl font-bold text-gray-800">sneekpeeks</a>
+{% comment %}<div class="flex flex-col items-center border-b bg-white  sm:flex-row sm:px-10 lg:px-20 xl:px-32">
+    <a href="#" class="text-2xl font-bold text-gray-800">sneekpeeks</a>
         <div class="mt-4 py-2 text-xs sm:mt-0 sm:ml-auto sm:text-base">
              <div class="relative">
                 <ul class="relative flex w-full items-center justify-between space-x-2 sm:space-x-4">
@@ -33,10 +33,9 @@
                 </li>
                 </ul>
             </div> 
-            </div>{% endcomment %}
-         </div>
+            </div>
+         </div>{% endcomment %}
   <div class="grid sm:px-10 lg:grid-cols-2 py-3 lg:px-20 xl:px-32">
-    
     <div class="px-4 pt-8">
       <p class="text-xl font-medium">Order Summary</p>
       <p class="text-gray-400">Check your items. And select a suitable shipping method.</p>
@@ -73,7 +72,7 @@
         </div> {% endcomment %}
       </div>
   
-      <p class="mt-8 text-lg font-medium">Shipping Methods</p>
+      <p class="mt-8 text-lg font-medium">Payment Methods</p>
       <form class="mt-5 grid gap-6">
         <div class="relative">
           <input class="peer hidden" id="radio_1" type="radio" name="radio" checked />
@@ -81,35 +80,51 @@
           <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="radio_1">
             <img class="w-14 object-contain" src="/images/naorrAeygcJzX0SyNI4Y0.png" alt="" />
             <div class="ml-5">
-              <span class="mt-2 font-semibold">Fedex Delivery</span>
+              <span class="mt-2 font-semibold">Razorpay</span>
               <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
             </div>
           </label>
         </div>
+        <div class="relative">
+            <input class="peer hidden" id="radio_1" type="radio" name="radio" checked />
+            <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+            <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="radio_1">
+              <img class="w-14 object-contain" src="/images/naorrAeygcJzX0SyNI4Y0.png" alt="" />
+              <div class="ml-5">
+                <span class="mt-2 font-semibold">PayPal</span>
+                <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
+              </div>
+            </label>
+          </div>
         <div class="relative">
           <input class="peer hidden" id="radio_2" type="radio" name="radio" checked />
           <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
           <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="radio_2">
             <img class="w-14 object-contain" src="/images/oG8xsl3xsOkwkMsrLGKM4.png" alt="" />
             <div class="ml-5">
-              <span class="mt-2 font-semibold">Fedex Delivery</span>
+              <span class="mt-2 font-semibold">Cash On Delivery</span>
               <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
             </div>
           </label>
         </div>
       </form>
     </div>
+    
     <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-      <p class="text-xl font-medium">Payment Details</p>
-      <p class="text-gray-400">Complete your order by providing your payment details.</p>
+      <p class="text-xl font-medium">Address Details</p>
+      <p class="text-gray-400">Complete your order details.</p>
       <div class="">
-        <label for="email" class="mt-4 mb-2 block text-sm font-medium">Email</label>
+        <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
         <div class="relative">
-          <input type="text" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="your.email@gmail.com" />
+          <input type="text" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
           <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            {% comment %} <svg xmlns="" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-            </svg>
+            </svg> {% endcomment %}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
+              
           </div>
         </div>
         <label for="card-holder" class="mt-4 mb-2 block text-sm font-medium">Card Holder</label>
@@ -167,8 +182,114 @@
       </div>
       <button class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
     </div>
-  </div>
-  
 
+
+      <div class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center" id="modal">
+        <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg">
+           <div class="modal-header flex justify-between items-center mb-4">
+           <h2 class="text-lg font-semibold  text-center">Modal Title</h2>
+            <button id="close-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        <div class="modal-body overflow-y-auto max-h-96 ">
+           
+
+                                <p class="text-xl font-medium">Address Details</p>
+                                <p class="text-gray-400">Complete your order details.</p>
+                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
+                                <div class="relative">
+                                <input type="text" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
+                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                    </svg>
+                                    
+                                </div>
+                                </div>
+
+                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
+                                <div class="relative">
+                                <input type="text" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
+                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                    </svg>
+                                    
+                                </div>
+                                </div>
+
+                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
+                                <div class="relative">
+                                <input type="text" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
+                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                    </svg>
+                                    
+                                </div>
+                                </div>
+
+                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
+                                <div class="relative">
+                                <input type="text" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
+                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                    </svg>
+                                    
+                                </div>
+                                </div>
+
+                        <!-- Total -->
+                  
+                    <div class="mt-6 flex items-center justify-between">
+                        <p class="text-sm font-medium text-gray-900">Total</p>
+                        <p class="text-2xl font-semibold text-gray-900">$408.00</p>
+                    </div>
+                    </div>
+                    <button class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
+              
+
+                
+        
+        </div> 
+
+      
+    </div>
+      
+      <button id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
+        Open Modal
+      </button>
+
+
+
+
+  </div>
+
+<script>
+  function openModal() {
+    document.getElementById('modal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+  }
+
+  document.getElementById('close-modal').addEventListener('click', closeModal);
+
+  // Close modal if the overlay is clicked
+  document.getElementById('modal').addEventListener('click', function (event) {
+    if (event.target === this) {
+      closeModal();
+    }
+  });
+</script>
 
 {% endblock %}

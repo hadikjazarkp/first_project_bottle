@@ -86,9 +86,11 @@ def productview(request, pslug, vslug):
 
 
 
-@login_required 
+
+@login_required(login_url='loginpage')  # Specify the login URL
 def cart(request):
-    
+
+        
     cart_items = Cart.objects.filter(user=request.user)
     cart_total = 0
     for item in cart_items:
