@@ -11,6 +11,7 @@ from Store.manager import UserProfileManager
 from django.utils.html import mark_safe
 from django.core.exceptions import ValidationError
 import os
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 
@@ -81,7 +82,30 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
  
- 
+
+
+
+class ShippingAddress(models.Model):
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    )
+    ADDRESS_TYPE = (
+        ('h', 'Home'),
+        ('o', 'Office')
+    )
+    
+    
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    address_type = models.CharField(max_length=1, choices = ADDRESS_TYPE)
+    address = models.CharField(max_length=300)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    gender = models.CharField(max_length=1, choices = GENDER_CHOICES,)
+    phone_number = PhoneNumberField()
+    pincode = models.IntegerField()
+    
  
  
 class CustomUserManager(UserManager):

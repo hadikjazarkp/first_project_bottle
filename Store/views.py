@@ -96,9 +96,9 @@ def cart(request):
         cart_total=cart_total+item.total_price
      
      
-    promocodes = PeromoCode.objects.filter(purchase_price__lte=cart_total)
     
-    return render(request, 'store/products/cart.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes} )
+    
+    return render(request, 'store/products/cart.html', {'cart_items':cart_items, 'cart_total':cart_total,} )
       
      
 def cart_count_increase(request, id):
@@ -142,6 +142,36 @@ def remove_from_cart(request, id):
     
     
     
+def checkout(request):
     
+    cart_items = Cart.objects.filter(user=request.user)
+    cart_total = 0
+    for item in cart_items:
         
- 
+        cart_total=cart_total+item.total_price
+     
+     
+    promocodes = PeromoCode.objects.filter(purchase_price__lte=cart_total)
+    
+    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes})    
+        
+     
+def checkout_increase(request, id):
+    print(id)
+    cart_item = Cart.objects.get(id=id)
+    cart_item.variant_qty += 1
+    cart_item.save()
+    return redirect('checkout')     
+     
+     
+def checkout_count_decrease(request, id):
+    print(id)
+    cart_item = Cart.objects.get(id=id)
+    if cart_item.variant_qty > 1:
+       cart_item.variant_qty -= 1
+       cart_item.save()
+    
+    
+    return redirect('checkout')     
+          
+  

@@ -19,6 +19,10 @@ urlpatterns = [
     path("add_to_cart/<slug:slug>/", views.add_to_cart, name='add_to_cart'),
     path("remove_from_cart/<uuid:id>/",views.remove_from_cart, name='remove_from_cart'),
      
+    path('checkout/', views.checkout, name='checkout'),
+    path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
+    path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
+    
    
     path('register/', authview.Register.as_view(), name="register"),
     path('verify/<str:key>/',authview.VerifyOtpView.as_view(),name='otp'),
