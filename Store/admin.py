@@ -40,7 +40,7 @@ class UserdpAdmin(admin.ModelAdmin):
 
 class PeromoCodeAdmin(admin.ModelAdmin):
     form = PeromoCodeForm
-    list_display=['peromocode','discount_price','purchase_price','expaire_date',]
+    list_display=['code','discount_price','purchase_price','expaire_date',]
  
 
 

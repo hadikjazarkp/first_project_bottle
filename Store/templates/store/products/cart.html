@@ -6,10 +6,11 @@
 
 
 
-
     <div class="container mx-auto mt-10">
-      <div class="flex shadow-md my-10">
-        <div class="w-3/4 bg-white px-10 py-10">
+      {% comment %} <div class="flex shadow-md my-10"> {% endcomment %}
+        <div class="flex flex-col shadow-md my-10 md:flex-row">
+        {% comment %} <div class="w-3/4 bg-white px-10 py-10"> {% endcomment %}
+          <div class="w-full md:w-3/4 bg-white px-4 py-4">
           <div class="flex justify-between border-b pb-8">
             <h1 class="font-semibold text-2xl">Shopping Cart</h1>
             <h2 class="font-semibold text-2xl">3 Items</h2>
@@ -25,7 +26,8 @@
 
 
           {% for item in cart_items %}
-          <div class="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
+          {% comment %} <div class="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5"> {% endcomment %}
+            <div class="flex flex-col md:flex-row items-center hover:bg-gray-100 -mx-4 px-4 py-5">
             <div class="flex w-2/5"> <!-- product -->
               <div class="w-20">
                 <img class="h-24" src="{{ item.variant.cover_image.url }}" alt="img">
@@ -56,44 +58,71 @@
 
 
           {% endfor %}
-
-          <a href="{% url "home" %}" class="flex font-semibold text-indigo-600 text-sm mt-10">
+{% comment %} 
+          <a href="{% url "home" %}" class="flex font-semibold text-indigo-600 text-sm mt-10"> {% endcomment %}
+            <a href="{% url "home" %}" class="flex font-semibold text-indigo-600 text-sm mt-6 md:mt-10">
         
             <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z"/></svg>
             Continue Shopping
           </a>
         </div>
   
-        <div id="summary" class="w-1/4 px-8 py-10">
+        {% comment %} <div id="summary" class="w-1/4 px-8 py-10"> {% endcomment %}
+          <div id="summary" class="w-full md:w-1/4 px-4 py-4 mt-4 md:mt-0">
           <h1 class="font-semibold text-2xl border-b pb-8">Order Summary</h1>
           <div class="flex justify-between mt-10 mb-5">
             <span class="font-semibold text-sm uppercase">Items 3</span>
             <span class="font-semibold text-sm"></span>
           </div>
-          <div>
+          {% comment %} <div>
             <label class="font-medium inline-block mb-3 text-sm uppercase">Shipping</label>
             <select class="block p-2 text-gray-600 w-full text-sm">
               <option>Standard shipping - $10.00</option>
             </select>
-          </div>
-          <div class="py-10">
-            <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
-            <input type="text" id="promo" placeholder="Enter your code" class="p-2 text-sm w-full">
-          </div>
-
-          <!-- modal trigger -->
-          <div>
-            <label for="tw-modal" id="tw-modal" class="cursor-pointer rounded bg-black px-8 py-4 text-white active:bg-slate-400">Open Modal</label>
-          </div>
+          </div> {% endcomment %}
           
-          <!-- hidden toggle -->
          
-          <input type="checkbox" id="tw-modal" class="peer fixed appearance-none opacity-0">
+{% comment %} 
+ <div class="min-h-screen ">
+  <!-- Modal Trigger -->
+  <button id="open-modal" class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white rounded">
+    APPLY
+  </button>
 
-          <!-- modal-->
-          
-          <label for="tw-modal" class="pointer-events-none invisible fixed inset-0 flex cursor-pointer items-center justify-center overflow-hidden overscroll-contain bg-slate-700/30 opacity-0 transition-all duration-200 ease-in-out peer-checked:pointer-events-auto peer-checked:visible peer-checked:opacity-100 peer-checked:[&>*]:translate-y-0 peer-checked:[&>*]:scale-100"></label>
-          <button class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">Apply</button>
+  <!-- Modal -->
+
+ 
+  <div id="modal" class="fixed  inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50  text-center   py-80">
+    <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg transform -translate-x-1/2 -translate-y-1/2">
+      <div class="modal-header flex justify-between items-center  mb-4">
+        <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
+        <button id="close-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body ">
+         <div class="py-10">
+          <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
+          <input type="text" id="promo" placeholder="Enter your code" class="p-2 text-sm w-full">
+        </div> 
+
+        <div class="text-center ">
+          {% for promocode in promocodes %}
+          <div class="border-4 m-10 bg-black text-white">
+          <h1>{{ promocode.discount_price}}</h1>
+          <h1>{{ promocode.code}}</h1>
+        </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div> 
+
+       {% endcomment %}
+
+         
 
 
 
@@ -115,5 +144,20 @@
       </div>
     </div>
   
+    <script>
+      // JavaScript to handle modal opening and closing
+      document.addEventListener('DOMContentLoaded', function () {
+        const openModalButton = document.getElementById('open-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const modal = document.getElementById('modal');
   
+        openModalButton.addEventListener('click', function () {
+          modal.classList.remove('hidden');
+        });
+  
+        closeModalButton.addEventListener('click', function () {
+          modal.classList.add('hidden');
+        });
+      });
+    </script>
   {% endblock %}

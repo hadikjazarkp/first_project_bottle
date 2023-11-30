@@ -96,9 +96,9 @@ def cart(request):
         cart_total=cart_total+item.total_price
      
      
-    promocode = PeromoCode.objects.filter(purchase_price__lte=cart_total)
+    promocodes = PeromoCode.objects.filter(purchase_price__lte=cart_total)
     
-    return render(request, 'store/products/cart.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocode':promocode} )
+    return render(request, 'store/products/cart.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes} )
       
      
 def cart_count_increase(request, id):

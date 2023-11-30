@@ -25,7 +25,7 @@
     
   </div>
 </div> {% endcomment %}
-<h1 class="text-2xl font-bold mx-10 mb-4">PRODUCT VIEW</h1>
+
 <hr>
 <div class=" bg-gradient-gray-dark py-12">
  
@@ -57,21 +57,26 @@
               <div class="flex mb-4">
 
                 <div>
+                  {% if variant.quantity > 0 %}
                   <span class="font-bold text-gray-700 dark:text-gray-300">Availability:</span>
-                  <span class="text-gray-600 dark:text-gray-300">In Stock</span>
+                  <span class="text-green-400 dark:text-gray-300">In Stock</span>
+                  {% else %}
+                  <span class="font-bold text-gray-700 dark:text-gray-300">Availability:</span>
+                  <span class="text-red-400 dark:text-gray-300">Out Of Stock</span>
+                  {% endif %}
                 </div>
                   
               </div>
               
               <div class="mr-4 flex justify-start ">
-                <p class="font-bold text-gray-700 dark:text-gray-300">Price :</p>
+                <p class="font-bold text-black dark:text-gray-300">Price :</p>
                 <del  class="text-red-500">
-                  <p class="text-gray-600 dark:text-gray-300 overline ml-2">{{variant.orginal_price}} </p>
+                  <p class="text-gray-700 dark:text-gray-300 overline ml-2">{{variant.orginal_price}} </p>
                 </del>
-                  <p class="text-gray-600 dark:text-gray-300 overline ml-2"> {{ variant.selling_price}}</p>
+                  <p class="text-black dark:text-gray-300 overline ml-2"> {{ variant.selling_price}}</p>
               </div>
               <div class="mb-4">
-                  <span class="font-bold text-gray-700 dark:text-gray-300">Select Color:</span>
+                  <span class="font-bold text-black dark:text-gray-300">Select Color:</span>
                   <div class="flex items-center mt-2">
                     <div class="flex ps-2">
                       {% for similar_variant in variant.product.variants.all %}
@@ -97,28 +102,32 @@
                   {% comment %} <form method="post" action="{% url 'add_to_cart' slug=variant.slug %}">
                     {% csrf_token %} {% endcomment %}
                     <input type="hidden" name="variant_id" value="{{ variant.id }}">
-                    <div class="mb-4">
-                        <label for="quantity">Quantity:</label>
-                        {% if variant.quantity > 0 %}
-                        <div class="flex items-center">
+                    <div class="">
+                        <label for="quantity"></label>
+                       
+                      </div>
+
+                    {% if variant.quantity > 0%}
+
+                       <a  href="{% url "add_to_cart" slug=variant.slug %}">
+                        <button class="w-full bg-black dark:bg-gray-400 py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700 border border-black text-white">Add to cart</button>
+
+                       </a> 
+                      
+                    {% else  %}
+
+                      
+                        <button class="w-full bg-black dark:bg-gray-400 py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700 border border-black text-white">Out Of Stock</button>     
+                     
+                    {% endif %}
+                     
+                        </div>
+                        {% comment %} <div class="flex items-center">
                             <button type="button" class="quantity-button" id="quantity-minus">-</button>
                             <input type="number" name="quantity" id="quantity" value="1" min="1" class="w-16 text-center" required>
                             <button type="button" class="quantity-button" id="quantity-plus">+</button>
-                        </div>
-                        {% else %}
-                        <div>
-                          <button class="out-of-stock-button">Out of Stock</button>
-
-                        </div>
-
-                        {% endif %}
-                    </div>
-                    <a class="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700" href="{% url "add_to_cart" slug=variant.slug %}">Add to cart</a>
-                    
-                  {% comment %} </form> {% endcomment %}
-                    
-                   
-                </div>
+                        </div> {% endcomment %}
+                       
                   <div class="w-1/2 px-2">
                     <form method="post" action="{% url 'add_to_wishlist' slug=variant.product.slug %}">
                       {% csrf_token %}
@@ -128,7 +137,7 @@
               </div>
           
               <div>
-                  <span class="font-bold text-gray-700 dark:text-gray-300">Product Description:</span>
+                  <span class="font-bold text-black dark:text-gray-300">Product Description:</span>
                   <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">{{ variant.product.description }}
                       </p>
               </div>
