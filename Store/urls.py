@@ -20,8 +20,9 @@ urlpatterns = [
     path("remove_from_cart/<uuid:id>/",views.remove_from_cart, name='remove_from_cart'),
      
     path('checkout/', views.checkout, name='checkout'),
-    path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
-    path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
+    path('add_address/', views.add_address, name='add_address'),
+    # path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
+    # path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
     
    
     path('register/', authview.Register.as_view(), name="register"),

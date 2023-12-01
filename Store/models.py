@@ -57,7 +57,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     # phone_number = models.CharField(max_length=12 , unique=True)
     # is_phone_verified = models.BooleanField(default=False)
     # ootp = models.CharField(max_length=6)
-
+   
     # New field for the user's profile image
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
 
@@ -85,15 +85,13 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
 
 
-class ShippingAddress(models.Model):
-    ADDRESS_TYPE = (
-        ('h', 'Home'),
-        ('o', 'Office')
-    )
-    
-    
+class Address(models.Model):
+   
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
-    address_type = models.CharField(max_length=1, choices = ADDRESS_TYPE)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    address_type = models.CharField(max_length=50)
     address = models.CharField(max_length=300)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)

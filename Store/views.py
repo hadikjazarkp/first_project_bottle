@@ -37,9 +37,9 @@ def shop(request):
 def settingsview(request):
     # Assuming the user is logged in, you can access the UserProfile through request.user
     user= request.user
+    user_address = Address.objects.filter(user=request.user)
     
-    
-    return render(request, 'store/auth/settings.html', {'user_profile': user})
+    return render(request, 'store/auth/settings.html', {'user_profile': user, 'user_address':user_address})
 
 
 
@@ -148,6 +148,10 @@ def checkout(request):
     
     cart_items = Cart.objects.filter(user=request.user)
     cart_total = 0
+    user_address = Address.objects.filter(user=request.user)
+    
+    
+    
     for item in cart_items:
         
         cart_total=cart_total+item.total_price
@@ -155,25 +159,54 @@ def checkout(request):
      
     promocodes = PeromoCode.objects.filter(purchase_price__lte=cart_total)
     
-    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes})    
+     
+    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address})    
+
+   
+from django.shortcuts import render, redirect
+
+def add_address(request):
+    if request.method == 'POST':
+        
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        phone_number = request.POST.get('phone_number')  # Updated to match the HTML form
+        pincode = request.POST.get('pincode') 
+        address_type = request.POST.get('address_type')
+
+        # Print the values for testing
+        Address.objects.create(first_name=first_name,last_name=last_name,address=address,city=city,state=state,phone_number=phone_number,pincode=pincode,address_type=address_type, user=request.user)
+        print(first_name, last_name, address, city, state, phone_number,pincode, address_type)
+
+        # Perform any additional processing or save to the database as needed
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))  # Redirect to the referring page or home if not available
+
+
+
+
+
         
      
-def checkout_increase(request, id):
-    print(id)
-    cart_item = Cart.objects.get(id=id)
-    cart_item.variant_qty += 1
-    cart_item.save()
-    return redirect('checkout')     
+# def checkout_increase(request, id):
+#     print(id)
+#     cart_item = Cart.objects.get(id=id)
+#     cart_item.variant_qty += 1
+#     cart_item.save()
+#     return redirect('checkout')     
      
      
-def checkout_count_decrease(request, id):
-    print(id)
-    cart_item = Cart.objects.get(id=id)
-    if cart_item.variant_qty > 1:
-       cart_item.variant_qty -= 1
-       cart_item.save()
+# def checkout_count_decrease(request, id):
+#     print(id)
+#     cart_item = Cart.objects.get(id=id)
+#     if cart_item.variant_qty > 1:
+#        cart_item.variant_qty -= 1
+#        cart_item.save()
     
     
-    return redirect('checkout')     
+#     return redirect('checkout')     
           
   
