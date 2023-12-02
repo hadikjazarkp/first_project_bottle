@@ -186,7 +186,32 @@ def add_address(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))  # Redirect to the referring page or home if not available
 
 
+def edit_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id)
+    if request.method == 'POST':
+        # Process the form data if needed, you can access it using request.POST
+        # Update the address fields accordingly
+        address.first_name = request.POST.get('first_name')
+        address.last_name = request.POST.get('last_name')
+        address.address_type = request.POST.get('address_type')
+        address.address = request.POST.get('address')
+        address.city = request.POST.get('city')
+        address.state = request.POST.get('state')
+        address.phone_number = request.POST.get('phone_number')
+        address.pincode = request.POST.get('pincode')
+        
+        # Save the updated address
+        address.save()
+        
+        
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
+def delete_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id)
+    # if request.method == 'POST':
+    address.delete()
+        
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
         

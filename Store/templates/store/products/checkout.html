@@ -3,38 +3,36 @@
 {% csrf_token %}
 {% block content %}
 
+<style>
 
 
-{% comment %}<div class="flex flex-col items-center border-b bg-white  sm:flex-row sm:px-10 lg:px-20 xl:px-32">
-    <a href="#" class="text-2xl font-bold text-gray-800">sneekpeeks</a>
-        <div class="mt-4 py-2 text-xs sm:mt-0 sm:ml-auto sm:text-base">
-             <div class="relative">
-                <ul class="relative flex w-full items-center justify-between space-x-2 sm:space-x-4">
-                <li class="flex items-center space-x-3 text-left sm:space-x-4">
-                    <a class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-200 text-xs font-semibold text-emerald-700" href="#"
-                    ><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg
-                    ></a>
-                    <span class="font-semibold text-gray-900">Shop</span>
-                </li>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-                <li class="flex items-center space-x-3 text-left sm:space-x-4">
-                    <a class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-2" href="#">2</a>
-                    <span class="font-semibold text-gray-900">Shipping</span>
-                </li>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-                <li class="flex items-center space-x-3 text-left sm:space-x-4">
-                    <a class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-400 text-xs font-semibold text-white" href="#">3</a>
-                    <span class="font-semibold text-gray-500">Payment</span>
-                </li>
-                </ul>
-            </div> 
-            </div>
-         </div>{% endcomment %}
+
+
+
+
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    padding: 16px; /* Adjust the padding as needed */
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.address-details p {
+    margin-bottom: 8px;
+}
+
+.buttons button {
+    margin-right: 8px;
+
+}
+
+</style>
+
   <div class="grid sm:px-10 lg:grid-cols-2 py-3 lg:px-20 xl:px-32">
     <div class="px-4 pt-8">
       <p class="text-xl font-medium">Order Summary</p>
@@ -137,64 +135,281 @@
         </div>
       </form> {% endcomment %}
     </div>
-    
-    <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-      <p class="text-xl font-medium">Address Details</p>
-      <div class="container mt-4">
-          <div class="row">
-              {% for ad in user_address %}
-              <div class="col-md-6 mb-4">
-                  <div class="card">
-                      <div class="card-body">
-                          <h5 class="card-title">Address {{ ad.address_type }}</h5>
-                          <p class="card-text"><strong>Address:</strong> {{ ad.address }}</p>
-                          <p class="card-text"><strong>Name:</strong> {{ ad.first_name }}</p>
-                          <p class="card-text"><strong>State:</strong> {{ ad.state }}</p>
-                          <p class="card-text"><strong>City:</strong> {{ ad.city }}</p>
-                          <p class="card-text"><strong>Pin Code:</strong> {{ ad.pincode }}</p>
-                          <p class="card-text"><strong>Phone number:</strong> {{ ad.phone_number }}</p>
+    <div>
+
+    <div class="container mt-4">
+      <div class="row">
+          <h1 class="text-5xl">Addresses</h1>
   
-                          <!-- Edit Button (Open Modal) -->
-                          <button class="btn btn-primary" onclick="openEditModal('{{ ad.id }}')">Edit</button>
-  
-                          <!-- Delete Button (with confirmation) -->
-                          <button class="btn btn-danger" onclick="confirmDelete('{{ ad.id }}')">Delete</button>
+          {% for ad in user_address %}
+          <div class="col-md-6 mt-3 mb-4">
+              <div class="card p-4">
+                  <div class="card-body">
+                      <h3 class="text-xl font-medium mb-2">Address {{ad.address_type}}</h3>
+                      <div class="address-details">
+                          <p><strong>Address:</strong> {{ad.address}}</p>
+                          <p><strong>Name:</strong> {{ad.first_name}}</p>
+                          <p><strong>State:</strong> {{ad.state}}</p>
+                          <p><strong>City:</strong> {{ad.city}}</p>
+                          <p><strong>Pin Code:</strong> {{ad.pincode}}</p>
+                          <p><strong>Phone number:</strong> {{ad.phone_number}}</p>
                       </div>
+                      <div class="buttons mt-3">
+                          <!-- Edit Button (Open Modal) -->
+                          <button class="btn btn-primary bg-black text-white px-3 py-1" onclick="openEditModal('{{ ad.id }}')">Edit</button>
+
+
+
+
+                          <button class="btn btn-danger bg-red-900 text-white px-3 py-1" onclick="confirmDelete('{% url 'delete_address' address_id=ad.id %}')">Delete</button>
+                        </div>
                   </div>
               </div>
-              {% endfor %}
           </div>
+
+
+
+<!-- Edit Modal -->
+<div class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center" id="edit-modal">
+  <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg">
+      <div class="modal-header flex justify-between items-center mb-4">
+          <p class="text-xl font-medium">Edit Address</p>
+          <button id="close-edit-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none" onclick="closeEditModal()">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+          </button>
+      </div>
+      <div class="modal-body overflow-y-auto max-h-96">
+        <form action="{% url "edit_address" address_id=ad.id %}" method="post">
+          {% csrf_token %}
+          <p class="text-gray-400">Complete your order details.</p>
+
+          <div class="mt-4">
+            <label for="address_type" class="block text-sm font-medium">Address Type</label>
+            <select name="address_type" id="address_type"
+                class="w-full border border-gray-200 px-4 py-2 rounded-md text-sm outline-none focus:ring focus:border-blue-500">
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+            </select>
+        </div>
+          <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
+          <div class="relative">
+          <input type="text" id="email" name="address"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" value="{{ad.address}}"  />
+          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
+              
+          </div>
+          </div>
+          
+        
+
+          <label for="email" class="mt-4 mb-2 block text-sm font-medium">First name</label>
+          <div class="relative">
+           <input type="text" id="first_name" name="first_name" value="{{ad.first_name}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="first_name" /> 
+          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+            </svg>
+              
+          </div>
+          </div>
+
+          <label for="email" class="mt-4 mb-2 block text-sm font-medium">last name</label>
+          <div class="relative">
+          <input type="text" id="last_name" name="last_name" value="{{ad.last_name}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="last_name" />
+          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+            </svg>
+              
+          </div>
+          </div>
+
+          <label for="email" class="mt-4 mb-2 block text-sm font-medium">city</label>
+          <div class="relative">
+          <input type="text" id="city" name="city" value="{{ad.city}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="city" />
+          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
+              
+          </div>
+          </div>
+
+          <label for="email" class="mt-4 mb-2 block text-sm font-medium">state</label>
+          <div class="relative">
+          <input type="text" id="state" name="state" value="{{ad.state}}" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="state" />
+          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
+              
+          </div>
+          </div>
+
+
+          <label for="number" class="mt-4 mb-2 block text-sm font-medium">number</label>
+          <div class="relative">
+          <input type="text" id="number" name="phone_number" value="{{ad.phone_number}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="number" />
+          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+            </svg>
+            
+          </div>
+          </div>
+
+          <label for="email" class="mt-4 mb-2 block text-sm font-medium">Pincode</label>
+          <div class="relative">
+           <input type="text"  name="pincode" value="{{ad.pincode}}"  class="w-full  rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="pincode" /> 
+          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+              
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+            </svg>
+              
+          </div>
+          </div>
+
+          
+
+  <!-- Total -->
+
+
+</div>
+<input type="submit" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white" value="Save Change">
+</form>
+
+ </div>
+</div>
+
+          {% endfor %}
       </div>
   </div>
+  
 
   
-  !-- Edit Modal -->
-<div class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center"
-    id="edit-modal">
-    <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg" style="width: -moz-available;">
-        <div class="modal-header flex justify-between items-center mb-4">
-            <p class="text-xl font-medium">Edit Address</p>
-            <button id="close-edit-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                onclick="closeEditModal()">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                </svg>
-            </button>
-        </div>
-        <div class="modal-body overflow-y-auto max-h-96 w-100">
-            <!-- Your edit form goes here -->
-            <!-- Use JavaScript to pre-fill the form with the selected address details -->
-        </div>
-    </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
 
       <div class="">
   
         <button id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
           Add Address
         </button>
+
+
+
+<!-- Trigger button for Promo Modal -->
+<button onclick="openPromoModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  Open Promo Modal
+</button>
+
+<!-- Promo Modal -->
+<div id="promoModal" class="modal">
+  <div class="modal-content bg-white border rounded-lg shadow-md p-8 w-4/5 md:w-1/2 mx-auto mt-16">
+    <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
+    <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Enter Promo Code:</label>
+    <input type="text" id="promoCode" placeholder="Enter your promo code" class="w-full border rounded py-2 px-3 mb-4">
+
+    <div class="text-center ">
+      {% for promocode in promocodes %}
+      <div class="border-4 m-10 bg-black text-white">
+      <h1>{{ promocode.discount_price}}</h1>
+      <h1>{{ promocode.code}}</h1>
+    </div>
+      {% endfor %}
+    <button onclick="applyPromoCode()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+      Apply
+    </button>
+  </div>
+</div>
+
+
+
+
+        {% comment %} <!-- Trigger button -->
+<button onclick="openPromoModal()">Apply Promo Code</button>
+
+<!-- Promo Code Modal -->
+<div id="promoModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closePromoModal()">&times;</span>
+    <label for="promoCode">Enter Promo Code:</label>
+    <input type="text" id="promoCode" placeholder="Enter your promo code">
+    <button onclick="applyPromoCode()">Apply</button>
+  </div>
+</div> {% endcomment %}
+
+
+        {% comment %} <button id="open-modal" class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white rounded">
+          APPLY
+        </button>
+
+
+
+
+      <!-- Modal -->
+
+ 
+  <div id="open-modal" class="fixed  inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50  text-center   py-80">
+    <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg transform -translate-x-1/2 -translate-y-1/2">
+      <div class="modal-header flex justify-between items-center  mb-4">
+        <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
+        <button id="close-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body ">
+         <div class="py-10">
+          <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
+          <input type="text" id="promo" placeholder="Enter your code" class="p-2 text-sm w-full">
+        </div> 
+
+        <div class="text-center ">
+          {% for promocode in promocodes %}
+          <div class="border-4 m-10 bg-black text-white">
+          <h1>{{ promocode.discount_price}}</h1>
+          <h1>{{ promocode.code}}</h1>
+        </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+   {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+        
         <!-- Total -->
         <div class="mt-6 border-t border-b py-2">
           
@@ -234,6 +449,17 @@
                                <form action="{% url 'add_address' %}" method="post">
                                 {% csrf_token %}
                                 <p class="text-gray-400">Complete your order details.</p>
+
+
+                                <div class="mt-4">
+                                  <label for="address_type" class="block text-sm font-medium">Address Type</label>
+                                  <select name="address_type" id="address_type"
+                                      class="w-full border border-gray-200 px-4 py-2 rounded-md text-sm outline-none focus:ring focus:border-blue-500">
+                                      <option value="Home">Home</option>
+                                      <option value="Office">Office</option>
+                                  </select>
+                              </div>
+
                                 <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
                                 <div class="relative">
                                 <input type="text" id="email" name="address" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
@@ -307,7 +533,7 @@
                                 </div>
                                 </div>
 
-                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">First name</label>
+                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">pincode</label>
                                 <div class="relative">
                                  <input type="text"  name="pincode" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="pincode" /> 
                                 <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
@@ -319,10 +545,7 @@
                                 </div>
                                 </div>
 
-                                 <select name="address_type" >
-                                  <option value="Home">Home</option>
-                                  <option value="Office">Office</option>
-                                 </select>
+
 
                         <!-- Total -->
                   
@@ -353,30 +576,77 @@
 
 
 <script>
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get all radio buttons and their corresponding labels
+    const radioButtons = document.querySelectorAll('input[name="radioGroup"]');
+    const labels = document.querySelectorAll('label[for^="radioButton"]');
+
+    // Add event listener to each radio button
+    radioButtons.forEach(function(radioButton, index) {
+      radioButton.addEventListener("change", function() {
+        // Hide all markers
+        labels.forEach(function(label) {
+          label.querySelector('.marker').style.opacity = '0';
+        });
+
+        // Show the marker for the selected radio button
+        labels[index].querySelector('.marker').style.opacity = '1';
+      });
+    });
+  });
+
+
+
+
+
+
+
+
+
+
+
   function openEditModal(addressId) {
-    // Use JavaScript to fetch the address details and pre-fill the form in the modal
-    // Set the form action URL to include the addressId for updating
+    // Fetch address details based on addressId and fill the form
+    // Assuming you have an endpoint to get address details by ID
+    // Use JavaScript or an AJAX request to fetch data and populate the form fields
+
+    // Example using vanilla JavaScript and assuming you have an endpoint '/get_address_details/'
+    fetch(`/get_address_details/?address_id=${addressId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Fill the form fields with data received from the server
+            document.getElementById('first_name').value = data.first_name;
+            // Repeat similar lines for other form fields
+        });
+
+    // Show the modal
     document.getElementById('edit-modal').classList.remove('hidden');
 }
 
 function closeEditModal() {
-    // Use JavaScript to close the edit modal
+    // Close the modal
     document.getElementById('edit-modal').classList.add('hidden');
+}  
+ 
+
+
+function confirmDelete(url) {
+  console.log("URL:", url);  // Check if the URL is correct
+  var userConfirmed = window.confirm("Are you sure you want to delete?");
+  
+  if (userConfirmed) {
+      console.log("User confirmed. Redirecting...");
+      window.location.href = url;
+  } else {
+      console.log("Delete canceled by user.");
+  }
 }
 
-  const radioButtons = document.querySelectorAll('input[type="radio"]');
 
-  radioButtons.forEach((radioButton) => {
-    radioButton.addEventListener('change', () => {
-      radioButtons.forEach((otherRadioButton) => {
-        const indicator = otherRadioButton.nextElementSibling.querySelector('.bg-indigo-500');
-        indicator.style.opacity = '0';
-      });
 
-      const indicator = radioButton.nextElementSibling.querySelector('.bg-indigo-500');
-      indicator.style.opacity = '1';
-    });
-  });
+
 
 
   function openModal() {
@@ -396,5 +666,28 @@ function closeEditModal() {
     }
   });
 </script>
+
+
+<script>
+  function openPromoModal() {
+    document.getElementById('promoModal').classList.remove('hidden');
+  }
+
+  function closePromoModal() {
+    document.getElementById('promoModal').classList.add('hidden');
+  }
+
+  function applyPromoCode() {
+    // Add logic to handle applying the promo code
+    console.log('Promo code applied!');
+    // Close the modal
+    closePromoModal();
+  }
+</script>
+
+
+
+
+
 
 {% endblock %}
