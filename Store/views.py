@@ -150,6 +150,7 @@ def checkout(request):
     cart_total = 0
     user_address = Address.objects.filter(user=request.user)
     
+    final_price = 0
     
     
     for item in cart_items:
@@ -158,9 +159,14 @@ def checkout(request):
      
      
     promocodes = PeromoCode.objects.filter(purchase_price__lte=cart_total)
+    discount_price = 0
+    if request.session.get('discount'):
+        discount_price = request.session.get('discount')
+        del request.session['discount']   
+    final_price = cart_total - discount_price
     
-     
-    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address})    
+    
+    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address, 'final_price':final_price, 'discount_price':discount_price})    
 
    
 from django.shortcuts import render, redirect
@@ -235,3 +241,30 @@ def delete_address(request, address_id):
 #     return redirect('checkout')     
           
   
+  
+  
+def promocode_view(request):
+    
+    # cart_items = Cart.objects.filter(user=request.user)
+    promocode_value = request.POST.get('promocodevalue')
+    cart_total_price = request.POST.get('cart_total')
+    
+    
+    if promocode_value is not None:
+        discount = float(promocode_value)
+        # cart_total_price = float(cart_total_price)
+
+        # discount = cart_total_price - promocode_value
+    request.session['discount']= discount
+
+        
+    # print(promocode_value)
+    # print(discount)
+    
+    
+    
+    
+    
+
+    
+    return redirect(request.META.get('HTTP_REFERER'))

@@ -191,7 +191,7 @@ class ColorImage(BaseModel):
  
 
 class Cart(BaseModel): 
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='cart')
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE, null=True)
     variant_qty = models.IntegerField(default=1, null=True, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)

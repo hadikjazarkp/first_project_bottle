@@ -26,6 +26,9 @@ urlpatterns = [
     # path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
     # path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
     
+    
+    
+    path('promocode_view/', views.promocode_view, name='promocode_view'),
    
     path('register/', authview.Register.as_view(), name="register"),
     path('verify/<str:key>/',authview.VerifyOtpView.as_view(),name='otp'),

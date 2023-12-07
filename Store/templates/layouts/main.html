@@ -94,6 +94,34 @@
                 <a href="{% url 'shop' %}" class="hover:text-gray-500">SHOP</a>
                 <a href="{% url 'categoryview' slug='combo-packs'%}" class="hover:text-gray-500">COMBO</a>
                
+
+                {{user.wishlist.all}}
+
+  
+    {% comment %} <!-- Trigger button for Modal -->
+    <button onclick="openModal()" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">
+      Open Modal
+  </button>
+
+  <!-- Modal Container -->
+  <div id="modal" class="fixed top-0 left-0 w-full h-full flex items-center justify-center overflow-hidden hidden">
+      <!-- Modal Overlay -->
+      <div class="absolute w-full h-full bg-gray-900 opacity-50"></div>
+      <!-- Modal Content -->
+      <div class="bg-white p-8 rounded shadow-lg z-10 transform translate-x-full transition-transform ease-in-out duration-300">
+          <!-- Modal Close Button -->
+          <span onclick="closeModal()" class="absolute top-0 right-0 p-4 cursor-pointer text-gray-500">&times;</span>
+          <!-- Modal Content Goes Here -->
+          <h1 class="text-2xl font-bold mb-4">Sliding Modal Content</h1>
+          <p>This is a sliding modal created using Tailwind CSS.</p>
+      </div>
+  </div>
+ {% endcomment %}
+
+
+
+
+                
             </nav>
             <div class="flex">
                 <a href="{% url 'home' %}">
@@ -110,13 +138,16 @@
 
                 <!-- Cart -->
                 <div class="ml-auto">
+                  <div class="relative group">
                     <a href="{% url 'wishlist_view' %}" class="text-gray-600 hover:text-gray-900">
                         <img src="{% static 'heart-regular.svg' %}" alt="Profile Image" class=" h-7 w-7">
                     {% comment %} <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
                       <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
                       <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
                     </svg> {% endcomment %}
+                       <span class="absolute -top-2 -right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">{{user.wishlist.all|length}}</span>
                     </a>
+                  </div>
                   </div>
                 <div class="relative group">
                     <a href="{% url "cart_page" %}" class="text-gray-600 hover:text-gray-900">
@@ -124,7 +155,7 @@
                         {% comment %} <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20a2 2 0 100-4 2 2 0 000 4zM21 4h-3.293a1 1 0 00-.768.36l-2.88 3.456H7.945l-2.695-7.89A1 1 0 004.483 1H2v2h.78l3.947 11.577-2.288 2.748a1 1 0 00.194 1.358 1 1 0 001.36-.193l3.072-3.686h4.94l1.612 4.713a1 1 0 001.234.624h4.09a1 1 0 00.973-.766l2-10a1 1 0 00-.242-.87 1 1 0 00-.728-.33z" />
                         </svg> {% endcomment %}
-                        {% comment %} <span class="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full text-xs">5</span> {% endcomment %}
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">{{user.cart.all|length}}</span>
                     </a>
                 </div>
 
@@ -456,8 +487,19 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {% comment %}custom{% endcomment %}
     
-    
+    {% comment %} <script>
+      function openModal() {
+          document.getElementById('modal').classList.remove('hidden');
+          document.getElementById('modal').classList.add('flex');
+          document.getElementById('modal').style.transform = 'translateX(0)';
+      }
 
-       
+      function closeModal() {
+          document.getElementById('modal').classList.remove('flex');
+          document.getElementById('modal').classList.add('hidden');
+          document.getElementById('modal').style.transform = 'translateX(-100%)';
+      }
+  </script> {% endcomment %}
+
 </body>
 </html>
