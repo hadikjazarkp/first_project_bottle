@@ -196,6 +196,10 @@ class Cart(BaseModel):
     variant_qty = models.IntegerField(default=1, null=True, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.IntegerField(default=0)
+    rezor_pay_order_id = models.CharField(max_length=100, null=True, blank=True)
+    rezor_pay_payment_id = models.CharField(max_length=100, null=True, blank=True)
+    rezor_pay_payment_signature = models.CharField(max_length=100, null=True, blank=True)
+     
     
     
     def save(self, *args, **kwargs):

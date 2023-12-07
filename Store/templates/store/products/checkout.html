@@ -74,29 +74,24 @@
       
         <div class="mt-5 grid gap-4">
           <div class="flex items-center">
+            
             <input type="radio" id="radioButton1" name="radioGroup" value="razorpay" />
-            {% comment %} <label for="radioButton1" class="cursor-pointer select-none relative flex items-center justify-center w-6 h-6 border-2 border-gray-300 rounded-full">
-              <div class="w-3 h-3 bg-indigo-500 rounded-full opacity-0 transition-opacity duration-300 ease-in-out"></div>
-            </label> {% endcomment %}
-            <label for="radioButton1" class="ml-2 text-gray-700">Razorpay</label>
+            <label for="radioButton1" class="ml-2 text-gray-700"><button >Pay with Razorpay</button></label>
           </div>
       
           <div class="flex items-center">
             <input type="radio" id="radioButton2" name="radioGroup" value="paypal" />
-            {% comment %} <label for="radioButton2" class="cursor-pointer select-none relative flex items-center justify-center w-6 h-6 border-2 border-gray-300 rounded-full">
-              <div class="w-3 h-3 bg-indigo-500 rounded-full opacity-0 transition-opacity duration-300 ease-in-out"></div>
-            </label> {% endcomment %}
+           
             <label for="radioButton2" class="ml-2 text-gray-700">PayPal</label>
           </div>
       
           <div class="flex items-center">
             <input type="radio" id="radioButton3" name="radioGroup" value="cashOnDelivery"  />
-            {% comment %} <label for="radioButton3" class="cursor-pointer select-none relative flex items-center justify-center w-6 h-6 border-2 border-gray-300 rounded-full"> {% endcomment %}
-              {% comment %} <div class="w-3 h-3 bg-indigo-500 rounded-full opacity-0 transition-opacity duration-300 ease-in-out"></div> {% endcomment %}
-            {% comment %} </label> {% endcomment %}
-            <label for="radioButton3" class="ml-2 text-gray-700">Cash On Delivery</label>
+             <label for="radioButton3" class="ml-2 text-gray-700">Cash On Delivery</label>
           </div>
         </div>
+
+        
       </div>
       {% comment %} <p class="mt-8 text-lg font-medium">Payment Methods</p>
       <form class="mt-5 grid gap-6">
@@ -449,11 +444,10 @@
           <p class="text-2xl font-semibold text-gray-900"> ₹ {{ final_price }}</p>
         </div>
        
-     
-
       
       
-      <button class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
+        
+      <button  class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
     </div>
 
 
@@ -725,9 +719,51 @@ function confirmDelete(url) {
 
 
 
+
+
+
+
+
+
+
  
 </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+<script>
+  var options = {
+      "key": "rzp_test_HIRhNkqNybeWdx", // Enter the Key ID generated from the Dashboard
+      "amount": "{{ payment.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+      "name": "Usbot",
+      "description": "Purchases",
+      "image": "https://example.com/your_logo",
+      "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler": function (response){
+    //      alert(response.razorpay_payment_id);
+        //  alert(response.razorpay_order_id);
+       //   alert(response.razorpay_signature)
+      },
+
+      "theme": {
+          "color": "#3399cc"
+      }
+  };
+  var rzp1 = new Razorpay(options);
+  rzp1.on('payment.failed', function (response){
+          alert(response.error.code);
+          alert(response.error.description);
+          alert(response.error.source);
+          alert(response.error.step);
+          alert(response.error.reason);
+          alert(response.error.metadata.order_id);
+          alert(response.error.metadata.payment_id);
+  });
+  document.getElementById('rzp-button1').onclick = function(e){
+      rzp1.open();
+      e.preventDefault();
+  }
+  </script>
 
 
 

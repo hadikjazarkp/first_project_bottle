@@ -165,3 +165,15 @@ EMAIL_HOST_USER='usbotbottle@gmail.com'
 EMAIL_HOST_PASSWORD='amny bqog bjyy ozmu'
 DEFAULT_FROM_EMAIL='usbotbottle@gmail.com'
 
+
+
+
+
+
+
+
+
+
+
+KEY = 'rzp_test_HIRhNkqNybeWdx'
+SECRET = 'SbAXrEwCX45PooisjDgRmJ2x'

@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.decorators import login_required
+import razorpay
+from django.conf import settings
 
 
 
@@ -147,6 +149,8 @@ def remove_from_cart(request, id):
 def checkout(request):
     
     cart_items = Cart.objects.filter(user=request.user)
+    
+    
     cart_total = 0
     user_address = Address.objects.filter(user=request.user)
     
@@ -166,7 +170,15 @@ def checkout(request):
     final_price = cart_total - discount_price
     
     
-    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address, 'final_price':final_price, 'discount_price':discount_price})    
+    
+    client =razorpay.Client( auth = (settings.KEY, settings.SECRET))
+    payment = client.order.create({'amount': (final_price) * 100, 'currency': 'INR', 'payment_capture': 1 }) 
+    item.rezor_pay_order_id = payment['id']
+    item.save()
+   
+    
+    
+    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address, 'final_price':final_price, 'discount_price':discount_price, 'payment':payment})    
 
    
 from django.shortcuts import render, redirect
