@@ -1,10 +1,10 @@
-
 {% extends "layouts/main.html" %}
 {% load static %}
 
 
 
 {% block content %}
+<hr>
 
 
 {% comment %} <div class="py-3 bg-blue-500">
@@ -13,6 +13,9 @@
         <a href="{% url 'shop' %}"> SHOP /</a>
     </div>
 </div> {% endcomment %}
+{% comment %} 
+<div class="bg-blue-200">
+
 <div class="container mx-auto">
     <div class="flex flex-wrap">
         <div class="w-full">
@@ -34,191 +37,176 @@
             </div>
         </div>
     </div>
+</div> {% endcomment %}
+
+
+
+<div class="flex">
+{% comment %} 
+    <div class="bg-white ">
+        <h1 class="py-3 mx-5 text-2xl ">Filter</h1>
+        <hr>
+        <h1 class=" py-3 mx-5">Category</h1>
+        {% for category_item in category %}
+            <div class="flex items-center px-3 py-2 gap-1">
+                <input type="radio" id="radioButton{{ forloop.index }}" name="radioGroup" value="{{ category_item.name }}" />
+                <label for="radioButton{{ forloop.index }}" class="text-gray-700">{{ category_item.name }}</label>
+            </div>
+        {% endfor %}
+            
+            {% for sub_item in category_item.sub_categories.all %}
+            <hr>
+            <h1 class=" py-3 mx-5">Sub Category</h1>
+            <div class="flex items-center px-3 py-2 gap-1">
+                <input type="radio" id="radioButton{{ forloop.index }}" name="radioGroup" value="{{ sub_item.name }}" />
+                <label for="radioButton{{ forloop.index }}" class="text-gray-700">{{ sub_item.name }}</label>
+            </div>
+            {% endfor %}
+
+
+        
+       
+    </div>
+     {% endcomment %}
+
+     
+     <div class="bg-white">
+        <div class="flex justify-content-between">
+            <div class="py-3 mx-6 text-2xl">Filter</div>
+
+            <a href="{% url 'shop' %}" class="py-5 mx-6 text-blue-300">CLEAR ALL</a>
+        </div>
+        <hr>
+        <h1 class="py-3 mx-5">Category</h1>
+        {% for category_item in category %}
+        
+
+            <div class="flex items-center px-3 py-2 gap-1">
+                <input type="radio" id="radioButton{{ forloop.counter }}" name="radioGroup" value="{{ category_item.name }}" onclick="select_category('{{category_item.slug}}')"  {% if request.GET.category == category_item.slug %}checked{% endif %}/>
+                <label for="radioButton{{ forloop.counter }}" class="text-gray-700">{{ category_item.name }}</label>
+            </div>
+            
+            {% comment %} {% for sub_item in category_item.sub_categories.all %}
+                <hr>
+                <h1 class="py-3 mx-5">Sub Category</h1>
+                <div class="flex items-center px-3 py-2 gap-1">
+                    <input type="radio" id="radioButton{{ forloop.index }}" name="radioGroup" value="{{ sub_item.name }}" />
+                    <label for="radioButton{{ forloop.index }}" class="text-gray-700">{{ sub_item.name }}</label>
+                </div>
+            {% endfor %} {% endcomment %}
+            
+        {% endfor %}
+        
+        <hr>
+        <h1 class="py-3 mx-5">Sort</h1>
+        <div class="flex items-center px-3 py-2 gap-1">
+            <input type="radio" id="radioButton_low_to_high" name="radioGroup2" value="low_to_high"  onclick="sorting('low_to_high')"  {% if request.GET.sort == 'low_to_high' %}checked{% endif %}/>
+            <label for="radioButton_low_to_high" class="text-gray-700">low to high</label>
+        </div>
+
+        <div class="flex items-center px-3 py-2 gap-1">
+            <input type="radio" id="radioButton_high_to_low" name="radioGroup2" value="high_to_low" onclick="sorting('high_to_low')"  {% if request.GET.sort == 'high_to_low' %}checked{% endif %}/>
+            <label for="radioButton_high_to_low" class="text-gray-700">high to low</label>
+        </div>
+
+       
+        <div class="flex items-center px-3 py-2 gap-1">
+            <input type="radio" id="radioButton_New" name="radioGroup2" value="New" onclick="sorting('new')" {% if request.GET.sort == 'new' %}checked{% endif %} />
+            <label for="radioButton_New" class="text-gray-700">New</label>
+        </div>
+        <hr>
+        <h1 class="py-3 mx-5">Price Range</h1>
+        <div class="flex items-center px-3 py-2 gap-1">
+            <label for="minPrice" class="text-gray-700">Min Price:</label>
+            <input type="number" id="minPrice" name="minPrice" class="border rounded px-2 py-1">
+        </div>
+        <div class="flex items-center px-3 py-2 gap-1">
+            <label for="maxPrice" class="text-gray-700">Max Price:</label>
+            <input type="number" id="maxPrice" name="maxPrice" class="border rounded px-2 py-1">
+        </div>
+    </div>
+    
+
+
+<div class="bg-white  px-12 grid grid-cols-3 gap-16 ">
+
+   
+    
+  
+  
+    
+
+
+    {% comment %} {% for item in category %} {% endcomment %}
+      {% comment %} <div class="text-center col-span-3">
+        <h1 class="font-bold text-7xl mb-4 ">{{ item.name }}</h1>
+    </div> {% endcomment %}
+  
+      {% comment %} {% for sub_item in item.sub_categories.all %} {% endcomment %}
+        {% comment %} <div class="text-center col-span-3">
+          <h1 class="text-3xl">{{ sub_item.name }}</h1>
+        </div> {% endcomment %}
+  
+        {% for product in products %}
+          <div class="text-center shadow-md my-4">
+            <img src="{{ product.variants.first.cover_image.url }}" alt="Product" class="h-72 w-64 object-cover rounded-t-xl mx-auto" />
+            <h1 class="text-lg font-bold my-2">{{ product.name }}</h1>
+  
+            <div class="flex items-center justify-center">
+                {% comment %} {% for variant_item in product_item.variants.all %}
+                  {% if forloop.first %} {% endcomment %}
+                    <p class="text-lg font-semibold text-black cursor-auto my-3"> ₹ {{ product.variants.first.selling_price }}</p>
+                  
+                      <del>
+                        <p class="text-sm text-gray-600 cursor-auto ml-2"> ₹ {{ product.variants.first.orginal_price }}</p>
+                      </del>
+                   
+                  {% comment %} {% endif %}
+                {% endfor %} {% endcomment %}
+              </div>
+              
+          </div>
+        {% endfor %}
+  
+      {% comment %} {% endfor %}
+    {% endfor %} {% endcomment %}
+  
+  </div>
+  
+
 </div>
 
 
 
 
 
-<!-- source: https://github.com/mfg888/Responsive-Tailwind-CSS-Grid/blob/main/index.html -->
-
-<div class="text-center p-10">
-    <h1 class="font-bold text-4xl mb-4">Responsive Product card grid</h1>
-    <h1 class="text-3xl">Tailwind CSS</h1>
-</div>
-
-<!-- ✅ Grid Section - Starts Here 👇 -->
-<section id="Projects"
-    class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-    {% for item in category %}
-    <!--   ✅ Product card 1 - Starts Here 👇 -->
-    <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-        <a href="#">
-            <img src="{{ item.image.url }}" 
-                    alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
-            <div class="px-4 py-3 w-72">
-                <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-                <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-                <div class="flex items-center">
-                    <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                    <del>
-                        <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                    </del>
-                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                            <path
-                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                        </svg></div>
-                </div>
-            </div>
-        </a>
-    </div>
-    {% endfor %}
-    <!--   🛑 Product card 1 - Ends Here  -->
-
-    <!--   ✅ Product card 2 - Starts Here 👇 -->
-    <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-        <a href="#">
-            <img src="https://images.unsplash.com/photo-1651950519238-15835722f8bb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8Mjh8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
-            <div class="px-4 py-3 w-72">
-                <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-                <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-                <div class="flex items-center">
-                    <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                    <del>
-                        <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                    </del>
-                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                            <path
-                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                        </svg></div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <!--   🛑 Product card 2- Ends Here  -->
-
-    <!--   ✅ Product card 3 - Starts Here 👇 -->
-    <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-        <a href="#">
-            <img src="https://images.unsplash.com/photo-1651950537598-373e4358d320?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MjV8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
-            <div class="px-4 py-3 w-72">
-                <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-                <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-                <div class="flex items-center">
-                    <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                    <del>
-                        <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                    </del>
-                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                            <path
-                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                        </svg></div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <!--   🛑 Product card 3 - Ends Here  -->
-
-    <!--   ✅ Product card 4 - Starts Here 👇 -->
-    <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-        <a href="#">
-            <img src="https://images.unsplash.com/photo-1651950540805-b7c71869e689?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8Mjl8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
-            <div class="px-4 py-3 w-72">
-                <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-                <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-                <div class="flex items-center">
-                    <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                    <del>
-                        <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                    </del>
-                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                            <path
-                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                        </svg></div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <!--   🛑 Product card 4 - Ends Here  -->
-
-    <!--   ✅ Product card 5 - Starts Here 👇 -->
-    <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-        <a href="#">
-            <img src="https://images.unsplash.com/photo-1649261191624-ca9f79ca3fc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NDd8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
-            <div class="px-4 py-3 w-72">
-                <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-                <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-                <div class="flex items-center">
-                    <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                    <del>
-                        <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                    </del>
-                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                            <path
-                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                        </svg></div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <!--   🛑 Product card 5 - Ends Here  -->
-
-    <!--   ✅ Product card 6 - Starts Here 👇 -->
-    <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-        <a href="#">
-            <img src="https://images.unsplash.com/photo-1649261191606-cb2496e97eee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8NDR8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                    alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
-            <div class="px-4 py-3 w-72">
-                <span class="text-gray-400 mr-3 uppercase text-xs">Brand</span>
-                <p class="text-lg font-bold text-black truncate block capitalize">Product Name</p>
-                <div class="flex items-center">
-                    <p class="text-lg font-semibold text-black cursor-auto my-3">$149</p>
-                    <del>
-                        <p class="text-sm text-gray-600 cursor-auto ml-2">$199</p>
-                    </del>
-                    <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                            <path
-                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                        </svg></div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <!--   🛑 Product card 6 - Ends Here  -->
-
-</section>
-
-<!-- 🛑 Grid Section - Ends Here -->
 
 
-<!-- credit -->
-<div class="text-center py-10 px-10">
-    <h2 class="font-bold text-2xl md:text-4xl mb-4">Thanks to <a href="https://unsplash.com/@nixcreative"
-            class="underline font-black">Tyler Nix</a> for those AMAZING product images!</h2>
-</div>
 
+
+
+
+<script>
+    let currentUrl = new URL(window.location.href);
+    let urlparams = new URLSearchParams(currentUrl.search);
+
+    
+
+
+    function sorting(sortby) {
+       // urlparams.set('page', 1);
+        urlparams.set('sort', sortby);
+        currentUrl.search = urlparams.toString();
+        window.location.href = currentUrl.toString();
+      }
+
+
+    function select_category(categoryby)  {
+        urlparams.set('category', categoryby);
+        currentUrl.search = urlparams.toString();
+        window.location.href = currentUrl.toString();
+    }
+</script>
 
 <!-- Support Me 🙏🥰 -->
 <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
@@ -230,4 +218,6 @@
             'floating-chat.donateButton.text-color': '#fff'
         });
 </script>
+
+
   {% endblock content %}    

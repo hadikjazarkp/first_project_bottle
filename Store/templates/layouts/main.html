@@ -134,7 +134,12 @@
 
             <!-- Login/Logout (Change the link and text based on user authentication status) -->
             <div class="flex items-center space-x-4">
+               
 
+              <form class="d-flex" method="get" action="{% url 'shop' %}" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" name="search">
+                <button class="hidden" type="submit">Search</button>
+              </form>
 
                 <!-- Cart -->
                 <div class="ml-auto">

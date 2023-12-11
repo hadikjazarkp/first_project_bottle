@@ -69,7 +69,7 @@
           </div>
         </div> {% endcomment %}
       </div>
-      <div class="border p-4 rounded-md">
+      {% comment %} <div class="border p-4 rounded-md">
         <p class="mt-4 text-lg font-medium">Payment Methods</p>
       
         <div class="mt-5 grid gap-4">
@@ -92,7 +92,7 @@
         </div>
 
         
-      </div>
+      </div> {% endcomment %}
       {% comment %} <p class="mt-8 text-lg font-medium">Payment Methods</p>
       <form class="mt-5 grid gap-6">
         <div class="relative">
@@ -423,8 +423,8 @@
         
         <!-- Total -->
 
-
-      <div class="mt-6 border-t border-b py-2">
+{% comment %} 
+      <div class="mt-6 border-t   border-b py-2">
           
           <div class="flex items-center justify-between">
             <p class="text-sm font-medium text-gray-900">Subtotal</p>
@@ -443,12 +443,58 @@
           <p class="text-sm font-medium text-gray-900">Total</p>
           <p class="text-2xl font-semibold text-gray-900"> ₹ {{ final_price }}</p>
         </div>
-       
+       <hr>
       
       
+        <h1 class=" py-3 text-3xl">Payment Methods</h1>
+
+          <div class="flex justify-content-center gap-3">
+
         
-      <button  class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
-    </div>
+            <button  id="pay_pal" class="mt-4 mb-8 w-30px rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Pay pal</button>
+     
+
+             <button  id="cash_on_deliver" class="mt-4 mb-8 w-30px rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Cash on delivery</button>
+   
+    
+    
+             <button  id="rzp-button1" class="mt-4 mb-8 w-30px rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Razorpay</button>
+         </div>
+    </div> {% endcomment %}
+
+
+  <div class="border  p-4 rounded-md">
+      <div class="mt-6 border-b py-2">
+          <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-gray-900">Subtotal</p>
+              <p class="font-semibold text-gray-900"> ₹ {{ cart_total }}</p>
+          </div>
+          <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-gray-900">Discount</p>
+              <p class="font-semibold text-gray-900"> ₹ {{ discount_price }}</p>
+          </div>
+          <div class="flex items-center justify-between">
+              <p class="text-sm font-medium text-gray-900">Shipping</p>
+              <p class="font-semibold text-gray-400">FREE</p>
+          </div>
+      </div>
+  
+      <div class="mt-6 flex items-center justify-between border-b py-2">
+          <p class="text-sm font-medium text-gray-900">Total</p>
+          <p class="text-2xl font-semibold text-gray-900"> ₹ {{ final_price }}</p>
+      </div>
+  
+      <div class="mt-6 py-3 border-b">
+          <h1 class="text-3xl">Payment Methods</h1>
+      </div>
+  
+      <div class="flex justify-between gap-3 py-3">
+          <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
+          <button id="cash_on_deliver" class="py-2 px-4 bg-green-500 hover:bg-green-700 text-white font-bold rounded-full">Cash on Delivery</button>
+          <button id="rzp-button1" class="py-2 px-4 bg-purple-500 hover:bg-purple-700 text-white font-bold rounded-full">Razorpay</button>
+      </div>
+  </div>
+  </div>
 
 
       <div class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center"  id="modal">
@@ -740,9 +786,9 @@ function confirmDelete(url) {
       "image": "https://example.com/your_logo",
       "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       "handler": function (response){
-    //      alert(response.razorpay_payment_id);
-        //  alert(response.razorpay_order_id);
-       //   alert(response.razorpay_signature)
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature)
       },
 
       "theme": {

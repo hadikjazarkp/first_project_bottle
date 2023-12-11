@@ -3,7 +3,7 @@ from .models import *
 from .forms import *
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 import razorpay
 from django.conf import settings
@@ -28,7 +28,48 @@ def my_view(request):
 
 def shop(request):
     category = Category.objects.all()
-    context = {'category':category}
+    sub_category = Sub_Category.objects.all()
+    sort_by = request.GET.get('sort')
+    
+    category_by = request.GET.get('category')
+    search_key = request.GET.get('search')
+        
+    
+    
+    
+    
+    
+    
+    # variant_items = [item.variants.first for item in Product.objects.all()]
+
+    # if sort_by == 'new':
+    #     # variant_items = sorted(variant_items, key=lambda x: x.created_at, reverse=True)
+    #     pass
+    # elif sort_by == 'low_to_high':
+    #     variant_items = sorted(variant_items, key=lambda x: x.selling_price)
+    # elif sort_by == 'high_to_low':
+    #     variant_items = sorted(variant_items, key=lambda x: x.selling_price, reverse=True)
+    products = Product.objects.all()
+
+    if sort_by == 'new':
+        # Sort the products by the created_at attribute of their variants
+        products = products.order_by('-variants__created_at')
+    elif sort_by == 'low_to_high':
+        # Sort the products by the selling_price attribute of their variants
+        products = products.annotate(min_price=models.Max('variants__selling_price')).order_by('min_price')
+    elif sort_by == 'high_to_low':
+        # Sort the products by the selling_price attribute of their variants in reverse order
+        products = products.annotate(max_price=models.Max('variants__selling_price')).order_by('-max_price')
+    if category_by:
+        products = products.filter(sub_category__category__slug = category_by)  
+    if search_key:
+        products = Product.objects.filter( Q(name__istartswith=search_key) | Q(sub_category__category__name__istartswith=search_key) | Q(sub_category__name__istartswith=search_key) )      
+   
+    context = {
+        'category':category,
+        'sub_category' : sub_category,
+        'products' :products,
+        }
     return render(request, "store/shop.html", context)
 
 
@@ -119,7 +160,10 @@ def cart_count_decrease(request, id):
     if cart_item.variant_qty > 1:
        cart_item.variant_qty -= 1
        cart_item.save()
-    
+    else:
+        cart_item.delete()
+        
+        
     
     return redirect('cart_page')     
           

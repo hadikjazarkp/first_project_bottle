@@ -6,6 +6,8 @@
    
 {% block content %}  
 {% load i18n %}      
+
+<div class="bg-blue-100">
  <div class="w3-display-container w3-text-white "  >  
   
   
@@ -46,13 +48,13 @@
 </div>
 
 <div >
-    <a href="{% url 'categoryview' slug='HOTCOLD'%}">
+    {% comment %} <a href="{% url 'categoryview' slug='HOTCOLD'%}"> {% endcomment %}
 <h1 class="text-8xl py-2 ">hOT &  <br>COLD</h1>
 <h3>A smarter way to hydrate is,Keep your  <br>  drinks 24/18 hours cold & hot with <br>  Vaccum technology.</h3>
 <div class="py-4">
 <button class=" bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full  hover:bg-gray-600 dark:hover:bg-gray-700"> SHOP NOW</button>
 </div>
-</a> 
+{% comment %} </a>  {% endcomment %}
 </div>
 <div >
 
@@ -71,7 +73,7 @@
 </div>
 </div>
 
-
+</div>
 {% endblock content %}   
     
  
