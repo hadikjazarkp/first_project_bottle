@@ -41,7 +41,14 @@ class UserdpAdmin(admin.ModelAdmin):
 class PeromoCodeAdmin(admin.ModelAdmin):
     form = PeromoCodeForm
     list_display=['code','discount_price','purchase_price','expaire_date',]
- 
+
+class OrderAdmin(admin.ModelAdmin):
+    inlines = []
+  
+class OrderItemAdmin(admin.ModelAdmin):
+    form = PeromoCodeForm
+    list_display=[]
+    
 
 
 admin.site.register(Category,CategoryAdmin)
@@ -58,6 +65,8 @@ admin.site.register(PeromoCode,PeromoCodeAdmin)
 
 
 admin.site.register(Cart)
+admin.site.register(Order,OrderAdmin)
+admin.site.register(OrderItem,OrderItemAdmin)
 
 
 

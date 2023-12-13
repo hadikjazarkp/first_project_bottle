@@ -225,7 +225,7 @@ def checkout(request):
     return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address, 'final_price':final_price, 'discount_price':discount_price, 'payment':payment})    
 
    
-from django.shortcuts import render, redirect
+
 
 def add_address(request):
     if request.method == 'POST':
@@ -324,3 +324,10 @@ def promocode_view(request):
 
     
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+
+
+def order_confirmation(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'order_confirmation.html', {'order': order})

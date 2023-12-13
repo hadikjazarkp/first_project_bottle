@@ -2,7 +2,7 @@
 {% load static %}
 {% csrf_token %}
 {% block content %}
-
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 <style>
 
 
@@ -43,96 +43,18 @@
           <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
           <div class="flex w-full flex-col px-4 py-4">
             <span class="font-semibold">{{ item.variant.color}}</span>
-            {% comment %} <div class=" flex justify-center w-1/5">
-                <a href="{% url 'checkout_count_decrease' id=item.id %}">
-                <svg class=" decrement fill-current text-gray-600 w-3" viewBox="0 0 448 512"><path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
-                </svg>
-              </a>
-    
-                <input class="mx-2 border text-center w-8" type="text" value="{{ item.variant_qty }}">
-                <a href="{% url 'checkout_increase' id=item.id %}">
-                <svg class="increment  fill-current text-gray-600 w-3" viewBox="0 0 448 512">
-                  <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/>
-                </svg>
-                </a>
-              </div> {% endcomment %}
+            
             <p class="text-lg font-bold"> ₹{{ item.variant.selling_price}}</p>
           </div>
         </div>
         {% endfor %}
-        {% comment %} <div class="flex flex-col rounded-lg bg-white sm:flex-row">
-          <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="" />
-          <div class="flex w-full flex-col px-4 py-4">
-            <span class="font-semibold">Nike Air Max Pro 8888 - Super Light</span>
-            <span class="float-right text-gray-400">42EU - 8.5US</span>
-            <p class="mt-auto text-lg font-bold">$238.99</p>
-          </div>
-        </div> {% endcomment %}
+       
       </div>
-      {% comment %} <div class="border p-4 rounded-md">
-        <p class="mt-4 text-lg font-medium">Payment Methods</p>
-      
-        <div class="mt-5 grid gap-4">
-          <div class="flex items-center">
-            
-            <input type="radio" id="radioButton1" name="radioGroup" value="razorpay" />
-            <label for="radioButton1" class="ml-2 text-gray-700"><button >Pay with Razorpay</button></label>
-          </div>
-      
-          <div class="flex items-center">
-            <input type="radio" id="radioButton2" name="radioGroup" value="paypal" />
-           
-            <label for="radioButton2" class="ml-2 text-gray-700">PayPal</label>
-          </div>
-      
-          <div class="flex items-center">
-            <input type="radio" id="radioButton3" name="radioGroup" value="cashOnDelivery"  />
-             <label for="radioButton3" class="ml-2 text-gray-700">Cash On Delivery</label>
-          </div>
-        </div>
-
-        
-      </div> {% endcomment %}
-      {% comment %} <p class="mt-8 text-lg font-medium">Payment Methods</p>
-      <form class="mt-5 grid gap-6">
-        <div class="relative">
-          <input class="peer hidden" id="radio_1" type="radio" name="radio" checked />
-          <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
-          <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="radio_1">
-            <img class="w-14 object-contain" src="/images/naorrAeygcJzX0SyNI4Y0.png" alt="" />
-            <div class="ml-5">
-              <span class="mt-2 font-semibold">Razorpay</span>
-              <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
-            </div>
-          </label>
-        </div>
-        <div class="relative">
-            <input class="peer hidden" id="radio_1" type="radio" name="radio" checked />
-            <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
-            <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="radio_1">
-              <img class="w-14 object-contain" src="/images/naorrAeygcJzX0SyNI4Y0.png" alt="" />
-              <div class="ml-5">
-                <span class="mt-2 font-semibold">PayPal</span>
-                <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
-              </div>
-            </label>
-          </div>
-        <div class="relative">
-          <input class="peer hidden" id="radio_2" type="radio" name="radio" checked />
-          <span class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
-          <label class="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4" for="radio_2">
-            <img class="w-14 object-contain" src="/images/oG8xsl3xsOkwkMsrLGKM4.png" alt="" />
-            <div class="ml-5">
-              <span class="mt-2 font-semibold">Cash On Delivery</span>
-              <p class="text-slate-500 text-sm leading-6">Delivery: 2-4 Days</p>
-            </div>
-          </label>
-        </div>
-      </form> {% endcomment %}
+     
     </div>
     <div>
 
-    <div class="container mt-4">
+    {% comment %} <div class="container mt-4">
       <div class="row">
           <h1 class="text-5xl">Addresses</h1>
   
@@ -157,7 +79,7 @@
 
 
                           <button class="btn btn-danger bg-red-900 text-white px-3 py-1" onclick="confirmDelete('{% url 'delete_address' address_id=ad.id %}')">Delete</button>
-                        </div>
+                      </div>
                   </div>
               </div>
           </div>
@@ -290,17 +212,66 @@
           {% endfor %}
       </div>
   </div>
-  
+   {% endcomment %}
 
-  
+   <div x-data="{ showModal: false }" class="container mt-4">
+    <div class="row">
+        <h1 class="text-5xl">Addresses</h1>
+
+        <!-- Display the first address -->
+        {% if user_address %}
+            <div class="col-md-6 mt-3 mb-4">
+                <div class="card p-4">
+                    <div class="card-body">
+                        {% with first_address=user_address.0 %}
+                            <h3 class="text-xl font-medium mb-2">Address {{first_address.address_type}}</h3>
+                            <div class="address-details">
+                                <p><strong>Address:</strong> {{first_address.address}}</p>
+                                <p><strong>Name:</strong> {{first_address.first_name}}</p>
+                                <p><strong>State:</strong> {{first_address.state}}</p>
+                                <p><strong>City:</strong> {{first_address.city}}</p>
+                                <p><strong>Pin Code:</strong> {{first_address.pincode}}</p>
+                                <p><strong>Phone number:</strong> {{first_address.phone_number}}</p>
+                            </div>
+                            <!-- Button to open modal -->
+                            <button @click="showModal = true" class="btn btn-success bg-green-500 text-white px-3 py-1">Select</button>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+<!-- Modal -->
+<div x-show="showModal" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
+  <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg">
+      <div class="modal-header flex justify-between items-center mb-4">
+          <h5 class="text-xl font-medium">Select Address</h5>
+          <button @click="showModal = false" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+          </button>
+      </div>
+      <div class="modal-body">
+          {% for address in user_address %}
+              <div class="address-details">
+                  <p><strong>Address:</strong> {{ address.address }}</p>
+                  <p><strong>Name:</strong> {{ address.first_name }}</p>
+                  <p><strong>State:</strong> {{ address.state }}</p>
+                  <p><strong>City:</strong> {{ address.city }}</p>
+                  <p><strong>Pin Code:</strong> {{ address.pincode }}</p>
+                  <p><strong>Phone number:</strong> {{ address.phone_number }}</p>
+                  <button @click="selectAddress({{ address.id }})" class="mt-3 bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-700">Select</button>
+                  <hr class="my-4">
+              </div>
+          {% endfor %}
+      </div>
+  </div>
+</div>
 
 
 
-
-
-
-
-
+.0
 
 
 
@@ -350,117 +321,6 @@
 
 
 
-
-
-
-
-
-
-
-
-        {% comment %} <!-- Trigger button -->
-<button onclick="openPromoModal()">Apply Promo Code</button>
-
-<!-- Promo Code Modal -->
-<div id="promoModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closePromoModal()">&times;</span>
-    <label for="promoCode">Enter Promo Code:</label>
-    <input type="text" id="promoCode" placeholder="Enter your promo code">
-    <button onclick="applyPromoCode()">Apply</button>
-  </div>
-</div> {% endcomment %}
-
-
-        {% comment %} <button id="open-modal" class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white rounded">
-          APPLY
-        </button>
-
-
-
-
-      <!-- Modal -->
-
- 
-  <div id="open-modal" class="fixed  inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50  text-center   py-80">
-    <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg transform -translate-x-1/2 -translate-y-1/2">
-      <div class="modal-header flex justify-between items-center  mb-4">
-        <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
-        <button id="close-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-      <div class="modal-body ">
-         <div class="py-10">
-          <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">Promo Code</label>
-          <input type="text" id="promo" placeholder="Enter your code" class="p-2 text-sm w-full">
-        </div> 
-
-        <div class="text-center ">
-          {% for promocode in promocodes %}
-          <div class="border-4 m-10 bg-black text-white">
-          <h1>{{ promocode.discount_price}}</h1>
-          <h1>{{ promocode.code}}</h1>
-        </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-   {% endcomment %}
-
-
-
-
-
-
-
-
-
-
-
-        
-        <!-- Total -->
-
-{% comment %} 
-      <div class="mt-6 border-t   border-b py-2">
-          
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-medium text-gray-900">Subtotal</p>
-            <p class="font-semibold text-gray-900"> ₹ {{ cart_total }}</p>
-          </div>
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-medium text-gray-900">Discount</p>
-            <p class="font-semibold text-gray-900"> ₹ {{ discount_price }}</p>
-          </div>
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-medium text-gray-900">Shipping</p>
-            <p class="font-semibold text-gray-400">FREE</p>
-          </div>
-        </div>
-        <div class="mt-6 flex items-center justify-between">
-          <p class="text-sm font-medium text-gray-900">Total</p>
-          <p class="text-2xl font-semibold text-gray-900"> ₹ {{ final_price }}</p>
-        </div>
-       <hr>
-      
-      
-        <h1 class=" py-3 text-3xl">Payment Methods</h1>
-
-          <div class="flex justify-content-center gap-3">
-
-        
-            <button  id="pay_pal" class="mt-4 mb-8 w-30px rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Pay pal</button>
-     
-
-             <button  id="cash_on_deliver" class="mt-4 mb-8 w-30px rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Cash on delivery</button>
-   
-    
-    
-             <button  id="rzp-button1" class="mt-4 mb-8 w-30px rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Razorpay</button>
-         </div>
-    </div> {% endcomment %}
 
 
   <div class="border  p-4 rounded-md">
@@ -786,9 +646,10 @@ function confirmDelete(url) {
       "image": "https://example.com/your_logo",
       "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       "handler": function (response){
-          alert(response.razorpay_payment_id);
-          alert(response.razorpay_order_id);
-          alert(response.razorpay_signature)
+        
+         alert(response.razorpay_payment_id);
+         alert(response.razorpay_order_id);
+         alert(response.razorpay_signature)
       },
 
       "theme": {
@@ -809,7 +670,12 @@ function confirmDelete(url) {
       rzp1.open();
       e.preventDefault();
   }
-  </script>
+ 
+
+
+
+</script>
+
 
 
 

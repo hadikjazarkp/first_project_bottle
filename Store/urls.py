@@ -23,6 +23,7 @@ urlpatterns = [
     path('add_address/', views.add_address, name='add_address'),
     path('edit_address/<uuid:address_id>/', views.edit_address, name='edit_address'),
     path('delete_address/<uuid:address_id>/', views.delete_address, name='delete_address'),
+    path('order_confirmation/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
     # path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
     # path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
     
