@@ -234,7 +234,7 @@
                                 <p><strong>Phone number:</strong> {{first_address.phone_number}}</p>
                             </div>
                             <!-- Button to open modal -->
-                            <button @click="showModal = true" class="btn btn-success bg-green-500 text-white px-3 py-1">Select</button>
+                            <button @click="showModal = true" class="btn btn-success bg-green-500 text-white px-3 py-1">Change Address</button>
                         {% endwith %}
                     </div>
                 </div>
@@ -252,6 +252,7 @@
               </svg>
           </button>
       </div>
+      
       <div class="modal-body">
           {% for address in user_address %}
               <div class="address-details">
@@ -271,7 +272,6 @@
 
 
 
-.0
 
 
 

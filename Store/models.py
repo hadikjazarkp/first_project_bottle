@@ -12,7 +12,7 @@ from django.utils.html import mark_safe
 from django.core.exceptions import ValidationError
 import os
 from phonenumber_field.modelfields import PhoneNumberField
-
+from  ckeditor_uploader.fields import RichTextUploadingField
 
 
 
@@ -116,7 +116,8 @@ class Category(BaseModel):
     
     name = models.CharField(max_length=150, )
     image = models.ImageField(upload_to='category/', null=True, blank=True, validators=[validate_image_type] )
-    description = models.TextField(max_length=500, null=False, blank=False)
+    # description = models.TextField(max_length=500, null=False, blank=False)
+    description = RichTextUploadingField(max_length=500, null=False, blank=False)
    
     
     
@@ -185,7 +186,7 @@ class Variant(BaseModel):
 
 class ColorImage(BaseModel):
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE, related_name="colorimages")
-    variantimg = models.ImageField(upload_to='variant/', validators=[validate_image_type] )
+    variantimg = RichTextUploadingField( validators=[validate_image_type] )
     
    
  

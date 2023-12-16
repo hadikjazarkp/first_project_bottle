@@ -43,7 +43,11 @@ INSTALLED_APPS = [
     'theme',
     'Store',
     'wishlist',
+    'ckeditor_uploader',
+    'ckeditor',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -171,9 +175,24 @@ DEFAULT_FROM_EMAIL='usbotbottle@gmail.com'
 
 
 
+CKEDITOR_UPLOAD_PATH = 'uploads/'
 
-
-
+CKEDITOR_CONFIGS = {
+    'default':{
+        'skin': 'moono',
+        'codeSnippet_theme': 'monokai',
+        'toolbar': 'all',
+        'extraPlugins': ','.join(
+            [
+                'codesnippet',
+                'widget',
+                'dialog'
+            ]
+        ),
+    }
+    
+    
+}
 
 KEY = 'rzp_test_HIRhNkqNybeWdx'
 SECRET = 'SbAXrEwCX45PooisjDgRmJ2x'
