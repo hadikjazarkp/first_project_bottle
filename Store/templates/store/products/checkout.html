@@ -34,164 +34,143 @@
 </style>
 
   <div class="grid sm:px-10 lg:grid-cols-2 py-3 lg:px-20 xl:px-32">
-    <div class="px-4 pt-8">
-      <p class="text-xl font-medium">Order Summary</p>
-      <p class="text-gray-400">Check your items. And select a suitable shipping method.</p>
-      <div class="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
-        {% for item in cart_items %}
-        <div class="flex flex-col rounded-lg bg-white sm:flex-row">
-          <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
-          <div class="flex w-full flex-col px-4 py-4">
-            <span class="font-semibold">{{ item.variant.color}}</span>
-            
-            <p class="text-lg font-bold"> ₹{{ item.variant.selling_price}}</p>
+      <div class="">
+        <div class=" space-y-3 rounded-lg border-2  px-2 py-4 sm:px-6">
+          {% for item in cart_items %}
+          <div class="flex flex-col rounded-lg  sm:flex-row">
+            <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
+            <div class="flex w-full flex-col px-4 py-4">
+              <span class="font-semibold">{{ item.variant.color}}</span> 
+              <p class="text-lg font-bold"> ₹{{ item.variant.selling_price}}</p>
+            </div>
           </div>
+          {% endfor %}      
         </div>
-        {% endfor %}
-       
-      </div>
-     
-    </div>
-    <div>
 
-
-
-
- <!-- Delivery Address Section -->
-<div class="bg-gray-100 p-4 rounded shadow mb-4">
-  <div class="flex justify-between items-center mb-3">
-    <div class="text-sm text-gray-500">
-      <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
-    </div>
-  
-  </div>
-  <div class="border my-2 p-4">
-    <div id="selectedAddress"></div>
-    <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
-  </div>
- 
-</div>
-
-<!-- Modal Container -->
-<div id="myModal" class="modal fixed hidden inset-0 z-50 overflow-auto bg-black bg-opacity-50">
-  <!-- Modal Content -->
-  <div class="modal-content mx-auto my-12 p-6 bg-white w-96 shadow-lg rounded">
-
-    <!-- Close Button -->
-    <button id="closeModal" class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 cursor-pointer">
-      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-
-    <!-- Address Table -->
-    <div class="grid grid-cols-1 gap-4">
-      {% for address in user_address %}
-      <div class="border p-4 hover:bg-gray-100 cursor-pointer" onclick="selectAddress('{{ address.id }}')">
-        <input class="hidden form-radio addresscheck" type="radio" name="address" value="{{ address.id }}" id="user_address_{{ address.id }}" {% if forloop.first %}checked{% endif %}>
-        <label class="ml-2 cursor-pointer select-none block">
-          <div id="selectedAddressDetails_{{ address.id }}" class="address-details">
-            <p><strong>Address:</strong> {{ address.address }}</p>
-            <p><strong>Name:</strong> {{ address.first_name }}</p>
-            <p><strong>State:</strong> {{ address.state }}</p>
-            <p><strong>City:</strong> {{ address.city }}</p>
-            <p><strong>Pin Code:</strong> {{ address.pincode }}</p>
-            <p><strong>Phone number:</strong> {{ address.phone_number }}</p>
-            <hr class="my-4">
-          </div>
-        </label>
-      </div>
-      {% endfor %}
-    </div>
-
-    <!-- Close Modal Button -->
-    <button id="closeModalContent" class="bg-gray-500 text-white p-2 mt-4 w-full rounded" onclick="handleCloseModal()">Close Modal</button>
-     <!-- Trigger button for Promo Modal -->
-     <button onclick="openPromoModal()" class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      Apply
-    </button>
-  </div>
-</div>
-
-
-
-
-
-    <div class="">
-  
-        <button id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()">
-          Add Address
-        </button>
-
-    
-
-     
-    </div>
-<form action="{% url 'promocode_view' %}" method="post">
-  {% csrf_token %}
-  <div id="promoModal" class="modal">
-    <input type="hidden" name="cart_total" value="{{ cart_total }}">
-      <div class="modal-content w-64 bg-white border rounded-lg shadow-md p-8 w-4/5 md:w-1/2 mx-auto mt-16">
-          <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
+        <!-- Delivery Address Section -->
+        <div class="bg-gray-100 mt-10 p-4 rounded shadow mb-4">
+          <div class="flex justify-between items-center mb-3">
+            <div class="text-sm text-gray-500">
+              <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
+            </div>
           
-          <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
-          <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 mb-4">
-              {% for promocode in promocodes %}
-                
-
-                
-
-                 
-                  <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
-              {% endfor %}
-          </select>
-
-          <div class="text-center">
-              <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">
-                  Apply 
-              </button>
           </div>
-      </div>
-  </div>
-</form>
-
-
-
-
-
-
-  <div class="border  p-4 rounded-md">
-      <div class="mt-6 border-b py-2">
-          <div class="flex items-center justify-between">
-              <p class="text-sm font-medium text-gray-900">Subtotal</p>
-              <p class="font-semibold text-gray-900"> ₹ {{ cart_total }}</p>
+          <div class="border my-2 p-4">
+            <div id="selectedAddress"></div>
+                <button id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()"> Add Address </button> 
+                <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
+            </div>
           </div>
-          <div class="flex items-center justify-between">
-              <p class="text-sm font-medium text-gray-900">Discount</p>
-              <p class="font-semibold text-gray-900"> ₹ {{ discount_price }}</p>
-          </div>
-          <div class="flex items-center justify-between">
-              <p class="text-sm font-medium text-gray-900">Shipping</p>
-              <p class="font-semibold text-gray-400">FREE</p>
-          </div>
-      </div>
-  
-      <div class="mt-6 flex items-center justify-between border-b py-2">
-          <p class="text-sm font-medium text-gray-900">Total</p>
-          <p class="text-2xl font-semibold text-gray-900"> ₹ {{ final_price }}</p>
-      </div>
-  
-      <div class="mt-6 py-3 border-b">
-          <h1 class="text-3xl">Payment Methods</h1>
-      </div>
-  
-      <div class="flex justify-between gap-3 py-3">
-          <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
-          <button id="cash_on_deliver" class="py-2 px-4 bg-green-500 hover:bg-green-700 text-white font-bold rounded-full">Cash on Delivery</button>
-          <button id="rzp-button1" class="py-2 px-4 bg-purple-500 hover:bg-purple-700 text-white font-bold rounded-full">Razorpay</button>
-      </div>
-  </div>
-  </div>
+            
+        </div>
+          <div>
+              <!-- Modal Container -->
+              <div id="myModal" class="modal fixed hidden inset-0 z-50 overflow-auto bg-black bg-opacity-50">
+                <!-- Modal Content -->
+                <div class="modal-content mx-auto my-12 p-6 bg-white w-96 shadow-lg rounded">
+
+                  <!-- Close Button -->
+                  <button id="closeModal" class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 cursor-pointer">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+
+                  <!-- Address Table -->
+                  <div class="grid grid-cols-1 gap-4">
+                    {% for address in user_address %}
+                    <div class="border p-4 hover:bg-gray-100 cursor-pointer" onclick="selectAddress('{{ address.id }}')">
+                      <input class="hidden form-radio addresscheck" type="radio" name="address" value="{{ address.id }}" id="user_address_{{ address.id }}" {% if forloop.first %}checked{% endif %}>
+                      <label class="ml-2 cursor-pointer select-none block">
+                        <div id="selectedAddressDetails_{{ address.id }}" class="address-details">
+                          <p><strong>Address:</strong> {{ address.address }}</p>
+                          <p><strong>Name:</strong> {{ address.first_name }}</p>
+                          <p><strong>State:</strong> {{ address.state }}</p>
+                          <p><strong>City:</strong> {{ address.city }}</p>
+                          <p><strong>Pin Code:</strong> {{ address.pincode }}</p>
+                          <p><strong>Phone number:</strong> {{ address.phone_number }}</p>
+                          <hr class="my-4">
+                        </div>
+                      </label>
+                    </div>
+                    {% endfor %}
+                  </div>
+
+                    <!-- Close Modal Button -->
+                    <button id="closeModalContent" class="bg-gray-500 text-white p-2 mt-4 w-full rounded" onclick="handleCloseModal()">Close Modal</button>
+                    <!-- Trigger button for Promo Modal -->
+                  
+                </div>
+              </div>
+
+
+
+
+            <form action="{% url 'promocode_view' %}" method="post">
+              {% csrf_token %}
+              <div id="promoModal" class="modal">
+                <input type="hidden" name="cart_total" value="{{ cart_total }}">
+                  <div class="modal-content  w-64 bg-white border rounded-lg shadow-md p-8 w-4/5 md:w-1/2 mx-auto mt-16">
+                      <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
+                      
+                      <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
+                      <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 mb-4">
+                          {% for promocode in promocodes %}
+                              <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
+                          {% endfor %}
+                      </select>
+
+                      <div class="text-center">
+                          <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">
+                              Apply 
+                          </button>
+                      </div>
+                  </div>
+              </div>
+            </form>
+
+
+
+
+
+
+            <div class="border  p-4 rounded-md">
+              <div class="flex items-center justify-between pb-2">
+                <h1 class="text-2xl gap">Apply Coupons</h1>
+                <button onclick="openPromoModal()" class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Apply</button>
+              </div>
+              <hr>
+              <div class="mt-6 border-b py-2">
+                  <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-gray-900">Subtotal</p>
+                      <p class="font-semibold text-gray-900"> ₹ {{ cart_total }}</p>
+                  </div>
+                  <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-gray-900">Discount</p>
+                      <p class="font-semibold text-gray-900"> ₹ {{ discount_price }}</p>
+                  </div>
+                  <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-gray-900">Shipping</p>
+                      <p class="font-semibold text-gray-400">FREE</p>
+                  </div>
+              </div>
+      
+              <div class="mt-6 flex items-center justify-between border-b py-2">
+                  <p class="text-sm font-medium text-gray-900">Total</p>
+                  <p class="text-2xl font-semibold text-gray-900"> ₹ {{ final_price }}</p>
+              </div>
+          
+              <div class="mt-6 py-3 border-b">
+                  <h1 class="text-3xl">Payment Methods</h1>
+              </div>
+          
+              <div class="flex justify-between gap-3 py-3">
+                  <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
+                  <button id="cash_on_deliver" class="py-2 px-4 bg-green-500 hover:bg-green-700 text-white font-bold rounded-full">Cash on Delivery</button>
+                  <button id="rzp-button1" class="py-2 px-4 bg-purple-500 hover:bg-purple-700 text-white font-bold rounded-full">Razorpay</button>
+              </div>
+            </div>
+         </div>
 
 </div>
 </div>
@@ -465,17 +444,9 @@ function confirmDelete(url) {
     closePromoModal();
   } 
 
-
-
-
-
-
-
-
-
-
- 
 </script>
+
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
