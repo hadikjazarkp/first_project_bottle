@@ -54,249 +54,64 @@
     </div>
     <div>
 
-    {% comment %} <div class="container mt-4">
-      <div class="row">
-          <h1 class="text-5xl">Addresses</h1>
+
+
+
+ <!-- Delivery Address Section -->
+<div class="bg-gray-100 p-4 rounded shadow mb-4">
+  <div class="flex justify-between items-center mb-3">
+    <div class="text-sm text-gray-500">
+      <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
+    </div>
   
-          {% for ad in user_address %}
-          <div class="col-md-6 mt-3 mb-4">
-              <div class="card p-4">
-                  <div class="card-body">
-                      <h3 class="text-xl font-medium mb-2">Address {{ad.address_type}}</h3>
-                      <div class="address-details">
-                          <p><strong>Address:</strong> {{ad.address}}</p>
-                          <p><strong>Name:</strong> {{ad.first_name}}</p>
-                          <p><strong>State:</strong> {{ad.state}}</p>
-                          <p><strong>City:</strong> {{ad.city}}</p>
-                          <p><strong>Pin Code:</strong> {{ad.pincode}}</p>
-                          <p><strong>Phone number:</strong> {{ad.phone_number}}</p>
-                      </div>
-                      <div class="buttons mt-3">
-                          <!-- Edit Button (Open Modal) -->
-                          <button class="btn btn-primary bg-black text-white px-3 py-1" onclick="openEditModal('{{ ad.id }}')">Edit</button>
+  </div>
+  <div class="border my-2 p-4">
+    <div id="selectedAddress"></div>
+    <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
+  </div>
+ 
+</div>
 
+<!-- Modal Container -->
+<div id="myModal" class="modal fixed hidden inset-0 z-50 overflow-auto bg-black bg-opacity-50">
+  <!-- Modal Content -->
+  <div class="modal-content mx-auto my-12 p-6 bg-white w-96 shadow-lg rounded">
 
+    <!-- Close Button -->
+    <button id="closeModal" class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 cursor-pointer">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
 
-
-                          <button class="btn btn-danger bg-red-900 text-white px-3 py-1" onclick="confirmDelete('{% url 'delete_address' address_id=ad.id %}')">Delete</button>
-                      </div>
-                  </div>
-              </div>
+    <!-- Address Table -->
+    <div class="grid grid-cols-1 gap-4">
+      {% for address in user_address %}
+      <div class="border p-4 hover:bg-gray-100 cursor-pointer" onclick="selectAddress('{{ address.id }}')">
+        <input class="hidden form-radio addresscheck" type="radio" name="address" value="{{ address.id }}" id="user_address_{{ address.id }}" {% if forloop.first %}checked{% endif %}>
+        <label class="ml-2 cursor-pointer select-none block">
+          <div id="selectedAddressDetails_{{ address.id }}" class="address-details">
+            <p><strong>Address:</strong> {{ address.address }}</p>
+            <p><strong>Name:</strong> {{ address.first_name }}</p>
+            <p><strong>State:</strong> {{ address.state }}</p>
+            <p><strong>City:</strong> {{ address.city }}</p>
+            <p><strong>Pin Code:</strong> {{ address.pincode }}</p>
+            <p><strong>Phone number:</strong> {{ address.phone_number }}</p>
+            <hr class="my-4">
           </div>
-
-
-
-<!-- Edit Modal -->
-<div class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center" id="edit-modal">
-  <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg">
-      <div class="modal-header flex justify-between items-center mb-4">
-          <p class="text-xl font-medium">Edit Address</p>
-          <button id="close-edit-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none" onclick="closeEditModal()">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-          </button>
+        </label>
       </div>
-      <div class="modal-body overflow-y-auto max-h-96">
-        <form action="{% url "edit_address" address_id=ad.id %}" method="post">
-          {% csrf_token %}
-          <p class="text-gray-400">Complete your order details.</p>
-
-          <div class="mt-4">
-            <label for="address_type" class="block text-sm font-medium">Address Type</label>
-            <select name="address_type" id="address_type"
-                class="w-full border border-gray-200 px-4 py-2 rounded-md text-sm outline-none focus:ring focus:border-blue-500">
-                <option value="Home">Home</option>
-                <option value="Office">Office</option>
-            </select>
-        </div>
-          <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
-          <div class="relative">
-          <input type="text" id="email" name="address"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" value="{{ad.address}}"  />
-          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-              </svg>
-              
-          </div>
-          </div>
-          
-        
-
-          <label for="email" class="mt-4 mb-2 block text-sm font-medium">First name</label>
-          <div class="relative">
-           <input type="text" id="first_name" name="first_name" value="{{ad.first_name}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="first_name" /> 
-          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-              
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-            </svg>
-              
-          </div>
-          </div>
-
-          <label for="email" class="mt-4 mb-2 block text-sm font-medium">last name</label>
-          <div class="relative">
-          <input type="text" id="last_name" name="last_name" value="{{ad.last_name}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="last_name" />
-          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-              
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-            </svg>
-              
-          </div>
-          </div>
-
-          <label for="email" class="mt-4 mb-2 block text-sm font-medium">city</label>
-          <div class="relative">
-          <input type="text" id="city" name="city" value="{{ad.city}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="city" />
-          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-              </svg>
-              
-          </div>
-          </div>
-
-          <label for="email" class="mt-4 mb-2 block text-sm font-medium">state</label>
-          <div class="relative">
-          <input type="text" id="state" name="state" value="{{ad.state}}" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="state" />
-          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-              </svg>
-              
-          </div>
-          </div>
-
-
-          <label for="number" class="mt-4 mb-2 block text-sm font-medium">number</label>
-          <div class="relative">
-          <input type="text" id="number" name="phone_number" value="{{ad.phone_number}}"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="number" />
-          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-              
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-            </svg>
-            
-          </div>
-          </div>
-
-          <label for="email" class="mt-4 mb-2 block text-sm font-medium">Pincode</label>
-          <div class="relative">
-           <input type="text"  name="pincode" value="{{ad.pincode}}"  class="w-full  rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="pincode" /> 
-          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-              
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-            </svg>
-              
-          </div>
-          </div>
-
-          
-
-  <!-- Total -->
-
-
-</div>
-<input type="submit" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white" value="Save Change">
-</form>
-
- </div>
-</div>
-
-          {% endfor %}
-      </div>
-   </div>
-   {% endcomment %}
-
-
-   <div x-data="{ showModal: false }" class="container mt-4">
-    <div class="row">
-        <h1 class="text-5xl">Addresses</h1>
-
-<!-- Display the first address -->
-{% if user_address %}
-    <div class="col-md-6 mt-3 mb-4">
-        <div class="card p-4">
-            <div class="card-body">
-                {% with first_address=user_address.0 %}
-                    <h3 class="text-xl font-medium mb-2">Address {{first_address.address_type}}</h3>
-                    <div id="firstAddressDetails_{{ first_address.id }}" class="address-details">
-                        <p data-address-id="{{ first_address.id }}"><strong>Address:</strong> {{first_address.address}}</p>
-                        <p><strong>Name:</strong> {{first_address.first_name}}</p>
-                        <p><strong>State:</strong> {{first_address.state}}</p>
-                        <p><strong>City:</strong> {{first_address.city}}</p>
-                        <p><strong>Pin Code:</strong> {{first_address.pincode}}</p>
-                        <p><strong>Phone number:</strong> {{first_address.phone_number}}</p>
-                    </div>
-                    <!-- Button to open modal -->
-                    <button @click="showModal = true" data-first-address-id="{{ first_address.id }}" class="btn btn-success bg-green-500 text-white px-3 py-1">Change Address</button>
-                {% endwith %}
-            </div>
-        </div>
+      {% endfor %}
     </div>
-{% endif %}
 
-<!-- Modal -->
-<div x-show="showModal" class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg">
-        <div class="modal-header flex justify-between items-center mb-4">
-            <h5 class="text-xl font-medium" id="selectedAddressHeader">Select Address</h5>
-            <button @click="showModal = false" class="text-gray-500 hover:text-gray-700 focus:outline-none" id="b1">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-
-        <div class="modal-body overflow-y-auto max-h-96 w-100">
-            {% for address in user_address %}
-                <div id="selectedAddressDetails_{{ address.id }}" class="address-details">
-                    <p><strong>Address:</strong> {{ address.address }}</p>
-                    <p><strong>Name:</strong> {{ address.first_name }}</p>
-                    <p><strong>State:</strong> {{ address.state }}</p>
-                    <p><strong>City:</strong> {{ address.city }}</p>
-                    <p><strong>Pin Code:</strong> {{ address.pincode }}</p>
-                    <p><strong>Phone number:</strong> {{ address.phone_number }}</p>
-                    <button onclick="selectAddress('{{ address.id }}')" class="mt-3 bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-700">Select</button>
-
-                    <hr class="my-4">
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    <!-- Close Modal Button -->
+    <button id="closeModalContent" class="bg-gray-500 text-white p-2 mt-4 w-full rounded" onclick="handleCloseModal()">Close Modal</button>
+     <!-- Trigger button for Promo Modal -->
+     <button onclick="openPromoModal()" class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Apply
+    </button>
+  </div>
 </div>
-
-<script>
-  function selectAddress(addressId) {
-      // Get the selected address details element
-      var selectedAddressDetails = document.getElementById("selectedAddressDetails_" + addressId);
-      
-      // Check if the selected address details element exists
-      if (selectedAddressDetails) {
-          // Get the content of the selected address details
-          var selectedAddressContent = selectedAddressDetails.innerHTML;
-
-          // Update the content of the first address details element
-          var firstAddressDetails = document.getElementById("firstAddressDetails_{{ first_address.id }}");
-          
-          // Check if the first address details element exists
-          if (firstAddressDetails) {
-              // Replace the content of the first address details with the selected address details
-              firstAddressDetails.innerHTML = selectedAddressContent;
-          }
-
-          // Trigger the click event on the button to close the modal
-          document.getElementById("b1").click();
-      }
-  }
-</script>
-
 
 
 
@@ -310,10 +125,7 @@
 
     
 
-      <!-- Trigger button for Promo Modal -->
-      <button onclick="openPromoModal()" class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Apply
-      </button>
+     
     </div>
 <form action="{% url 'promocode_view' %}" method="post">
   {% csrf_token %}
@@ -526,6 +338,9 @@
 <div>
 
 
+  
+
+
 <script>
 
 
@@ -698,26 +513,78 @@ function confirmDelete(url) {
       e.preventDefault();
   }
  
-{% comment %} 
-  function selectAddress(addressId) {
-    // Your logic to handle the selected address ID
-    console.log('Selected Address ID:', addressId);
 
-    // Access the element by ID if needed
-    var elements = document.getElementById('selectedAddressDetails');
-    var element = document.getElementById('firstAddressDetails');
-    
-    // Show an alert message
-    if (elements) {
-        alert('Button clicked! Selected Address ID: ' + addressId);
-    }
-} {% endcomment %}
 
 </script>
 
 
 
 
+
+
+
+
+<script>
+  // JavaScript to handle modal interaction
+  const openModalButton = document.getElementById('openModal');
+  const closeModalButton = document.getElementById('closeModal');
+  const closeModalContentButton = document.getElementById('closeModalContent');
+  const modal = document.getElementById('myModal');
+
+  openModalButton.addEventListener('click', () => {
+    modal.classList.remove('hidden');
+  });
+
+  closeModalButton.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  closeModalContentButton.addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const selectedAddress = document.getElementById('selectedAddress');
+    const initiallyCheckedRadio = document.querySelector("input[name='address']:checked");
+
+    if (initiallyCheckedRadio) {
+      const radioLabel = initiallyCheckedRadio.nextElementSibling;
+      selectedAddress.innerHTML = radioLabel.innerHTML;
+    }
+  });
+
+  function updateAddress() {
+    const selectedRadio = document.querySelector("input[name='address']:checked");
+    const radioLabel = selectedRadio.nextElementSibling;
+    const selectedAddress = document.getElementById('selectedAddress');
+    selectedAddress.innerHTML = radioLabel.innerHTML;
+  }
+
+  function selectAddress(addressId) {
+    const radio = document.getElementById('user_address_' + addressId);
+    radio.checked = true;
+    updateAddress();
+  }
+</script>
+
+<script>
+  function handleCloseModal() {
+    // Your logic to handle the selected address when the modal is closed
+    // You can retrieve the selected address using JavaScript and perform any necessary actions
+    // For example, you can update the UI with the selected address or make an AJAX request to save it.
+    
+    // Close the modal (assuming you have a function for that)
+    closeTheModal();
+  }
+
+  function closeTheModal() {
+    // Your logic to close the modal, you may need to implement this function
+    // depending on how you've implemented the modal in your application
+    document.getElementById("myModal").classList.add("hidden");
+  }
+</script>
 
 
 {% endblock %}
