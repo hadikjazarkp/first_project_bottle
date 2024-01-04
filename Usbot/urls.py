@@ -30,6 +30,9 @@ urlpatterns = [
     path('',include('wishlist.urls')),
  
     path('ckeditor/', include("ckeditor_uploader.urls")),
+    
+    # paypal urls
+    path('paypal/', include('paypal.standard.ipn.urls')),
 ] 
 
 

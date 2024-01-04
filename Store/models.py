@@ -209,7 +209,7 @@ class Cart(BaseModel):
 
   
   
-class PeromoCode(models.Model):
+class PromoCode(models.Model):
     code = models.CharField(max_length=10)
     discount_price = models.IntegerField()
     purchase_price = models.IntegerField()
@@ -259,3 +259,19 @@ class OrderItem(models.Model):
         return self.order.user.username
     
     
+    
+class CartOrder(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='cartorder') 
+    total_amt = models.FloatField()
+    paid_status= models.BooleanField(default=False)
+    order_dt=models.DateTimeField(auto_now_add=True)
+    
+class CartOrderItems(models.Model):
+    order=models.ForeignKey(CartOrder, on_delete=models.CASCADE) 
+    invoice_no=models.CharField(max_length=150)
+    item=models.CharField(max_length=150)
+    image=models.ImageField(upload_to='cartorderimage/', validators=[validate_image_type] )  
+    qty=models.IntegerField()
+    price=models.FloatField()
+    total=models.FloatField()
+        

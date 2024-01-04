@@ -39,16 +39,20 @@
           {% for item in cart_items %}
           <div class="flex flex-col rounded-lg  sm:flex-row">
             <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
-            <div class="flex w-full flex-col px-4 py-4">
-              <span class="font-semibold">{{ item.variant.color}}</span> 
-              <p class="text-lg font-bold"> ₹{{ item.variant.selling_price}}</p>
-            </div>
+            
+            {% comment %} <div class="flex w-full flex-col px-4 py-4"> {% endcomment %}
+              <span class="font-semibold my-8 mx-6 text-center">{{ item.variant.color}}</span> 
+              <input class="my-8 mx-6 border text-center h-8 w-8" type="text" value="{{ item.variant_qty }}">
+              <p class="text-lg font-bold my-8 mx-6 text-center"> ₹{{ item.variant.selling_price}}</p>
+             
+            {% comment %} </div> {% endcomment %}
           </div>
           {% endfor %}      
         </div>
+        {{form.render}}
 
         <!-- Delivery Address Section -->
-        <div class="bg-gray-100 mt-10 p-4 rounded shadow mb-4">
+        <div class=" mt-10 p-4 rounded shadow mb-4">
           <div class="flex justify-between items-center mb-3">
             <div class="text-sm text-gray-500">
               <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
@@ -106,30 +110,31 @@
 
 
 
-            <form action="{% url 'promocode_view' %}" method="post">
-              {% csrf_token %}
-              <div id="promoModal" class="modal">
-                <input type="hidden" name="cart_total" value="{{ cart_total }}">
-                  <div class="modal-content  w-64 bg-white border rounded-lg shadow-md p-8 w-4/5 md:w-1/2 mx-auto mt-16">
-                      <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
-                      
+              <form action="{% url 'promocode_view' %}" method="post">
+                {% csrf_token %}
+                <div id="promoModal" class="modal">
+                  <input type="hidden" name="cart_total" value="{{ cart_total }}">
+                  <div class="modal-content bg-white border rounded-lg shadow-md p-4 w-4/5 md:w-1/2 mx-auto mt-14">
+                    <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
+              
+                    <div class="mb-6">
                       <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
-                      <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 mb-4">
-                          {% for promocode in promocodes %}
-                              <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
-                          {% endfor %}
+                      <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 focus:outline-none focus:shadow-outline-blue focus:border-blue-300">
+                        {% for promocode in promocodes %}
+                        <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
+                        {% endfor %}
                       </select>
-
-                      <div class="text-center">
-                          <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">
-                              Apply 
-                          </button>
-                      </div>
+                    </div>
+              
+                    <div class="text-center">
+                      <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Apply
+                      </button>
+                    </div>
                   </div>
-              </div>
-            </form>
-
-
+                </div>
+              </form>
+              
 
 
 
@@ -137,7 +142,7 @@
             <div class="border  p-4 rounded-md">
               <div class="flex items-center justify-between pb-2">
                 <h1 class="text-2xl gap">Apply Coupons</h1>
-                <button onclick="openPromoModal()" class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Apply</button>
+                <button onclick="openPromoModal()" class="border-2 bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded">Select Coupon</button>
               </div>
               <hr>
               <div class="mt-6 border-b py-2">
@@ -165,12 +170,31 @@
               </div>
           
               <div class="flex justify-between gap-3 py-3">
-                  <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
-                  <button id="cash_on_deliver" class="py-2 px-4 bg-green-500 hover:bg-green-700 text-white font-bold rounded-full">Cash on Delivery</button>
-                  <button id="rzp-button1" class="py-2 px-4 bg-purple-500 hover:bg-purple-700 text-white font-bold rounded-full">Razorpay</button>
+          
+                <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
+                  <button id="cash_on_deliver" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">Cash on Delivery</button>
+                  <button  class="payWithRazorpay py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full payWithRazorpay">Razorpay</button>
               </div>
             </div>
          </div>
+         <div class="form-check">
+          <input class="form-check-input" type="radio" name="payment_method" value="cod" id="cod" checked>
+          <label class="form-check-label" for="cod">
+            Cash On Delivery
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="payment_method" value="online" id="online">
+          <label class="form-check-label" for="online">
+            Online Payment  
+          </label>
+        </div>
+      </div>
+
+      <div class="d-grid py-2">
+        <input class="btn btn-primary d-none" id="rzp-button1" onclick="saveorder()" type="submit" value="CONFIRM ORDER">
+        <input class="btn btn-primary d-block" id="cod-button1" onclick="saveorder()" type="submit" value="CONFIRM ORDER">
+      </div>
 
 </div>
 </div>
@@ -449,46 +473,136 @@ function confirmDelete(url) {
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+
 <script>
-  var options = {
-      "key": "rzp_test_HIRhNkqNybeWdx", // Enter the Key ID generated from the Dashboard
-      "amount": "{{ payment.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      "currency": "INR",
-      "name": "Usbot",
-      "description": "Purchases",
-      "image": "https://example.com/your_logo",
-      "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      "handler": function (response){
-        
-         alert(response.razorpay_payment_id);
-         alert(response.razorpay_order_id);
-         alert(response.razorpay_signature)
-      },
 
-      "theme": {
-          "color": "#3399cc"
-      }
-  };
-  var rzp1 = new Razorpay(options);
-  rzp1.on('payment.failed', function (response){
-          alert(response.error.code);
-          alert(response.error.description);
-          alert(response.error.source);
-          alert(response.error.step);
-          alert(response.error.reason);
-          alert(response.error.metadata.order_id);
-          alert(response.error.metadata.payment_id);
-  });
-  document.getElementById('rzp-button1').onclick = function(e){
-      rzp1.open();
+  {% comment %} $(document).ready(function (){
+    
+    $('.payWithRazorpay').click(function (e){
       e.preventDefault();
-  }
- 
 
 
+    // Get the selected address details
+    var selectedAddressId = $('input[name="address"]:checked').val();
+    var selectedAddress = $("#selectedAddressDetails_" + selectedAddressId);
+
+    var addressDetails = {
+        "address": selectedAddress.find('p strong:contains("Address")').next().text().trim(),
+        "first_name": selectedAddress.find('p strong:contains("Name")').next().text().trim(),
+        "state": selectedAddress.find('p strong:contains("State")').next().text().trim(),
+        "city": selectedAddress.find('p strong:contains("city")').next().text().trim(),
+        "pincode": selectedAddress.find('p strong:contains("pincode")').next().text().trim(),
+        "phone_number": selectedAddress.find('p strong:contains("phone_number")').next().text().trim(),
+        // Add other properties as needed
+    };
+
+
+
+      var options = {
+        "key": "rzp_test_HIRhNkqNybeWdx", // Enter the Key ID generated from the Dashboard
+        "amount": "{{ payment.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Usbot",
+        "description": "Purchases",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+          
+        //   alert(response.razorpay_payment_id);
+        //   alert(response.razorpay_order_id);
+        alert(phone_number)
+        },
+  
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+    });
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+    });
+
+
+  }); {% endcomment %}
+
+
+
+
+
+  $(document).ready(function () {
+
+    $('.payWithRazorpay').click(function (e) {
+        e.preventDefault();
+
+        // Get the selected address details
+        var selectedAddressId = $('input[name="address"]:checked').val();
+        var selectedAddress = $("#selectedAddressDetails_" + selectedAddressId);
+
+        var addressDetails = {
+            "address": selectedAddress.find('p strong:contains("Address")').next().text().trim(),
+            "first_name": selectedAddress.find('p strong:contains("Name")').next().text().trim(),
+            "state": selectedAddress.find('p strong:contains("State")').next().text().trim(),
+            "city": selectedAddress.find('p strong:contains("City")').next().text().trim(),
+            "pincode": selectedAddress.find('p strong:contains("Pin Code")').next().text().trim(),
+            "phone_number": selectedAddress.find('p strong:contains("Phone number")').next().text().trim(),
+        };
+
+        // Validate the fields
+        if (addressDetails.address === "" || addressDetails.first_name === "" || addressDetails.state === "" || addressDetails.city === "" || addressDetails.pincode === "" || addressDetails.phone_number === "") {
+            alert("All fields are mandatory");
+            return false;
+        } else {
+            // If validation passes, proceed with Razorpay
+            var options = {
+                "key": "rzp_test_HIRhNkqNybeWdx",
+                "amount": "{{ payment.amount }}",
+                "currency": "INR",
+                "name": "Usbot",
+                "description": "Purchases",
+                "image": "https://example.com/your_logo",
+                "order_id": "{{payment.id}}",
+                "handler": function (response) {
+                    // Access addressDetails here if needed
+                    console.log("Razorpay payment successful");
+                    console.log("Address: " + addressDetails.address);
+                    console.log("First Name: " + addressDetails.first_name);
+                    console.log("State: " + addressDetails.state);
+                    console.log("Phone Number: " + addressDetails.phone_number);
+                    // Add other details as needed
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+
+            var rzp1 = new Razorpay(options);
+
+            rzp1.on('payment.failed', function (response) {
+                // Handle payment failure
+                console.error("Razorpay payment failed");
+                console.error(response.error);
+            });
+
+           // document.getElementById('rzp-button1').onclick = function (e) {
+            var rzpl = new Razorpay(options;)
+                rzp1.open();
+                e.preventDefault();
+          //  }
+        }
+    });
+});
 </script>
-
-
 
 
 
@@ -556,6 +670,8 @@ function confirmDelete(url) {
     document.getElementById("myModal").classList.add("hidden");
   }
 </script>
+
+
 
 
 {% endblock %}

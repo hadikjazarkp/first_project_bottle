@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 from Store.controller import authview 
@@ -26,6 +26,16 @@ urlpatterns = [
     path('order_confirmation/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
     # path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
     # path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
+    
+    
+    
+    
+    path('paypal/', include('paypal.standard.ipn.urls')),
+    # path('process-payment/', views.process_payment, name= 'process_payment'),
+    path('payment-done', views.payment_done, name= 'payment_done'),
+    path('payment-cancelled/', views.payment_canceled, name='payment_cancelled'),
+    
+    
     
     
     

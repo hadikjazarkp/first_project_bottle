@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile, PeromoCode, Address
+from .models import UserProfile, PromoCode, Address
 
 class CustomUserForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control my-2',  'placeholder': 'Enter username', "id":"username"}))
@@ -42,9 +42,9 @@ class CustomUserForm(UserCreationForm):
     
 
 
-class PeromoCodeForm(forms.ModelForm):
+class PromoCodeForm(forms.ModelForm):
     class Meta:
-        model = PeromoCode
+        model = PromoCode
         fields = '__all__'
         widgets = {
             'expaire_date': forms.DateInput(attrs={'type': 'date'}),

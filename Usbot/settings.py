@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'wishlist',
     'ckeditor_uploader',
     'ckeditor',
+    
+    # paypal intergration
+    'paypal.standard.ipn',
 ]
 
 
@@ -196,3 +199,7 @@ CKEDITOR_CONFIGS = {
 
 KEY = 'rzp_test_HIRhNkqNybeWdx'
 SECRET = 'SbAXrEwCX45PooisjDgRmJ2x'
+
+
+PAYPAL_RECEIVER_EMAIL = 'usbotbottle@gmail.com'
+PAYPAL_TEST = True

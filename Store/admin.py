@@ -38,17 +38,18 @@ class UserdpAdmin(admin.ModelAdmin):
     # list_display = []  
     exclude = ['slug']       
 
-class PeromoCodeAdmin(admin.ModelAdmin):
-    form = PeromoCodeForm
+class PromoCodeAdmin(admin.ModelAdmin):
+    form = PromoCodeForm
     list_display=['code','discount_price','purchase_price','expaire_date',]
 
 class OrderAdmin(admin.ModelAdmin):
     inlines = []
   
 class OrderItemAdmin(admin.ModelAdmin):
-    form = PeromoCodeForm
+    form = PromoCodeForm
     list_display=[]
     
+
 
 
 admin.site.register(Category,CategoryAdmin)
@@ -60,7 +61,7 @@ admin.site.register(Logo)
 admin.site.register(UserProfile,UserAdmin)
 admin.site.register(ColorImage,ColorImageAdmin)
 admin.site.register(Userdp,UserdpAdmin)
-admin.site.register(PeromoCode,PeromoCodeAdmin)
+admin.site.register(PromoCode,PromoCodeAdmin)
 
 
 
@@ -68,6 +69,8 @@ admin.site.register(Cart)
 admin.site.register(Order,OrderAdmin)
 admin.site.register(OrderItem,OrderItemAdmin)
 
+admin.site.register(CartOrder)
+admin.site.register(CartOrderItems)
 
 
 
