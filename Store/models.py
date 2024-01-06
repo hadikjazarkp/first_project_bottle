@@ -13,7 +13,9 @@ from django.core.exceptions import ValidationError
 import os
 from phonenumber_field.modelfields import PhoneNumberField
 from  ckeditor_uploader.fields import RichTextUploadingField
-
+#new
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 def validate_image_type(value):

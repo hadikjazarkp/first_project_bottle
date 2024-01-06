@@ -10,7 +10,9 @@ from django.conf import settings
 from paypal.standard.forms import PayPalEncryptedPaymentsForm
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-
+import stripe
+import time
+from django.http import HttpResponse
 
 
 def home(request):
@@ -262,7 +264,9 @@ def checkout(request):
     total_amt = 0
 
     totalAmt = 0
-
+    
+     
+     
     if 'cartdata' in request.session:
         for p_id, item in request.session['cartdata'].items():
             totalAmt += int(item['qty']) * float(item['price'])
@@ -327,6 +331,8 @@ def checkout(request):
                                                             'promocodes': promocodes, 'user_address': user_address,
                                                             'final_price': final_price, 'discount_price': discount_price,
                                                             'payment': payment})
+
+
 
 
 @csrf_exempt
