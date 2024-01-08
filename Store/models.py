@@ -231,49 +231,28 @@ class Order(models.Model):
     
     
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='order') 
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    address_type = models.CharField(max_length=50)
     address = models.CharField(max_length=300)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    phone_number = PhoneNumberField()
-    pincode = models.IntegerField()
-    amount = models.CharField(max_length=100)
-    payment_id = models.CharField(max_length=300,null=True,blank=True)
-    paid = models.BooleanField(default=False,null=True)
-    date = models.DateField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    total_price = models.IntegerField(default=0)
+    payment_mode = models.CharField(max_length=150,null=True)
+    status = models.CharField(max_length=150, choices=STATUS_CHOICES, default='Pending')
+    message = models.TextField(null=True)
+    tracking_no = models.CharField(max_length = 150, null=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    update_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return self.user.username
+        return '{} - {}'.format(self.id, self.tracking_no)
      
     
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name='orderitem')   
-    product = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='orderitem/', validators=[validate_image_type] ) 
+    variant = models.ForeignKey(Variant,on_delete=models.CASCADE,null=True) 
     quantity = models.CharField(max_length=20)
     price = models.CharField(max_length=50)
     total = models.CharField(max_length=1000)
     
     def __str__(self):
-        return self.order.user.username
+        return '{} - {}'.format(self.order.id, self.order.tracking_no)
     
     
     
-class CartOrder(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='cartorder') 
-    total_amt = models.FloatField()
-    paid_status= models.BooleanField(default=False)
-    order_dt=models.DateTimeField(auto_now_add=True)
-    
-class CartOrderItems(models.Model):
-    order=models.ForeignKey(CartOrder, on_delete=models.CASCADE) 
-    invoice_no=models.CharField(max_length=150)
-    item=models.CharField(max_length=150)
-    image=models.ImageField(upload_to='cartorderimage/', validators=[validate_image_type] )  
-    qty=models.IntegerField()
-    price=models.FloatField()
-    total=models.FloatField()
-        

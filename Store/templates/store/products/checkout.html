@@ -4,24 +4,16 @@
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 <style>
-
-
-
-
-
-
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-    padding: 16px; /* Adjust the padding as needed */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  padding: 16px; /* Adjust the padding as needed */
 }
-
 .card:hover {
     transform: translateY(-4px);
 }
-
 .address-details p {
     margin-bottom: 8px;
 }
@@ -34,298 +26,295 @@
 </style>
 
   <div class="grid sm:px-10 lg:grid-cols-2 py-3 lg:px-20 xl:px-32">
-      <div class="">
-        <div class=" space-y-3 rounded-lg border-2  px-2 py-4 sm:px-6">
-          {% for item in cart_items %}
-          <div class="flex flex-col rounded-lg  sm:flex-row">
-            <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
-            
-            {% comment %} <div class="flex w-full flex-col px-4 py-4"> {% endcomment %}
-              <span class="font-semibold my-8 mx-6 text-center">{{ item.variant.color}}</span> 
-              <input class="my-8 mx-6 border text-center h-8 w-8" type="text" value="{{ item.variant_qty }}">
-              <p class="text-lg font-bold my-8 mx-6 text-center"> ₹{{ item.variant.selling_price}}</p>
-             
-            {% comment %} </div> {% endcomment %}
-          </div>
-          {% endfor %}      
-        </div>
-        {{form.render}}
-
-        <!-- Delivery Address Section -->
-        <div class=" mt-10 p-4 rounded shadow mb-4">
-          <div class="flex justify-between items-center mb-3">
-            <div class="text-sm text-gray-500">
-              <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
+    
+        <div class=""> 
+            <div class=" space-y-3 rounded-lg border-2  px-2 py-4 sm:px-6">
+              {% for item in cart_items %}
+              <div class="flex flex-col rounded-lg  sm:flex-row">
+                <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
+                
+                {% comment %} <div class="flex w-full flex-col px-4 py-4"> {% endcomment %}
+                  <span class="font-semibold my-8 mx-6 text-center">{{ item.variant.color}}</span> 
+                  <input class="my-8 mx-6 border text-center h-8 w-8" type="text" value="{{ item.variant_qty }}">
+                  <p class="text-lg font-bold my-8 mx-6 text-center"> ₹{{ item.variant.selling_price}}</p>
+                
+                {% comment %} </div> {% endcomment %}
+              </div>
+              {% endfor %}      
             </div>
-          
-          </div>
-          <div class="border my-2 p-4">
-            <div id="selectedAddress"></div>
-                <button id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()"> Add Address </button> 
-                <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
-            </div>
-          </div>
-            
-        </div>
-          <div>
-              <!-- Modal Container -->
-              <div id="myModal" class="modal fixed hidden inset-0 z-50 overflow-auto bg-black bg-opacity-50">
-                <!-- Modal Content -->
-                <div class="modal-content mx-auto my-12 p-6 bg-white w-96 shadow-lg rounded">
-
-                  <!-- Close Button -->
-                  <button id="closeModal" class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 cursor-pointer">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-
-                  <!-- Address Table -->
-                  <div class="grid grid-cols-1 gap-4">
-                    {% for address in user_address %}
-                    <div class="border p-4 hover:bg-gray-100 cursor-pointer" onclick="selectAddress('{{ address.id }}')">
-                      <input class="hidden form-radio addresscheck" type="radio" name="address" value="{{ address.id }}" id="user_address_{{ address.id }}" {% if forloop.first %}checked{% endif %}>
-                      <label class="ml-2 cursor-pointer select-none block">
-                        <div id="selectedAddressDetails_{{ address.id }}" class="address-details">
-                          <p><strong>Address:</strong> {{ address.address }}</p>
-                          <p><strong>Name:</strong> {{ address.first_name }}</p>
-                          <p><strong>State:</strong> {{ address.state }}</p>
-                          <p><strong>City:</strong> {{ address.city }}</p>
-                          <p><strong>Pin Code:</strong> {{ address.pincode }}</p>
-                          <p><strong>Phone number:</strong> {{ address.phone_number }}</p>
-                          <hr class="my-4">
-                        </div>
-                      </label>
-                    </div>
-                    {% endfor %}
-                  </div>
-
-                    <!-- Close Modal Button -->
-                    <button id="closeModalContent" class="bg-gray-500 text-white p-2 mt-4 w-full rounded" onclick="handleCloseModal()">Close Modal</button>
-                    <!-- Trigger button for Promo Modal -->
-                  
-                </div>
-              </div>
-
-
-
-
-              <form action="{% url 'promocode_view' %}" method="post">
-                {% csrf_token %}
-                <div id="promoModal" class="modal">
-                  <input type="hidden" name="cart_total" value="{{ cart_total }}">
-                  <div class="modal-content bg-white border rounded-lg shadow-md p-4 w-4/5 md:w-1/2 mx-auto mt-14">
-                    <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
+            <div class="border my-2 p-4">
               
-                    <div class="mb-6">
-                      <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
-                      <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 focus:outline-none focus:shadow-outline-blue focus:border-blue-300">
-                        {% for promocode in promocodes %}
-                        <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-              
-                    <div class="text-center">
-                      <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                        Apply
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-              
-
-
-
-
-            <div class="border  p-4 rounded-md">
-              <div class="flex items-center justify-between pb-2">
-                <h1 class="text-2xl gap">Apply Coupons</h1>
-                <button onclick="openPromoModal()" class="border-2 bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded">Select Coupon</button>
-              </div>
-              <hr>
-              <div class="mt-6 border-b py-2">
-                  <div class="flex items-center justify-between">
-                      <p class="text-sm font-medium text-gray-900">Subtotal</p>
-                      <p class="font-semibold text-gray-900"> ₹ {{ cart_total }}</p>
-                  </div>
-                  <div class="flex items-center justify-between">
-                      <p class="text-sm font-medium text-gray-900">Discount</p>
-                      <p class="font-semibold text-gray-900"> ₹ {{ discount_price }}</p>
-                  </div>
-                  <div class="flex items-center justify-between">
-                      <p class="text-sm font-medium text-gray-900">Shipping</p>
-                      <p class="font-semibold text-gray-400">FREE</p>
-                  </div>
-              </div>
+              <button type="button" id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()"> Add Address </button> 
+              <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
       
-              <div class="mt-6 flex items-center justify-between border-b py-2">
-                  <p class="text-sm font-medium text-gray-900">Total</p>
-                  <p class="text-2xl font-semibold text-gray-900"> ₹ {{ final_price }}</p>
-              </div>
-          
-              <div class="mt-6 py-3 border-b">
-                  <h1 class="text-3xl">Payment Methods</h1>
-              </div>
-          
-              <div class=" flex justify-between gap-3 py-3">
-          
-                <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
-                  <button id="cash_on_deliver" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">Cash on Delivery</button>
-                  <button id="rzp-button1" class=" py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full ">Razorpay</button>
+              <form action="{% url 'placeorder' %}" method="POST"> 
+                {% csrf_token %}
+              <div id="selectedAddress"></div>
+              <input type="hidden" name="selectedAddressData" id="selectedAddressData" value="">
               </div>
             </div>
-         </div>
         
+            <!-- Delivery Address Section -->
+            <div class=" mt-10 p-4 rounded shadow mb-4">
+              <div class="flex justify-between items-center mb-3">
+                <div class="text-sm text-gray-500">
+                  <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
+                </div>
+              
+              </div>
+          
+            </div>
+            
+             
 
-</div>
-</div>
+
+                 <input type="hidden" value="COD" name="payment_mode">
+                <div class="border  p-4 rounded-md">
+                  <div class="flex items-center justify-between pb-2">
+                    <h1 class="text-2xl gap">Apply Coupons</h1>
+                    <button type="button" onclick="openPromoModal()" class="border-2 bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded">Select Coupon</button>
+                  </div>
+                  <hr>
+                  <div class="mt-6 border-b py-2">
+                      <div class="flex items-center justify-between">
+                          <p class="text-sm font-medium text-gray-900">Subtotal</p>
+                          <p class="font-semibold text-gray-900"> ₹ {{ cart_total }}</p>
+                      </div>
+                      <div class="flex items-center justify-between">
+                          <p class="text-sm font-medium text-gray-900">Discount</p>
+                          <p class="font-semibold text-gray-900"> ₹ {{ discount_price }}</p>
+                      </div>
+                      <div class="flex items-center justify-between">
+                          <p class="text-sm font-medium text-gray-900">Shipping</p>
+                          <p class="font-semibold text-gray-400">FREE</p>
+                      </div>
+                  </div>
+          
+                  <div class="mt-6 flex items-center justify-between border-b py-2">
+                      <p class="text-sm font-medium text-gray-900">Total</p>
+                      <p class="text-2xl font-semibold text-gray-900" data-name="final_price"> ₹ {{ final_price }}</p>
+                  </div>
+              
+                  <div class="mt-6 py-3 border-b">
+                      <h1 class="text-3xl">Payment Methods</h1>
+                  </div>
+              
+                  <div class=" flex justify-between gap-3 py-3">
+              
+                    <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
+                      <button id="cash_on_deliver" type="submit" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">Cash on Delivery</button>
+                      <button id="rzp-button1" class=" py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full ">Razorpay</button>
+                  </div>
+                </div>
+            </div>
+            
+          </form>
+    </div>
+    </div>
 
 
-      <div class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center"  id="modal">
-        <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg" style="width: -moz-available;">
-           <div class="modal-header flex justify-between items-center mb-4">
-            <p class="text-xl font-medium">Address Details</p>
-            <button id="close-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <div class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center"  id="modal">
+            <div class="modal-content bg-white p-4 max-w-md mx-auto rounded shadow-lg" style="width: -moz-available;">
+              <div class="modal-header flex justify-between items-center mb-4">
+                <p class="text-xl font-medium">Address Details</p>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+            <div class="modal-body overflow-y-auto max-h-96  w-100">
+              
+
+                                  <form action="{% url 'add_address' %}" method="post">
+                                    {% csrf_token %}
+                                    <p class="text-gray-400">Complete your order details.</p>
+
+
+                                    <div class="mt-4">
+                                      <label for="address_type" class="block text-sm font-medium">Address Type</label>
+                                      <select name="address_type" id="address_type"
+                                          class="w-full border border-gray-200 px-4 py-2 rounded-md text-sm outline-none focus:ring focus:border-blue-500">
+                                          <option value="Home">Home</option>
+                                          <option value="Office">Office</option>
+                                      </select>
+                                  </div>
+
+                                    <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
+                                    <div class="relative">
+                                    <input type="text" id="email" name="address" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                        </svg>
+                                        
+                                    </div>
+                                    </div>
+
+                                    <label for="email" class="mt-4 mb-2 block text-sm font-medium">First name</label>
+                                    <div class="relative">
+                                    <input type="text" id="first_name" name="first_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="first_name" /> 
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                        
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+                                      </svg>
+                                        
+                                    </div>
+                                    </div>
+
+                                    <label for="email" class="mt-4 mb-2 block text-sm font-medium">last name</label>
+                                    <div class="relative">
+                                    <input type="text" id="last_name" name="last_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="last_name" />
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                        
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+                                      </svg>
+                                        
+                                    </div>
+                                    </div>
+
+                                    <label for="email" class="mt-4 mb-2 block text-sm font-medium">city</label>
+                                    <div class="relative">
+                                    <input type="text" id="city" name="city" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="city" />
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                        </svg>
+                                        
+                                    </div>
+                                    </div>
+
+                                    <label for="email" class="mt-4 mb-2 block text-sm font-medium">state</label>
+                                    <div class="relative">
+                                    <input type="text" id="state" name="state" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="state" />
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                        </svg>
+                                        
+                                    </div>
+                                    </div>
+
+
+                                    <label for="number" class="mt-4 mb-2 block text-sm font-medium">number</label>
+                                    <div class="relative">
+                                    <input type="text" id="number" name="phone_number" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="number" />
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                        
+                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                                      </svg>
+                                      
+                                    </div>
+                                    </div>
+
+                                    <label for="email" class="mt-4 mb-2 block text-sm font-medium">pincode</label>
+                                    <div class="relative">
+                                    <input type="text"  name="pincode" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="pincode" /> 
+                                    <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                                        
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+                                      </svg>
+                                        
+                                    </div>
+                                    </div>
+
+
+
+                            <!-- Total -->
+                      
+                      
+                        </div>
+                        <input type="submit" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white" value="Save And Deliver Here">
+                      </form>
+
+                    
+            
+            </div> 
+
+          
+        </div>
+          
+          
+
+
+
+
+      </div>
+
+      <div>
+        <!-- Modal Container -->
+        <div id="myModal" class="modal fixed hidden inset-0 z-50 overflow-auto bg-black bg-opacity-50">
+          <!-- Modal Content -->
+          <div class="modal-content mx-auto my-12 p-6 bg-white w-96 shadow-lg rounded">
+
+            <!-- Close Button -->
+            <button id="closeModal" class="absolute top-0 right-0 mt-2 mr-2 text-gray-700 cursor-pointer">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
-          </div>
-        <div class="modal-body overflow-y-auto max-h-96  w-100">
            
+            <!-- Address Table -->
+            <div class="grid grid-cols-1 gap-4">
+              {% for address in user_address %}
+              <div class="border p-4 hover:bg-gray-100 cursor-pointer" onclick="selectAddress('{{ address.id }}')">
+                <input class="hidden form-radio addresscheck" type="radio" name="address" value="{{ address.id }}" id="user_address_{{ address.id }}" {% if forloop.first %}checked{% endif %}>
+                <label class="ml-2 cursor-pointer select-none block">
+                  <div id="{{ address.id }}" class="address-details">
+                    <p data-name="Address"><strong>Address:</strong> {{ address.address }}</p>
+                    <p data-name="Name"><strong>Name:</strong> {{ address.first_name }}</p>
+                    <p data-name="State"><strong>State:</strong> {{ address.state }}</p>
+                    <p data-name="City"><strong>City:</strong> {{ address.city }}</p>
+                    <p data-name="Pin Code"><strong>Pin Code:</strong> {{ address.pincode }}</p>
+                    <p data-name="Phone number"><strong>Phone number:</strong> {{ address.phone_number }}</p>
+                     <hr class="my-4">
+                  </div>
+                </label>
+              </div>
+              {% endfor %}
+            </div>
 
-                               <form action="{% url 'add_address' %}" method="post">
-                                {% csrf_token %}
-                                <p class="text-gray-400">Complete your order details.</p>
-
-
-                                <div class="mt-4">
-                                  <label for="address_type" class="block text-sm font-medium">Address Type</label>
-                                  <select name="address_type" id="address_type"
-                                      class="w-full border border-gray-200 px-4 py-2 rounded-md text-sm outline-none focus:ring focus:border-blue-500">
-                                      <option value="Home">Home</option>
-                                      <option value="Office">Office</option>
-                                  </select>
-                              </div>
-
-                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
-                                <div class="relative">
-                                <input type="text" id="email" name="address" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
-                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                                    </svg>
-                                    
-                                </div>
-                                </div>
-
-                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">First name</label>
-                                <div class="relative">
-                                 <input type="text" id="first_name" name="first_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="first_name" /> 
-                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                                  </svg>
-                                    
-                                </div>
-                                </div>
-
-                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">last name</label>
-                                <div class="relative">
-                                <input type="text" id="last_name" name="last_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="last_name" />
-                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                                  </svg>
-                                    
-                                </div>
-                                </div>
-
-                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">city</label>
-                                <div class="relative">
-                                <input type="text" id="city" name="city" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="city" />
-                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                                    </svg>
-                                    
-                                </div>
-                                </div>
-
-                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">state</label>
-                                <div class="relative">
-                                <input type="text" id="state" name="state" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="state" />
-                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                                    </svg>
-                                    
-                                </div>
-                                </div>
-
-
-                                <label for="number" class="mt-4 mb-2 block text-sm font-medium">number</label>
-                                <div class="relative">
-                                <input type="text" id="number" name="phone_number" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="number" />
-                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-                                  </svg>
-                                  
-                                </div>
-                                </div>
-
-                                <label for="email" class="mt-4 mb-2 block text-sm font-medium">pincode</label>
-                                <div class="relative">
-                                 <input type="text"  name="pincode" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="pincode" /> 
-                                <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                                  </svg>
-                                    
-                                </div>
-                                </div>
-
-
-
-                        <!-- Total -->
-                  
-                   
-                    </div>
-                    <input type="submit" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white" value="Save And Deliver Here">
-                  </form>
-
-                
-        
-        </div> 
-
-      
-    </div>
-      
-      
-
-
-
-
-  </div>
-
-
-
-
+              <!-- Close Modal Button -->
+              <button id="closeModalContent" class="bg-gray-500 text-white p-2 mt-4 w-full rounded" onclick="handleCloseModal()">Close Modal</button>
+              <!-- Trigger button for Promo Modal -->
+            
+          </div>
+        </div>
 <div>
 
 
   
-
+  <div id="promoModal" class="modal">
+    <form action="{% url 'promocode_view' %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="cart_total" value="{{ cart_total }}">
+      <div class="modal-content bg-white border rounded-lg shadow-md p-4 w-4/5 md:w-1/2 mx-auto mt-14">
+        <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
+  
+        <div class="mb-6">
+          <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
+          <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 focus:outline-none focus:shadow-outline-blue focus:border-blue-300">
+            {% for promocode in promocodes %}
+            <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
+            {% endfor %}
+          </select>
+        </div>
+  
+        <div class="text-center">
+          <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Apply
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 
 <script>
 
@@ -456,7 +445,7 @@ function confirmDelete(url) {
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-
+{% comment %} 
 <script>
 
   $(document).ready(function (){
@@ -500,11 +489,11 @@ function confirmDelete(url) {
 
 
 
- 
+  </script> {% endcomment %}
+
+{% comment %} <script>
 
 
-
-{% comment %} 
   $(document).ready(function () {
 
     $('.payWithRazorpay').click(function (e) {
@@ -552,25 +541,50 @@ function confirmDelete(url) {
             };
 
             var rzp1 = new Razorpay(options);
-
-            rzp1.on('payment.failed', function (response) {
-                // Handle payment failure
-                console.error("Razorpay payment failed");
-                console.error(response.error);
-            });
-
-           // document.getElementById('rzp-button1').onclick = function (e) {
-            var rzpl = new Razorpay(options;)
-                rzp1.open();
-                e.preventDefault();
-          //  }
+            rzp1.open();
+               
+        
         }
     });
 });
-</script> {% endcomment %}
+</script>  {% endcomment %}
 
 
 
+  <script>
+    var options = {
+        "key": "rzp_test_HIRhNkqNybeWdx", // Enter the Key ID generated from the Dashboard
+        "amount": "{{ payment.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Usbot",
+        "description": "Purchases",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+      //      alert(response.razorpay_payment_id);
+          //  alert(response.razorpay_order_id);
+         //   alert(response.razorpay_signature)
+        },
+  
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+    });
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+    </script> 
 
 
 
@@ -598,7 +612,8 @@ function confirmDelete(url) {
   document.addEventListener("DOMContentLoaded", function () {
     const selectedAddress = document.getElementById('selectedAddress');
     const initiallyCheckedRadio = document.querySelector("input[name='address']:checked");
-
+    const selectedAddressData = document.getElementById("selectedAddressData")
+    selectedAddressData.value = 
     if (initiallyCheckedRadio) {
       const radioLabel = initiallyCheckedRadio.nextElementSibling;
       selectedAddress.innerHTML = radioLabel.innerHTML;

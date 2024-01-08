@@ -28,7 +28,7 @@ urlpatterns = [
     # path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
     
     
-    
+    path('place-order/', views.placeorder, name='placeorder'),
     
     path('paypal/', include('paypal.standard.ipn.urls')),
     # path('process-payment/', views.process_payment, name= 'process_payment'),

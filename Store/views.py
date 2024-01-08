@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 import stripe
 import time
 from django.http import HttpResponse
+import random
 
 
 def home(request):
@@ -257,82 +258,110 @@ def remove_from_cart(request, id):
 
 
 
+# @login_required
+# def checkout(request):
+    
+    
+#     total_amt = 0
+
+#     totalAmt = 0
+    
+     
+     
+#     if 'cartdata' in request.session:
+#         for p_id, item in request.session['cartdata'].items():
+#             totalAmt += int(item['qty']) * float(item['price'])
+#             host = request.get_host()
+#         #order
+#         order=CartOrder.objects.create(
+#             user=request.user,
+#             total_amt=totalAmt
+#         )
+#         #end
+#         for p_id, item in request.session['cartdata'].items():
+#             total_amt += int(item['qty']) * float(item['price'])
+#             items=CartOrderItems(
+#                 order=order,
+#                 invoice_no='INV-'+str(order.id),
+#                 item=item['title'],
+#                 image=item['image'],
+#                 qty=item['qty'],
+#                 price=item['price'],
+#                 total=float(item['qty'])*float(item['price'])               
+#                 )
+#         host = request.get_host()
+#         paypal_dict = {
+#                 'business': settings.PAYPAL_RECEIVER_EMAIL,
+#                 'amount': '123',
+#                 'item_name': 'OrderNo-'+str(order.id),
+#                 'invoice': 'INV-'+str(order.id),
+#                 'currency_code': 'ISC',
+#                 'notify_url': 'http://{}{}'.format(host,reverse('paypal-ipn')),
+#                 'return_url':'htpp://{}{}'.format(host,reverse('payment_done')),
+#                 'cancel_return':'htpp://{}{}'.format(host,reverse('payment_cancelled')),
+        
+#             }
+
+#         form = PayPalEncryptedPaymentsForm(initial=paypal_dict)
+#         return render(request, 'store/products/checkout_html', {'cart_data': request.session['cartdata'],
+#                                                                 'totalitems': len(request.session['cartdat']),
+#                                                                 'total_amt': total_amt, 'form': form})
+
+#     cart_items = Cart.objects.filter(user=request.user)
+    
+#     cart_total = sum(item.total_price for item in cart_items)
+#     user_address = Address.objects.filter(user=request.user)
+    
+#     promocodes = PromoCode.objects.filter(purchase_price__lte=cart_total)
+#     discount_price = request.session.get('discount', 0)
+#     final_price = cart_total - discount_price
+
+#     try:
+#         client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
+#         payment = client.order.create({'amount': int(final_price * 100), 'currency': 'INR', 'payment_capture': 1})
+        
+#         # Assuming you have a loop here to handle multiple cart items
+#         for item in cart_items:
+#             item.razor_pay_order_id = payment['id']
+#             item.save()
+#     except ConnectionError as e:
+#         # Handle the connection error, e.g., log the error or inform the user
+#         return render(request, 'store/products/checkout.html', {'error_message': 'Failed to connect to Razorpay. Please try again later.'})
+
+#     return render(request, 'store/products/checkout.html', {'cart_items': cart_items, 'cart_total': cart_total,
+#                                                             'promocodes': promocodes, 'user_address': user_address,
+#                                                             'final_price': final_price, 'discount_price': discount_price,
+#                                                             'payment': payment})
 @login_required
 def checkout(request):
-    
-    
-    total_amt = 0
-
-    totalAmt = 0
-    
-     
-     
-    if 'cartdata' in request.session:
-        for p_id, item in request.session['cartdata'].items():
-            totalAmt += int(item['qty']) * float(item['price'])
-            host = request.get_host()
-        #order
-        order=CartOrder.objects.create(
-            user=request.user,
-            total_amt=totalAmt
-        )
-        #end
-        for p_id, item in request.session['cartdata'].items():
-            total_amt += int(item['qty']) * float(item['price'])
-            items=CartOrderItems(
-                order=order,
-                invoice_no='INV-'+str(order.id),
-                item=item['title'],
-                image=item['image'],
-                qty=item['qty'],
-                price=item['price'],
-                total=float(item['qty'])*float(item['price'])               
-                )
-        host = request.get_host()
-        paypal_dict = {
-                'business': settings.PAYPAL_RECEIVER_EMAIL,
-                'amount': '123',
-                'item_name': 'OrderNo-'+str(order.id),
-                'invoice': 'INV-'+str(order.id),
-                'currency_code': 'ISC',
-                'notify_url': 'http://{}{}'.format(host,reverse('paypal-ipn')),
-                'return_url':'htpp://{}{}'.format(host,reverse('payment_done')),
-                'cancel_return':'htpp://{}{}'.format(host,reverse('payment_cancelled')),
-        
-            }
-
-        form = PayPalEncryptedPaymentsForm(initial=paypal_dict)
-        return render(request, 'store/products/checkout_html', {'cart_data': request.session['cartdata'],
-                                                                'totalitems': len(request.session['cartdat']),
-                                                                'total_amt': total_amt, 'form': form})
 
     cart_items = Cart.objects.filter(user=request.user)
-    
-    cart_total = sum(item.total_price for item in cart_items)
+    cart_total = 0
     user_address = Address.objects.filter(user=request.user)
     
+    final_price = 0
+    
+    
+    for item in cart_items:
+        
+        cart_total=cart_total+item.total_price
+     
+     
     promocodes = PromoCode.objects.filter(purchase_price__lte=cart_total)
-    discount_price = request.session.get('discount', 0)
+    discount_price = 0
+    if request.session.get('discount'):
+        discount_price = request.session.get('discount')
+        del request.session['discount']   
     final_price = cart_total - discount_price
 
-    try:
-        client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
-        payment = client.order.create({'amount': int(final_price * 100), 'currency': 'INR', 'payment_capture': 1})
-        
-        # Assuming you have a loop here to handle multiple cart items
-        for item in cart_items:
-            item.razor_pay_order_id = payment['id']
-            item.save()
-    except ConnectionError as e:
-        # Handle the connection error, e.g., log the error or inform the user
-        return render(request, 'store/products/checkout.html', {'error_message': 'Failed to connect to Razorpay. Please try again later.'})
-
-    return render(request, 'store/products/checkout.html', {'cart_items': cart_items, 'cart_total': cart_total,
-                                                            'promocodes': promocodes, 'user_address': user_address,
-                                                            'final_price': final_price, 'discount_price': discount_price,
-                                                            'payment': payment})
+    client =razorpay.Client( auth = (settings.KEY, settings.SECRET))
+    payment = client.order.create({'amount': (final_price) * 100, 'currency': 'INR', 'payment_capture': 1 }) 
+    item.rezor_pay_order_id = payment['id']
+    item.save()
 
 
+
+    return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address, 'final_price':final_price, 'discount_price':discount_price, 'payment':payment})   
 
 
 @csrf_exempt
@@ -450,3 +479,59 @@ def promocode_view(request):
 def order_confirmation(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'order_confirmation.html', {'order': order})
+
+@login_required
+def placeorder(request):
+    if request.method == 'POST':
+        # neworder = Order()
+        # neworder.user = request.user
+        # neworder.first_name = request.POST.get('first_name')
+        # neworder.address_type = request.POST.get('address_type')
+        # neworder.address = request.POST.get('address')
+        # neworder.city = request.POST.get('city')
+        # neworder.state = request.POST.get('state')
+        # neworder.phone_number = request.POST.get('phone_number')
+        # neworder.pincode = request.POST.get('pincode')
+       
+        
+        # neworder.payment_mode = request.POST.get('payment_mode')
+        # neworder.total_price = request.POST.get('final_price')
+        # trackno = 'usbot'+str(random.randint(1111111,9999999))
+        print("cgbgfn")
+        
+        
+        user = request.user
+        address = request.POST.get('selectedAddressData')
+        payment_mode = request.POST.get('payment_mode')
+        total_price = request.POST.get('final_price')
+        trackno = 'usbot'+str(random.randint(1111111,9999999))
+        print("user",user,"address",address,"payment_mode",payment_mode,"total_price",total_price,"trackno",trackno)
+        # while Order.objects.filter(tracking_no=trackno) is None:
+        #     trackno = 'usbot'+str(random.randint(1111111,9999999))
+            
+        # neworder.tracking_no = trackno
+        # neworder.save()
+        
+        
+        # neworderitems = Cart.objects.filter(user=request.user)
+        # for item in neworderitems:
+        #     OrderItem.objects.create(
+        #         order=neworder,
+        #         variant=item.variant,
+        #         quantity=item.variant_qty,
+        #         price=item.variant.selling_price
+                
+        #     )    
+
+        #     # To decrease the product quantity from available stock
+        #     orderproduct = Variant.objects.filter(id=item.id).first()
+        #     orderproduct.quantity = orderproduct.quantity - item.variant_qty
+        #     orderproduct.save()
+            
+        # # To clear user Cart
+        # Cart.objects.filter(user=request.user).delete()  
+        
+        # messages.success(request, "Youe order has been placed successfuly")  
+
+    return redirect('home')
+    
