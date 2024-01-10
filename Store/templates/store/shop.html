@@ -122,60 +122,47 @@
 
 <div class="bg-white  px-12 grid grid-cols-3 gap-16 ">
 
-   
-    
-  
-  
-    
-
 
     {% comment %} {% for item in category %} {% endcomment %}
       {% comment %} <div class="text-center col-span-3">
         <h1 class="font-bold text-7xl mb-4 ">{{ item.name }}</h1>
     </div> {% endcomment %}
-  
+
       {% comment %} {% for sub_item in item.sub_categories.all %} {% endcomment %}
         {% comment %} <div class="text-center col-span-3">
           <h1 class="text-3xl">{{ sub_item.name }}</h1>
         </div> {% endcomment %}
-  
+
         {% for product in products %}
+        <a href="{% url 'productview' pslug=product.slug vslug=product.variants.first.slug %}">
           <div class="text-center shadow-md my-4">
             <img src="{{ product.variants.first.cover_image.url }}" alt="Product" class="h-72 w-64 object-cover rounded-t-xl mx-auto" />
             <h1 class="text-lg font-bold my-2">{{ product.name }}</h1>
-  
+
             <div class="flex items-center justify-center">
                 {% comment %} {% for variant_item in product_item.variants.all %}
                   {% if forloop.first %} {% endcomment %}
                     <p class="text-lg font-semibold text-black cursor-auto my-3"> ₹ {{ product.variants.first.selling_price }}</p>
-                  
+
                       <del>
                         <p class="text-sm text-gray-600 cursor-auto ml-2"> ₹ {{ product.variants.first.orginal_price }}</p>
                       </del>
-                   
+
                   {% comment %} {% endif %}
                 {% endfor %} {% endcomment %}
               </div>
-              
+
           </div>
+        </a>
         {% endfor %}
-  
+
       {% comment %} {% endfor %}
     {% endfor %} {% endcomment %}
-  
+
   </div>
-  
+
 
 </div>
-
-
-
-
-
-
-
-
-
 
 
 <script>
@@ -200,16 +187,9 @@
     }
 </script>
 
-{% comment %} <!-- Support Me 🙏🥰 -->
-<script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
-<script>
-    kofiWidgetOverlay.draw('mohamedghulam', {
-            'type': 'floating-chat',
-            'floating-chat.donateButton.text': 'Support me',
-            'floating-chat.donateButton.background-color': '#323842',
-            'floating-chat.donateButton.text-color': '#fff'
-        });
-</script> {% endcomment %}
 
 
   {% endblock content %}    
+
+
+  

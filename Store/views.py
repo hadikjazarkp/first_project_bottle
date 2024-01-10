@@ -302,10 +302,10 @@ def remove_from_cart(request, id):
         
 #             }
 
-#         form = PayPalEncryptedPaymentsForm(initial=paypal_dict)
-#         return render(request, 'store/products/checkout_html', {'cart_data': request.session['cartdata'],
-#                                                                 'totalitems': len(request.session['cartdat']),
-#                                                                 'total_amt': total_amt, 'form': form})
+#         form = PayPalEncryptedPaymentsForm(initial=paypal_dict)     
+#         return render(request,'store/products/checkout_html',{'cart_data': request.session['cartdata'],    
+#                                                                 'totalitems': len(request.session['cartdat']),     
+#                                                                 'total_amt': total_amt, 'form': form})    
 
 #     cart_items = Cart.objects.filter(user=request.user)
     
@@ -363,15 +363,6 @@ def checkout(request):
 
     return render(request, 'store/products/checkout.html', {'cart_items':cart_items, 'cart_total':cart_total, 'promocodes':promocodes, 'user_address':user_address, 'final_price':final_price, 'discount_price':discount_price, 'payment':payment})   
 
-
-@csrf_exempt
-def payment_done(request):
-    returnData=request.POST
-    return render(request, 'store/products/payment-success.html',{'data':returnData})   
-
-@csrf_exempt
-def payment_canceled(request):
-    return render(request, 'store/products/payment-fail.html')
 
 
 
@@ -476,62 +467,46 @@ def promocode_view(request):
 
 
 
-def order_confirmation(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
-    return render(request, 'order_confirmation.html', {'order': order})
-
 @login_required
 def placeorder(request):
     if request.method == 'POST':
         # neworder = Order()
         # neworder.user = request.user
-        # neworder.first_name = request.POST.get('first_name')
-        # neworder.address_type = request.POST.get('address_type')
-        # neworder.address = request.POST.get('address')
-        # neworder.city = request.POST.get('city')
-        # neworder.state = request.POST.get('state')
-        # neworder.phone_number = request.POST.get('phone_number')
-        # neworder.pincode = request.POST.get('pincode')
-       
         
-        # neworder.payment_mode = request.POST.get('payment_mode')
-        # neworder.total_price = request.POST.get('final_price')
-        # trackno = 'usbot'+str(random.randint(1111111,9999999))
-        print("cgbgfn")
+        address = request.POST.get('selectedAddressId').strip()
+        address = Address.objects.get(id=address)
         
         
-        user = request.user
-        address = request.POST.get('selectedAddressData')
         payment_mode = request.POST.get('payment_mode')
-        total_price = request.POST.get('final_price')
-        trackno = 'usbot'+str(random.randint(1111111,9999999))
-        print("user",user,"address",address,"payment_mode",payment_mode,"total_price",total_price,"trackno",trackno)
-        # while Order.objects.filter(tracking_no=trackno) is None:
-        #     trackno = 'usbot'+str(random.randint(1111111,9999999))
-            
+        total_price = request.POST.get('final_total')
+
+        # # Ensure that the tracking number is unique
+        trackno = 'usbot' + str(random.randint(1111111, 9999999))
+        while UserOrder.objects.filter(tracking_no=trackno).exists():
+            trackno = 'usbot' + str(random.randint(1111111, 9999999))
+        
         # neworder.tracking_no = trackno
         # neworder.save()
-        
-        
-        # neworderitems = Cart.objects.filter(user=request.user)
-        # for item in neworderitems:
-        #     OrderItem.objects.create(
-        #         order=neworder,
-        #         variant=item.variant,
-        #         quantity=item.variant_qty,
-        #         price=item.variant.selling_price
-                
-        #     )    
+        neworder= UserOrder.objects.create(user=request.user,address=address,total_price=total_price,payment_mode=payment_mode,tracking_no=trackno)
+        neworderitems = Cart.objects.filter(user=request.user)
+        for item in neworderitems:
+            UserOrderItem.objects.create(
+                order=neworder,
+                variant=item.variant,
+                quantity=item.variant_qty,
+                price=item.variant.selling_price
+            )    
 
-        #     # To decrease the product quantity from available stock
-        #     orderproduct = Variant.objects.filter(id=item.id).first()
-        #     orderproduct.quantity = orderproduct.quantity - item.variant_qty
-        #     orderproduct.save()
+            # To decrease the product quantity from available stock
+            orderproduct = Variant.objects.get(id=item.variant.id)
+            orderproduct.quantity = orderproduct.quantity - item.variant_qty
+            orderproduct.save()
             
-        # # To clear user Cart
-        # Cart.objects.filter(user=request.user).delete()  
+        # To clear user Cart
+        Cart.objects.filter(user=request.user).delete()  
         
-        # messages.success(request, "Youe order has been placed successfuly")  
+        messages.success(request, "Your order has been placed successfully")  
 
     return redirect('home')
+    
     

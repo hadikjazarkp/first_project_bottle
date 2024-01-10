@@ -1,0 +1,13 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+{% csrf_token %}
+{% block content %}
+
+<h1>My Orders</h1>
+
+{% for item in Orders %}
+  {{item.tracking_no}}
+
+{% endfor %}
+
+{% endblock %}

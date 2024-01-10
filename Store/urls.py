@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 
-from Store.controller import authview 
+from Store.controller import authview ,order
 
 urlpatterns = [
      
@@ -23,22 +23,19 @@ urlpatterns = [
     path('add_address/', views.add_address, name='add_address'),
     path('edit_address/<uuid:address_id>/', views.edit_address, name='edit_address'),
     path('delete_address/<uuid:address_id>/', views.delete_address, name='delete_address'),
-    path('order_confirmation/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
+   
+    
     # path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
     # path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
     
     
     path('place-order/', views.placeorder, name='placeorder'),
+    path('my-orders/', order.index, name="myorders"),
     
     path('paypal/', include('paypal.standard.ipn.urls')),
     # path('process-payment/', views.process_payment, name= 'process_payment'),
-    path('payment-done', views.payment_done, name= 'payment_done'),
-    path('payment-cancelled/', views.payment_canceled, name='payment_cancelled'),
     
-    
-    
-    
-    
+      
     path('promocode_view/', views.promocode_view, name='promocode_view'),
    
     path('register/', authview.Register.as_view(), name="register"),
@@ -49,5 +46,4 @@ urlpatterns = [
     path('login/',authview.SignIn.as_view(), name="loginpage"),
     path('logout/', authview.Logoutpage.as_view(), name="logout"),
 ]
-
 

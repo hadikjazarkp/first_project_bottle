@@ -42,13 +42,7 @@ class PromoCodeAdmin(admin.ModelAdmin):
     form = PromoCodeForm
     list_display=['code','discount_price','purchase_price','expaire_date',]
 
-class OrderAdmin(admin.ModelAdmin):
-    inlines = []
-  
-class OrderItemAdmin(admin.ModelAdmin):
-    form = PromoCodeForm
-    list_display=[]
-    
+
 
 
 
@@ -66,8 +60,8 @@ admin.site.register(PromoCode,PromoCodeAdmin)
 
 
 admin.site.register(Cart)
-admin.site.register(Order,OrderAdmin)
-admin.site.register(OrderItem,OrderItemAdmin)
+# admin.site.register(Order,OrderAdmin)
+# admin.site.register(OrderItem,OrderItemAdmin)
 
 
 

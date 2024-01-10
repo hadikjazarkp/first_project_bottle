@@ -43,14 +43,16 @@
               {% endfor %}      
             </div>
             <div class="border my-2 p-4">
-              
+
               <button type="button" id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()"> Add Address </button> 
               <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
       
-              <form action="{% url 'placeorder' %}" method="POST"> 
+              <form action="{% url 'placeorder' %}" id="orderform" method="POST"> 
                 {% csrf_token %}
               <div id="selectedAddress"></div>
-              <input type="hidden" name="selectedAddressData" id="selectedAddressData" value="">
+             
+              <input type="hidden" name="selectedAddressId" id="selectedAddressId" value=" {{user_address.first.id}}">
+
               </div>
             </div>
         
@@ -68,7 +70,7 @@
              
 
 
-                 <input type="hidden" value="COD" name="payment_mode">
+                 
                 <div class="border  p-4 rounded-md">
                   <div class="flex items-center justify-between pb-2">
                     <h1 class="text-2xl gap">Apply Coupons</h1>
@@ -92,7 +94,8 @@
           
                   <div class="mt-6 flex items-center justify-between border-b py-2">
                       <p class="text-sm font-medium text-gray-900">Total</p>
-                      <p class="text-2xl font-semibold text-gray-900" data-name="final_price"> ₹ {{ final_price }}</p>
+                     <input type="hidden" name="final_total" value={{ final_price }}>
+                      <p class="text-2xl font-semibold text-gray-900" > ₹ {{ final_price }}</p>
                   </div>
               
                   <div class="mt-6 py-3 border-b">
@@ -101,9 +104,14 @@
               
                   <div class=" flex justify-between gap-3 py-3">
               
-                    <button id="pay_pal" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
-                      <button id="cash_on_deliver" type="submit" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">Cash on Delivery</button>
-                      <button id="rzp-button1" class=" py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full ">Razorpay</button>
+                    <input type="hidden" id="payment_mode" name="payment_mode"> 
+
+
+                  
+                    <button id="pay_pal"  class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">PayPal</button>
+                   
+                    <button id="cash_on_deliver" onclick="setpayment_mode('cash_on_delivery')" type="submit" class="py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full">Cash on Delivery</button>
+                      <button id="rzp-button1"  type="submit" class=" py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full ">Razorpay</button>
                   </div>
                 </div>
             </div>
@@ -267,7 +275,7 @@
               <div class="border p-4 hover:bg-gray-100 cursor-pointer" onclick="selectAddress('{{ address.id }}')">
                 <input class="hidden form-radio addresscheck" type="radio" name="address" value="{{ address.id }}" id="user_address_{{ address.id }}" {% if forloop.first %}checked{% endif %}>
                 <label class="ml-2 cursor-pointer select-none block">
-                  <div id="{{ address.id }}" class="address-details">
+                  <div id="selectedAddressDetails_{{ address.id }}" class="address-details">
                     <p data-name="Address"><strong>Address:</strong> {{ address.address }}</p>
                     <p data-name="Name"><strong>Name:</strong> {{ address.first_name }}</p>
                     <p data-name="State"><strong>State:</strong> {{ address.state }}</p>
@@ -287,6 +295,8 @@
             
           </div>
         </div>
+
+
 <div>
 
 
@@ -316,6 +326,22 @@
     </form>
   </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
 
 
@@ -323,18 +349,12 @@
 
 function select_promocode(code){
   
-
 promocode = document.getElementById('promoCode')  
-
 promocode.value=code
 
 }
 
-
-
-
-
-  document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
     // Get all radio buttons and their corresponding labels
     const radioButtons = document.querySelectorAll('input[name="radioGroup"]');
     const labels = document.querySelectorAll('label[for^="radioButton"]');
@@ -352,14 +372,6 @@ promocode.value=code
       });
     });
   });
-
-
-
-
-
-
-
-
 
 
 
@@ -444,113 +456,6 @@ function confirmDelete(url) {
 
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-{% comment %} 
-<script>
-
-  $(document).ready(function (){
-    
-    document.getElementById('rzp-button1').onclick = function(e){
-      rzp1.open();
-      e.preventDefault();
-  }
-  });
-
-
-      var options = {
-        "key": "rzp_test_HIRhNkqNybeWdx", // Enter the Key ID generated from the Dashboard
-        "amount": "{{ payment.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        "currency": "INR",
-        "name": "Usbot",
-        "description": "Purchases",
-        "image": "https://example.com/your_logo",
-        "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "handler": function (response){
-          
-        //   alert(response.razorpay_payment_id);
-        //   alert(response.razorpay_order_id);
-        alert(phone_number)
-        },
-  
-        "theme": {
-            "color": "#3399cc"
-        }
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function (response){
-            alert(response.error.code);
-            alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
-    });
-
-
-
-  </script> {% endcomment %}
-
-{% comment %} <script>
-
-
-  $(document).ready(function () {
-
-    $('.payWithRazorpay').click(function (e) {
-        e.preventDefault();
-
-        // Get the selected address details
-        var selectedAddressId = $('input[name="address"]:checked').val();
-        var selectedAddress = $("#selectedAddressDetails_" + selectedAddressId);
-
-        var addressDetails = {
-            "address": selectedAddress.find('p strong:contains("Address")').next().text().trim(),
-            "first_name": selectedAddress.find('p strong:contains("Name")').next().text().trim(),
-            "state": selectedAddress.find('p strong:contains("State")').next().text().trim(),
-            "city": selectedAddress.find('p strong:contains("City")').next().text().trim(),
-            "pincode": selectedAddress.find('p strong:contains("Pin Code")').next().text().trim(),
-            "phone_number": selectedAddress.find('p strong:contains("Phone number")').next().text().trim(),
-        };
-
-        // Validate the fields
-        if (addressDetails.address === "" || addressDetails.first_name === "" || addressDetails.state === "" || addressDetails.city === "" || addressDetails.pincode === "" || addressDetails.phone_number === "") {
-            alert("All fields are mandatory");
-            return false;
-        } else {
-            // If validation passes, proceed with Razorpay
-            var options = {
-                "key": "rzp_test_HIRhNkqNybeWdx",
-                "amount": "{{ payment.amount }}",
-                "currency": "INR",
-                "name": "Usbot",
-                "description": "Purchases",
-                "image": "https://example.com/your_logo",
-                "order_id": "{{payment.id}}",
-                "handler": function (response) {
-                    // Access addressDetails here if needed
-                    console.log("Razorpay payment successful");
-                    console.log("Address: " + addressDetails.address);
-                    console.log("First Name: " + addressDetails.first_name);
-                    console.log("State: " + addressDetails.state);
-                    console.log("Phone Number: " + addressDetails.phone_number);
-                    // Add other details as needed
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
-
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
-               
-        
-        }
-    });
-});
-</script>  {% endcomment %}
-
-
-
   <script>
     var options = {
         "key": "rzp_test_HIRhNkqNybeWdx", // Enter the Key ID generated from the Dashboard
@@ -561,6 +466,10 @@ function confirmDelete(url) {
         "image": "https://example.com/your_logo",
         "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         "handler": function (response){
+          orderform = document.getElementById("orderform")
+          payment_mode = document.getElementById("payment_mode")
+          payment_mode.value = "razorpay"
+          orderform.submit()
       //      alert(response.razorpay_payment_id);
           //  alert(response.razorpay_order_id);
          //   alert(response.razorpay_signature)
@@ -569,6 +478,7 @@ function confirmDelete(url) {
         "theme": {
             "color": "#3399cc"
         }
+
     };
     var rzp1 = new Razorpay(options);
     rzp1.on('payment.failed', function (response){
@@ -608,31 +518,44 @@ function confirmDelete(url) {
   });
 </script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const selectedAddress = document.getElementById('selectedAddress');
-    const initiallyCheckedRadio = document.querySelector("input[name='address']:checked");
-    const selectedAddressData = document.getElementById("selectedAddressData")
-    selectedAddressData.value = 
-    if (initiallyCheckedRadio) {
-      const radioLabel = initiallyCheckedRadio.nextElementSibling;
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const selectedAddress = document.getElementById('selectedAddress');
+      const initiallyCheckedRadio = document.querySelector("input[name='address']:checked");
+  
+      if (initiallyCheckedRadio) {
+        const radioLabel = initiallyCheckedRadio.nextElementSibling;
+        selectedAddress.innerHTML = radioLabel.innerHTML;
+      }
+    });
+  
+    function updateAddress() {
+      
+      const selectedRadio = document.querySelector("input[name='address']:checked");
+      const radioLabel = selectedRadio.nextElementSibling;
+      const selectedAddress = document.getElementById('selectedAddress');
       selectedAddress.innerHTML = radioLabel.innerHTML;
+     
+
+      updateHiddenInput(selectedRadio); // Call updateHiddenInput to update the hidden input field
     }
-  });
+  
+    
+  
+    function selectAddress(addressId) {
+      hidden_address = document.getElementById("selectedAddressId")
+      const radio = document.getElementById('user_address_' + addressId);
+      console.log('Radio Value:', radio.value); // Log the radio value to the console
+      radio.checked = true;
+      hidden_address.value = radio.value
+      updateAddress();
+    }
+    
+  </script>
+  
 
-  function updateAddress() {
-    const selectedRadio = document.querySelector("input[name='address']:checked");
-    const radioLabel = selectedRadio.nextElementSibling;
-    const selectedAddress = document.getElementById('selectedAddress');
-    selectedAddress.innerHTML = radioLabel.innerHTML;
-  }
 
-  function selectAddress(addressId) {
-    const radio = document.getElementById('user_address_' + addressId);
-    radio.checked = true;
-    updateAddress();
-  }
-</script>
 
 <script>
   function handleCloseModal() {
@@ -648,6 +571,12 @@ function confirmDelete(url) {
     // Your logic to close the modal, you may need to implement this function
     // depending on how you've implemented the modal in your application
     document.getElementById("myModal").classList.add("hidden");
+  }
+
+
+  function setpayment_mode(mode) {
+    payment_mode = document.getElementById('payment_mode')
+    payment_mode.value = mode
   }
 </script>
 

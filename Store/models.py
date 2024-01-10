@@ -218,7 +218,46 @@ class PromoCode(models.Model):
     expaire_date = models.DateField()
     
 
-class Order(models.Model):
+# class Order(models.Model):
+    
+#     STATUS_CHOICES = [
+#         ('Pending', 'Pending'),
+#         ('Paid', 'Paid'),
+#         ('Shipped', 'Shipped'),
+#         ('Delivered', 'Delivered'),
+#         ('Cancelled', 'Cancelled'),
+#     ]
+    
+    
+    
+#     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='order') 
+#     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
+#     total_price = models.IntegerField(default=0,null=True)
+#     payment_mode = models.CharField(max_length=150,null=True)
+#     status = models.CharField(max_length=150, choices=STATUS_CHOICES, default='Pending')
+#     message = models.TextField(null=True)
+#     tracking_no = models.CharField(max_length = 150, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True,null=True)
+#     update_at = models.DateTimeField(auto_now=True)
+    
+#     def __str__(self):
+#         return '{} - {}'.format(self.id, self.tracking_no)
+     
+    
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name='orderitem')   
+#     variant = models.ForeignKey(Variant,on_delete=models.CASCADE,null=True) 
+#     quantity = models.CharField(max_length=20)
+#     price = models.CharField(max_length=50)
+#     total = models.CharField(max_length=1000)
+    
+#     def __str__(self):
+#         return '{} - {}'.format(self.order.id, self.order.tracking_no)
+    
+    
+    
+    
+class CartOrder(models.Model):
     
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -230,9 +269,9 @@ class Order(models.Model):
     
     
     
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='order') 
-    address = models.CharField(max_length=300)
-    total_price = models.IntegerField(default=0)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='cartorder') 
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
+    total_price = models.IntegerField(default=0,null=True)
     payment_mode = models.CharField(max_length=150,null=True)
     status = models.CharField(max_length=150, choices=STATUS_CHOICES, default='Pending')
     message = models.TextField(null=True)
@@ -244,8 +283,8 @@ class Order(models.Model):
         return '{} - {}'.format(self.id, self.tracking_no)
      
     
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name='orderitem')   
+class CartOrderItem(models.Model):
+    order = models.ForeignKey(CartOrder,on_delete=models.CASCADE,related_name='cartorderitem')   
     variant = models.ForeignKey(Variant,on_delete=models.CASCADE,null=True) 
     quantity = models.CharField(max_length=20)
     price = models.CharField(max_length=50)
@@ -255,4 +294,39 @@ class OrderItem(models.Model):
         return '{} - {}'.format(self.order.id, self.order.tracking_no)
     
     
+class UserOrder(models.Model):
     
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Paid', 'Paid'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
+    ]
+    
+    
+    
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='userorder') 
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
+    total_price = models.IntegerField(default=0,null=True)
+    payment_mode = models.CharField(max_length=150,null=True)
+    status = models.CharField(max_length=150, choices=STATUS_CHOICES, default='Pending')
+    message = models.TextField(null=True)
+    tracking_no = models.CharField(max_length = 150, null=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    update_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return '{} - {}'.format(self.id, self.tracking_no)
+     
+    
+class UserOrderItem(models.Model):
+    order = models.ForeignKey(UserOrder,on_delete=models.CASCADE,related_name='userorderitem')   
+    variant = models.ForeignKey(Variant,on_delete=models.CASCADE,null=True) 
+    quantity = models.CharField(max_length=20)
+    price = models.CharField(max_length=50)
+    total = models.CharField(max_length=1000)
+    
+    def __str__(self):
+        return '{} - {}'.format(self.order.id, self.order.tracking_no)
+         
