@@ -207,6 +207,10 @@ class Cart(BaseModel):
     
     def save(self, *args, **kwargs):
         self.total_price = self.variant_qty * self.variant.selling_price
+        if not self.slug:
+            self.slug=slugify(self.variant)
+  
+        
         super(Cart, self).save(*args, **kwargs)    
 
   
@@ -216,44 +220,6 @@ class PromoCode(models.Model):
     discount_price = models.IntegerField()
     purchase_price = models.IntegerField()
     expaire_date = models.DateField()
-    
-
-# class Order(models.Model):
-    
-#     STATUS_CHOICES = [
-#         ('Pending', 'Pending'),
-#         ('Paid', 'Paid'),
-#         ('Shipped', 'Shipped'),
-#         ('Delivered', 'Delivered'),
-#         ('Cancelled', 'Cancelled'),
-#     ]
-    
-    
-    
-#     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='order') 
-#     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
-#     total_price = models.IntegerField(default=0,null=True)
-#     payment_mode = models.CharField(max_length=150,null=True)
-#     status = models.CharField(max_length=150, choices=STATUS_CHOICES, default='Pending')
-#     message = models.TextField(null=True)
-#     tracking_no = models.CharField(max_length = 150, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True,null=True)
-#     update_at = models.DateTimeField(auto_now=True)
-    
-#     def __str__(self):
-#         return '{} - {}'.format(self.id, self.tracking_no)
-     
-    
-# class OrderItem(models.Model):
-#     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name='orderitem')   
-#     variant = models.ForeignKey(Variant,on_delete=models.CASCADE,null=True) 
-#     quantity = models.CharField(max_length=20)
-#     price = models.CharField(max_length=50)
-#     total = models.CharField(max_length=1000)
-    
-#     def __str__(self):
-#         return '{} - {}'.format(self.order.id, self.order.tracking_no)
-    
     
     
     
@@ -308,7 +274,7 @@ class UserOrder(models.Model):
     
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True,related_name='userorder') 
     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True, blank=True)
-    total_price = models.IntegerField(default=0,null=True)
+    total_price = models.FloatField(default=0,null=True)
     payment_mode = models.CharField(max_length=150,null=True)
     status = models.CharField(max_length=150, choices=STATUS_CHOICES, default='Pending')
     message = models.TextField(null=True)
@@ -325,8 +291,9 @@ class UserOrderItem(models.Model):
     variant = models.ForeignKey(Variant,on_delete=models.CASCADE,null=True) 
     quantity = models.CharField(max_length=20)
     price = models.CharField(max_length=50)
-    total = models.CharField(max_length=1000)
+    total = models.CharField(max_length=250)
+    coupon=models.CharField(max_length=250,null=True)
     
-    def __str__(self):
-        return '{} - {}'.format(self.order.id, self.order.tracking_no)
+    # def __str__(self):
+    #     return '{} - {}'.format(self.order.id, self.order.tracking_no)
          

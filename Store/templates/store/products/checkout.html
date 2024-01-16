@@ -24,57 +24,51 @@
 }
 
 </style>
+<hr>
+<div class=" bg-white grid sm:px-10 lg:grid-cols-2 py-3 lg:px-20 xl:px-32">
+  <div class="space-y-3 rounded-lg border-2 px-2 py-4 sm:px-6">
+    {% for item in cart_items %}
+    <div class="flex flex-row items-center">
+      <img class="m-2 h-18 w-20 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
+      <div class="md:flex flex-row gap-8 ml-2">
+        <span class="font-semibold text-sm">{{ item.variant.color}}</span>
+        <input class="border text-center h-8 w-8" type="text" value="{{ item.variant_qty }}">
+        <p class="text-md font-bold"> ₹{{ item.variant.selling_price}}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-  <div class="grid sm:px-10 lg:grid-cols-2 py-3 lg:px-20 xl:px-32">
-    
-        <div class=""> 
-            <div class=" space-y-3 rounded-lg border-2  px-2 py-4 sm:px-6">
-              {% for item in cart_items %}
-              <div class="flex flex-col rounded-lg  sm:flex-row">
-                <img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="{{ item.variant.cover_image.url }}" alt="img" />
-                
-                {% comment %} <div class="flex w-full flex-col px-4 py-4"> {% endcomment %}
-                  <span class="font-semibold my-8 mx-6 text-center">{{ item.variant.color}}</span> 
-                  <input class="my-8 mx-6 border text-center h-8 w-8" type="text" value="{{ item.variant_qty }}">
-                  <p class="text-lg font-bold my-8 mx-6 text-center"> ₹{{ item.variant.selling_price}}</p>
-                
-                {% comment %} </div> {% endcomment %}
-              </div>
-              {% endfor %}      
-            </div>
-            <div class="border my-2 p-4">
+  <div class="border my-2 p-4">
+    <button type="button" id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()"> Add Address </button>
+    <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
 
-              <button type="button" id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()"> Add Address </button> 
-              <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
-      
-              <form action="{% url 'placeorder' %}" id="orderform" method="POST"> 
-                {% csrf_token %}
-              <div id="selectedAddress"></div>
-             
-              <input type="hidden" name="selectedAddressId" id="selectedAddressId" value=" {{user_address.first.id}}">
+    <form action="{% url 'placeorder' %}" id="orderform" method="POST">
+      {% csrf_token %}
 
-              </div>
-            </div>
-        
-            <!-- Delivery Address Section -->
-            <div class=" mt-10 p-4 rounded shadow mb-4">
-              <div class="flex justify-between items-center mb-3">
-                <div class="text-sm text-gray-500">
-                  <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
-                </div>
-              
-              </div>
-          
-            </div>
-            
-             
+      <!-- Delivery Address Section -->
+      <div class="mt-10 p-4 rounded shadow mb-4">
+        <div class="flex justify-between items-center mb-3">
+          <div class="text-sm text-gray-500">
+            <span class="bg-blue-500 text-white px-2 py-1 rounded">DELIVERY ADDRESS</span>
+          </div>
+        </div>
 
+        <div id="selectedAddress"></div>
+        <input type="hidden" name="selectedAddressId" id="selectedAddressId" value="{{ user_address.first.id }}">
+      </div>
+    </div>
+      </div>
 
                  
-                <div class="border  p-4 rounded-md">
+                <div class="border  bg-white p-4 rounded-md">
                   <div class="flex items-center justify-between pb-2">
                     <h1 class="text-2xl gap">Apply Coupons</h1>
                     <button type="button" onclick="openPromoModal()" class="border-2 bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded">Select Coupon</button>
+                    
+                   
+
+
                   </div>
                   <hr>
                   <div class="mt-6 border-b py-2">
@@ -85,6 +79,7 @@
                       <div class="flex items-center justify-between">
                           <p class="text-sm font-medium text-gray-900">Discount</p>
                           <p class="font-semibold text-gray-900"> ₹ {{ discount_price }}</p>
+                          <input type="hidden" name="discount_price" value={{ discount_price }}>
                       </div>
                       <div class="flex items-center justify-between">
                           <p class="text-sm font-medium text-gray-900">Shipping</p>
@@ -301,31 +296,30 @@
 
 
   
-  <div id="promoModal" class="modal">
+  <div id="promoModal" class="modal fixed hidden inset-0 flex items-center justify-center">
     <form action="{% url 'promocode_view' %}" method="post">
-      {% csrf_token %}
-      <input type="hidden" name="cart_total" value="{{ cart_total }}">
-      <div class="modal-content bg-white border rounded-lg shadow-md p-4 w-4/5 md:w-1/2 mx-auto mt-14">
-        <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
-  
-        <div class="mb-6">
-          <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
-          <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 focus:outline-none focus:shadow-outline-blue focus:border-blue-300">
-            {% for promocode in promocodes %}
-            <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
-            {% endfor %}
-          </select>
-        </div>
-  
-        <div class="text-center">
-          <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            Apply
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
+        {% csrf_token %}
+        <input type="hidden" name="cart_total" value="{{ cart_total }}">
+        <div class="modal-content bg-white border rounded-lg shadow-md p-8 ">
+            <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
 
+            <div class="mb-6">
+                <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
+                <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 focus:outline-none focus:shadow-outline-blue focus:border-blue-300">
+                    {% for promocode in promocodes %}
+                        <option value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Apply
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 
 
 
@@ -579,6 +573,48 @@ function confirmDelete(url) {
     payment_mode.value = mode
   }
 </script>
+
+
+
+<script>
+
+
+  let username = document.getElementById('username');
+  let password1 = document.getElementById('password1');
+  let email = document.getElementById('email');
+  
+  username.addEventListener('input', validateUsername);
+  password1.addEventListener('input', validatePassword1);
+  email.addEventListener('input', validateEmail);
+  
+  function validateUsername() {
+      if (username.value.length < 6) {
+          username.style.color = 'red';
+      } else {
+          username.style.color = 'green';
+      }
+  }
+  
+  function validatePassword1() {
+      if (password1.value.length < 8) {
+          password1.style.color = 'red';
+      } else {
+          password1.style.color = 'green';
+      }
+  }
+  
+  function validateEmail() {
+      // Use a regular expression for basic email validation
+      const emailRegex = /\S+@\S+\.\S+/;
+  
+      if (!emailRegex.test(email.value)) {
+          email.style.color = 'red';
+      } else {
+          email.style.color = 'green';
+      }
+  }
+</script>
+
 
 
 

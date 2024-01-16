@@ -17,7 +17,8 @@ urlpatterns = [
     path('cart_count_increment/<uuid:id>/', views.cart_count_increase, name="cart_count_increment"),
     path('cart_count_decrement/<uuid:id>/', views.cart_count_decrease, name="cart_count_decrement"),
     path("add_to_cart/<slug:slug>/", views.add_to_cart, name='add_to_cart'),
-    path("remove_from_cart/<uuid:id>/",views.remove_from_cart, name='remove_from_cart'),
+    path("add_to_cart_button/<slug:slug>/", views.add_to_cart_button, name='add_to_cart_button'),
+    path("remove_from_cart/<slug:slug>/", views.remove_from_cart, name='remove_from_cart'),
     
     path('checkout/', views.checkout, name='checkout'),
     path('add_address/', views.add_address, name='add_address'),
@@ -25,16 +26,16 @@ urlpatterns = [
     path('delete_address/<uuid:address_id>/', views.delete_address, name='delete_address'),
    
     
-    # path('checkout_count_increment/<uuid:id>/', views.checkout_increase, name="checkout_increase"),
-    # path('checkout_count_decrement/<uuid:id>/', views.checkout_count_decrease, name="checkout_count_decrease"),
-    
     
     path('place-order/', views.placeorder, name='placeorder'),
     path('my-orders/', order.index, name="myorders"),
+    path('view-order/<str:t_no>', order.orderview, name='orderview'),
+    path('delete_order/<str:pk>', order.delete_order, name="delete_order"),
+    path('download/<str:id>', order.UserInvoice.as_view(), name="download"),
+
     
     path('paypal/', include('paypal.standard.ipn.urls')),
-    # path('process-payment/', views.process_payment, name= 'process_payment'),
-    
+   
       
     path('promocode_view/', views.promocode_view, name='promocode_view'),
    

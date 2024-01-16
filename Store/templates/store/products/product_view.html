@@ -108,10 +108,12 @@
 
                             {% if variant.quantity > 0%}
 
-                              <a  href="{% url "add_to_cart" slug=variant.slug %}">
+                              {% comment %} <a  href="{% url "add_to_cart_button" slug=variant.slug %}">
                                 <button class="w-full bg-black dark:bg-gray-400 py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700 border border-black text-white">Add to cart</button>
 
-                              </a> 
+                              </a>  {% endcomment %}
+                              <button id="add-to-cart-button" data-slug="{{ variant.slug }}" class="w-full bg-black dark:bg-gray-400 py-2 px-4 rounded-full font-bold hover:bg-gray-600 dark:hover:bg-gray-700 border border-black text-white">Add to cart</button>
+
                               
                             {% else  %}
 
@@ -150,7 +152,7 @@
 
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  {% comment %} document.addEventListener("DOMContentLoaded", function () {
       const quantityInput = document.getElementById("quantity");
       const quantityMinusButton = document.getElementById("quantity-minus");
       const quantityPlusButton = document.getElementById("quantity-plus");
@@ -165,7 +167,7 @@
           quantityInput.value = parseInt(quantityInput.value) + 1;
       });
   });
-
+ {% endcomment %}
 
   
 
@@ -190,6 +192,31 @@
 });
 
 </script> 
+
+
+<script>
+  $(document).ready(function() {
+    $('#add-to-cart-button').click(function() {
+      var slug = $(this).data('slug');
+      addItemToCart(slug);
+    });
+
+    function addItemToCart(slug) {
+      $.ajax({
+        type: 'GET',  // Adjust this to 'POST' if needed
+        url: '/add_to_cart_button/' + slug + '/',
+        success: function(response) {
+          // Assuming the server sends a JSON response with a success message
+          console.log(response);
+          alert("Product added to cart successfully");
+        },
+        error: function(error) {
+          console.error("Error adding product to cart", error);
+        }
+      });
+    }
+  });
+</script>
 
 {% endblock %}
 
