@@ -100,7 +100,7 @@
       <h1 class="text-3xl lg:text-4xl tracking-tight font-semibold leading-8 lg:leading-9 text-gray-800 dark:text-white">Favourites</h1>
     </div>
     <div class="mt-4">
-      <p class="text-2xl tracking-tight leading-6 text-gray-600 dark:text-white">{{ wishlist_items|length }} item</p>
+      <p class="text-2xl tracking-tight leading-6 text-gray-600 dark:text-white"> {{user.wishlist.all|length}}item</p>
     </div>
     <div class="mt-10 lg:mt-12 grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-10 lg:gap-y-0">
       {% if wishlist_items %}
@@ -109,9 +109,9 @@
       
         <div class="relative">
    
-          <img class="w-60 h-60" src="{{ item.variants.first.cover_image.url }}" alt="image" />
+          <img class="w-60 h-60" src="{{ item.product.variants.first.cover_image.url }}" alt="image" />
       
-        <form method="post" action="{% url 'remove_from_wishlist' slug=item.slug %}">
+       <form method="post" action="{% url 'remove_from_wishlist' item.product.slug %}">
         {% csrf_token %}
         <button type="submit" aria-label="close" class="top-4 right-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 absolute p-1.5 bg-gray-800 dark:bg-white dark:text-gray-800 text-white hover:text-gray-400">
             <svg class="fil-current" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,13 +119,13 @@
               <path d="M1 1L13 13" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-        </form>
+        </form> 
 
 
         </div>
         <div class="mt-6 flex justify-between items-center">
           <div class="flex justify-center items-center">
-            <p class="tracking-tight text-2xl font-semibold leading-6 text-gray-800 dark:text-white">{{item.name}}</p>
+            <p class="tracking-tight text-2xl font-semibold leading-6 text-gray-800 dark:text-white">{{item.product.name}}</p>
           </div>
           <div class="flex justify-center items-center">
             <button aria-label="show menu" onclick="handleClick{{ forloop.counter }}(true)" class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-2.5 px-2 bg-gray-800 dark:bg-white dark:text-gray-800 text-white hover:text-gray-400 hover:bg-gray-200">
@@ -144,14 +144,14 @@
           </div> {% endcomment %}
           
           <div class="mt-6">
-            <p class="tracking-tight text-base font-medium leading-4 text-gray-800 dark:text-white">{{ item.variants.first.size}}</p>
+            <p class="tracking-tight text-base font-medium leading-4 text-gray-800 dark:text-white">{{ item.product.variants.first.size}}</p>
           </div>
           <div class="mr-4 flex justify-start">
             <p class="font-bold text-gray-700 dark:text-gray-300">Price :</p>
             <del class="text-red-500">
-              <p class="text-gray-600 dark:text-gray-300 overline ml-2">{{ item.variants.first.orginal_price }}</p>
+              <p class="text-gray-600 dark:text-gray-300 overline ml-2">{{ item.product.variants.first.orginal_price }}</p>
             </del>
-            <p class="text-gray-600 dark:text-gray-300 overline ml-2">{{ variant.selling_price }}</p>
+            <p class="text-gray-600 dark:text-gray-300 overline ml-2">{{ item.product.variant.selling_price }}</p>
           </div>
           <div class="mt-6">
             <p class="tracking-tight text-base font-medium leading-4 text-gray-800 dark:text-white"></p>

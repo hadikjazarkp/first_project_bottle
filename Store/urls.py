@@ -46,5 +46,11 @@ urlpatterns = [
     path('rreset_password/<str:encrypt_id>/',authview.UserResetPassword.as_view(),name='reset'),
     path('login/',authview.SignIn.as_view(), name="loginpage"),
     path('logout/', authview.Logoutpage.as_view(), name="logout"),
+    
+    
+    
+    path('profile_view/',views.profile_view, name="profile_view"),
+    path('profile_order/',views.profile_order, name="profile_order"),
+    path('profile_address/',views.profile_address, name="profile_address"),
 ]
 

@@ -15,16 +15,21 @@ import time
 from django.http import HttpResponse
 import random
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 
+
+from django.shortcuts import render
+from .models import Main_Images, Category, Product
 
 def home(request):
-    print(request.user.username)
     main_images = Main_Images.objects.first()
     category = Category.objects.all()
-    product = Product.objects.all()
-    # variant = Variant.objects.all()
-    
-    return render(request,"store/index.html", {'main_images': main_images, 'category': category, 'product':product})
+    all_products = Product.objects.all()
+
+    # Create a new variable containing the first 6 products, sorted by creation date
+    six_products = all_products.order_by('created_at')[:6]
+
+    return render(request, "store/index.html", {'main_images': main_images, 'category': category, 'product': all_products, 'six_products': six_products})
 
 
 
@@ -155,15 +160,11 @@ def cart_count_decrease(request, id):
     return redirect('cart_page')     
           
      
-@login_required          
+@login_required(login_url='loginpage')  # Specify the login URL
 def add_to_cart(request, slug ):
-    
-   
+    print(slug)
     variant = Variant.objects.get(slug=slug)
-    
     cart_iteam = Cart.objects.get_or_create(variant=variant, user=request.user)
-    
-    
     return redirect('cart_page')
 
 def add_to_cart_button(request, slug):
@@ -193,6 +194,7 @@ def add_to_cart_button(request, slug):
     
 @login_required
 def remove_from_cart(request, slug):
+    print(slug)
     try:
         item = get_object_or_404(Cart, slug=slug, user=request.user)
         print(item)
@@ -363,5 +365,20 @@ def placeorder(request):
         messages.success(request, "Your order has been placed successfully")  
 
     return redirect('home')
+
+
+def profile_view(request):
+    return render(request, 'store/auth/profile.html',)
     
-    
+
+def profile_order(request):
+    orders = UserOrder.objects.filter(user=request.user)
+    context = { 'order':orders }
+    return render(request, 'store/auth/order.html', context)    
+
+
+def profile_address(request):
+    user= request.user
+    user_address = Address.objects.filter(user=request.user)
+    first_address = Address.objects.filter(user=request.user).first()
+    return render(request, 'store/auth/address.html', {'user_profile': user, 'user_address':user_address,'first_address':first_address})

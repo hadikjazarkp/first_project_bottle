@@ -72,11 +72,7 @@
     </style>
     <title>eCommerce Homepage</title>
 
-   
-    {% comment %} <link rel="stylesheet" type="text/css" href="path/to/xzoom.css" /> {% endcomment %}
-    {% comment %} <script type="text/javascript" src="path/to/jquery.js"></script> {% endcomment %}
-    {% comment %} <script type="text/javascript" src="path/to/xzoom.min.js"></script> {% endcomment %}
-    
+
     
 </head>
 <body class="bg-gray-100 font-sans">
@@ -92,45 +88,62 @@
         <div class="container mx-auto flex justify-between items-center ">
             <!-- Logo -->
             <!-- Navigation -->
-            <nav class="hidden md:flex space-x-12">
-                <a href="{% url 'shop' %}" class="hover:text-gray-500">SHOP</a>
-                <a href="{% url 'categoryview' slug='combo-packs'%}" class="hover:text-gray-500">COMBO</a>
-               
-
-                {{user.wishlist_item.all}}
-
-  
-    {% comment %} <!-- Trigger button for Modal -->
-    <button onclick="openModal()" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">
-      Open Modal
-  </button>
-
-  <!-- Modal Container -->
-  <div id="modal" class="fixed top-0 left-0 w-full h-full flex items-center justify-center overflow-hidden hidden">
-      <!-- Modal Overlay -->
-      <div class="absolute w-full h-full bg-gray-900 opacity-50"></div>
-      <!-- Modal Content -->
-      <div class="bg-white p-8 rounded shadow-lg z-10 transform translate-x-full transition-transform ease-in-out duration-300">
-          <!-- Modal Close Button -->
-          <span onclick="closeModal()" class="absolute top-0 right-0 p-4 cursor-pointer text-gray-500">&times;</span>
-          <!-- Modal Content Goes Here -->
-          <h1 class="text-2xl font-bold mb-4">Sliding Modal Content</h1>
-          <p>This is a sliding modal created using Tailwind CSS.</p>
-      </div>
-  </div>
- {% endcomment %}
-
-
-
-
-                
-            </nav>
             <div class="flex">
                 <a href="{% url 'home' %}">
-               <img src="{% static 'logos.png' %}" alt="Logoghjk" class=" h-12" >     
-            </a>           
-            </div>
+               <img src="{% static 'logos.png' %}" alt="Logoghjk" class=" h-12" > 
+              </a> 
+              
+               <div class="relative inline-block text-left">
+                <div>
+                  <button type="button" class="inline-flex w-full justify-center gap-x-1.5  bg-white hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
+                    <img src="{% static 'usbotname.svg' %}" alt=""class="mt-4 ml-3 h-4">  
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 mt-4 h-5">
+                      <path fill-rule="evenodd" d="M9.47 15.28a.75.75 0 0 0 1.06 0l4.25-4.25a.75.75 0 1 0-1.06-1.06L10 13.69 6.28 9.97a.75.75 0 0 0-1.06 1.06l4.25 4.25ZM5.22 6.03l4.25 4.25a.75.75 0 0 0 1.06 0l4.25-4.25a.75.75 0 0 0-1.06-1.06L10 8.69 6.28 4.97a.75.75 0 0 0-1.06 1.06Z" clip-rule="evenodd" />
+                    </svg>
+                    
+                  </button>
+                </div>
+              
+                <!-- Dropdown menu -->
+                <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                  <div class="py-1" role="none">
+                    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                    <a href="{% url 'shop' %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Shop</a>
+                    <a href="{% url 'categoryview' slug='combo-packs'%}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Combo</a>
+                    <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">License</a>
+                    <form method="POST" action="#" role="none">
+                      <button type="submit" class="text-gray-700 block w-full px-4 py-2 text-left text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Sign out</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  var menuButton = document.getElementById('menu-button');
+                  var dropdownMenu = document.querySelector('.absolute');
+              
+                  menuButton.addEventListener('click', function () {
+                    var expanded = menuButton.getAttribute('aria-expanded') === 'true';
+                    menuButton.setAttribute('aria-expanded', !expanded);
+                    dropdownMenu.classList.toggle('hidden');
+                  });
+              
+                  // Close the dropdown when clicking outside of it
+                  document.addEventListener('click', function (event) {
+                    if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                      menuButton.setAttribute('aria-expanded', 'false');
+                      dropdownMenu.classList.add('hidden');
+                    }
+                  });
+                });
+              </script>
+              
+                
+  
+                      
 
+          </div>
 
 
 
@@ -138,31 +151,25 @@
             <div class="flex items-center space-x-4">
                
 
-              <form class="d-flex" method="get" action="{% url 'shop' %}" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" name="search">
-                <button class="hidden" type="submit">Search</button>
-              </form>
+              <form class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-md p-1" method="get" action="{% url 'shop' %}" role="search">
+                <input class="flex-1 border-none outline-none bg-transparent px-1 text-gray-700 dark:text-gray-300" type="search" placeholder="Search" name="search">
+                <button type="submit" class="ml-2 bg-gray-600 dark:bg-gray-700 text-white px-3 py-1 rounded-md">Search</button>
+            </form>
+            
 
                 <!-- Cart -->
                 <div class="ml-auto">
                   <div class="relative group">
                     <a href="{% url 'wishlist_view' %}" class="text-gray-600 hover:text-gray-900">
                         <img src="{% static 'heart-regular.svg' %}" alt="Profile Image" class=" h-7 w-7">
-                    {% comment %} <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                      <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                    </svg> {% endcomment %}
-                       <span class="absolute -top-2 -right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">{{user.wishlist.all|length}}</span>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">{{user.wishlist.all|length}}</span>
                     </a>
                   </div>
                   </div>
                 <div class="relative group">
                     <a href="{% url "cart_page" %}" class="text-gray-600 hover:text-gray-900">
                         <img src="{% static 'shopping-cart.png' %}" alt="Profile Image" class=" h-7 w-7">
-                        {% comment %} <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20a2 2 0 100-4 2 2 0 000 4zM21 4h-3.293a1 1 0 00-.768.36l-2.88 3.456H7.945l-2.695-7.89A1 1 0 004.483 1H2v2h.78l3.947 11.577-2.288 2.748a1 1 0 00.194 1.358 1 1 0 001.36-.193l3.072-3.686h4.94l1.612 4.713a1 1 0 001.234.624h4.09a1 1 0 00.973-.766l2-10a1 1 0 00-.242-.87 1 1 0 00-.728-.33z" />
-                        </svg> {% endcomment %}
-                        <span class="absolute -top-2 -right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">{{user.cart.all|length}}</span>
+                           <span class="absolute -top-2 -right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs">{{user.cart.all|length}}</span>
                     </a>
                 </div>
 
@@ -178,19 +185,19 @@
                             <img src="{% static 'profile-circle-icon-512x512-zxne30hp.png' %}" alt="default_image" class="rounded-full h-10 w-10" >
                         {% endif %}
                         
-                            <div class="dropdown-content">
-                            <a href="{% url "settingsview" %}">Profile</a>
+                          <div class="dropdown-content">
+                            <a href="{% url "profile_view" %}">Profile</a>
                             <a href="#">About</a>
                             <a href="{% url 'logout' %}">Logout</a>
-                        </div>
+                          </div>
                     </div>
                 {% else %}
-                   <div>
+                      <div>
                         <a class="nav-link" href="{% url 'loginpage' %}">Login</a>
-                   </div>
-                    <div>
+                      </div>
+                      <div>
                         <a class="nav-link" href="{% url 'register' %}">Register</a>
-                    </div>
+                      </div>
                 {% endif %}
 
             </div>
@@ -223,9 +230,119 @@
         {% endfor %}
   
           
+
+        <nav class="bg-gray-800">
+          <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div class="relative flex h-16 items-center justify-between">
+              <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                <!-- Mobile menu button-->
+                <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                  <span class="absolute -inset-0.5"></span>
+                  <span class="sr-only">Open main menu</span>
+                  <!--
+                    Icon when menu is closed.
+        
+                    Menu open: "hidden", Menu closed: "block"
+                  -->
+                  <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg>
+                  <!--
+                    Icon when menu is open.
+        
+                    Menu open: "block", Menu closed: "hidden"
+                  -->
+                  <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <div class="flex flex-shrink-0 items-center">
+                  <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+                </div>
+                <div class="hidden sm:ml-6 sm:block">
+                  <div class="flex space-x-4">
+                    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                    <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Team</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Projects</a>
+                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Calendar</a>
+                  </div>
+                </div>
+              </div>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                  <span class="absolute -inset-1.5"></span>
+                  <span class="sr-only">View notifications</span>
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                  </svg>
+                </button>
+        
+                <!-- Profile dropdown -->
+                <div class="relative ml-3">
+                  <div>
+                    <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                      <span class="absolute -inset-1.5"></span>
+                      <span class="sr-only">Open user menu</span>
+                      <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                    </button>
+                  </div>
+        
+                  <!--
+                    Dropdown menu, show/hide based on menu state.
+        
+                    Entering: "transition ease-out duration-100"
+                      From: "transform opacity-0 scale-95"
+                      To: "transform opacity-100 scale-100"
+                    Leaving: "transition ease-in duration-75"
+                      From: "transform opacity-100 scale-100"
+                      To: "transform opacity-0 scale-95"
+                  -->
+                  <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                    <!-- Active: "bg-gray-100", Not Active: "" -->
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Mobile menu, show/hide based on menu state. -->
+          <div class="sm:hidden" id="mobile-menu">
+            <div class="space-y-1 px-2 pb-3 pt-2">
+              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+              <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Dashboard</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Team</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Projects</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Calendar</a>
+            </div>
+          </div>
+        </nav>
     </header>
-
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var userMenuButton = document.getElementById('user-menu-button');
+      var userMenuDropdown = document.querySelector('.user-menu-dropdown');
+    
+      userMenuButton.addEventListener('click', function () {
+        var expanded = userMenuButton.getAttribute('aria-expanded') === 'true';
+        userMenuButton.setAttribute('aria-expanded', !expanded);
+        userMenuDropdown.classList.toggle('hidden');
+      });
+    
+      // Close the user menu dropdown when clicking outside of it
+      document.addEventListener('click', function (event) {
+        if (!userMenuButton.contains(event.target) && !userMenuDropdown.contains(event.target)) {
+          userMenuButton.setAttribute('aria-expanded', 'false');
+          userMenuDropdown.classList.add('hidden');
+        }
+      });
+    });
+  </script>
     {% block content %}
     {% endblock %}
     

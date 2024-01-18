@@ -192,30 +192,35 @@
 });
 
 </script> 
-
-
 <script>
-  $(document).ready(function() {
-    $('#add-to-cart-button').click(function() {
-      var slug = $(this).data('slug');
-      addItemToCart(slug);
-    });
+$(document).ready(function() {
+  $('#add-to-cart-button').click(function() {
+    var slug = $(this).data('slug');
+    addItemToCart(slug);
+  });
 
-    function addItemToCart(slug) {
-      $.ajax({
-        type: 'GET',  // Adjust this to 'POST' if needed
-        url: '/add_to_cart_button/' + slug + '/',
-        success: function(response) {
-          // Assuming the server sends a JSON response with a success message
-          console.log(response);
-          alert("Product added to cart successfully");
-        },
-        error: function(error) {
+  function addItemToCart(slug) {
+    $.ajax({
+      type: 'GET',  // Adjust this to 'POST' if needed
+      url: '/add_to_cart_button/' + slug + '/',
+      success: function(response) {
+        // Assuming the server sends a JSON response with a success message
+        console.log(response);
+        alert("Product added to cart successfully");
+        location.reload();
+      },
+      error: function(error) {
+        // Check if the error status is 403 (Forbidden) indicating unauthenticated access
+        if (error.status === 403) {
+          alert("Please login to add items to the cart");
+          window.location.href = '/loginpage/';  // Redirect to the login page
+        } else {
           console.error("Error adding product to cart", error);
         }
-      });
-    }
-  });
+      }
+    });
+  }
+});
 </script>
 
 {% endblock %}

@@ -39,7 +39,7 @@
     {% endfor %}
   </div>
 
-  <div class="border my-2 p-4">
+  <div class=" my-2 p-4">
     <button type="button" id="open-modal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="openModal()"> Add Address </button>
     <button id="openModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" type="button">Change</button>
 
@@ -129,11 +129,11 @@
             <div class="modal-body overflow-y-auto max-h-96  w-100">
               
 
-                                  <form action="{% url 'add_address' %}" method="post">
+                                  <form action="{% url 'add_address' %}" id="form1" method="post">
                                     {% csrf_token %}
                                     <p class="text-gray-400">Complete your order details.</p>
 
-
+                                    <div id="errorMessages" class="text-red-500 mt-2"></div>
                                     <div class="mt-4">
                                       <label for="address_type" class="block text-sm font-medium">Address Type</label>
                                       <select name="address_type" id="address_type"
@@ -145,7 +145,7 @@
 
                                     <label for="email" class="mt-4 mb-2 block text-sm font-medium">Address</label>
                                     <div class="relative">
-                                    <input type="text" id="email" name="address" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
+                                    <input type="text" required id="email" name="address"  class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Address" />
                                     <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
@@ -157,7 +157,7 @@
 
                                     <label for="email" class="mt-4 mb-2 block text-sm font-medium">First name</label>
                                     <div class="relative">
-                                    <input type="text" id="first_name" name="first_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="first_name" /> 
+                                    <input type="text" required id="first_name" name="first_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="first_name" /> 
                                     <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         
                                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -169,7 +169,7 @@
 
                                     <label for="email" class="mt-4 mb-2 block text-sm font-medium">last name</label>
                                     <div class="relative">
-                                    <input type="text" id="last_name" name="last_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="last_name" />
+                                    <input type="text" required id="last_name" name="last_name" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="last_name" />
                                     <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         
                                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -181,7 +181,7 @@
 
                                     <label for="email" class="mt-4 mb-2 block text-sm font-medium">city</label>
                                     <div class="relative">
-                                    <input type="text" id="city" name="city" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="city" />
+                                    <input type="text" required id="city" name="city" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="city" />
                                     <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
@@ -193,7 +193,7 @@
 
                                     <label for="email" class="mt-4 mb-2 block text-sm font-medium">state</label>
                                     <div class="relative">
-                                    <input type="text" id="state" name="state" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="state" />
+                                    <input type="text" required id="state" name="state" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="state" />
                                     <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
@@ -206,7 +206,7 @@
 
                                     <label for="number" class="mt-4 mb-2 block text-sm font-medium">number</label>
                                     <div class="relative">
-                                    <input type="text" id="number" name="phone_number" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="number" />
+                                    <input type="text" required id="number" name="phone_number" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="number" />
                                     <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         
                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 opacity-40">
@@ -216,9 +216,9 @@
                                     </div>
                                     </div>
 
-                                    <label for="email" class="mt-4 mb-2 block text-sm font-medium">pincode</label>
+                                    <label for="pin"  class="mt-4 mb-2 block text-sm font-medium">pincode</label>
                                     <div class="relative">
-                                    <input type="text"  name="pincode" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="pincode" /> 
+                                    <input type="text" required id="pincode" name="pincode" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="pincode" /> 
                                     <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                                         
                                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -234,7 +234,7 @@
                       
                       
                         </div>
-                        <input type="submit" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white" value="Save And Deliver Here">
+                        <input type="submit" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white" value="Save And Deliver Here" >
                       </form>
 
                     
@@ -296,6 +296,7 @@
 
 
   
+
   <div id="promoModal" class="modal fixed hidden inset-0 flex items-center justify-center">
     <form action="{% url 'promocode_view' %}" method="post">
         {% csrf_token %}
@@ -322,89 +323,75 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
 
 
 
 
-function select_promocode(code){
-  
-promocode = document.getElementById('promoCode')  
-promocode.value=code
+  function select_promocode(code){
+    
+  promocode = document.getElementById('promoCode')  
+  promocode.value=code
 
-}
+  }
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Get all radio buttons and their corresponding labels
-    const radioButtons = document.querySelectorAll('input[name="radioGroup"]');
-    const labels = document.querySelectorAll('label[for^="radioButton"]');
+  document.addEventListener("DOMContentLoaded", function() {
+      // Get all radio buttons and their corresponding labels
+      const radioButtons = document.querySelectorAll('input[name="radioGroup"]');
+      const labels = document.querySelectorAll('label[for^="radioButton"]');
 
-    // Add event listener to each radio button
-    radioButtons.forEach(function(radioButton, index) {
-      radioButton.addEventListener("change", function() {
-        // Hide all markers
-        labels.forEach(function(label) {
-          label.querySelector('.marker').style.opacity = '0';
+      // Add event listener to each radio button
+      radioButtons.forEach(function(radioButton, index) {
+        radioButton.addEventListener("change", function() {
+          // Hide all markers
+          labels.forEach(function(label) {
+            label.querySelector('.marker').style.opacity = '0';
+          });
+
+          // Show the marker for the selected radio button
+          labels[index].querySelector('.marker').style.opacity = '1';
         });
-
-        // Show the marker for the selected radio button
-        labels[index].querySelector('.marker').style.opacity = '1';
       });
     });
-  });
 
 
 
-  function openEditModal(addressId) {
-    // Fetch address details based on addressId and fill the form
-    // Assuming you have an endpoint to get address details by ID
-    // Use JavaScript or an AJAX request to fetch data and populate the form fields
+    function openEditModal(addressId) {
+      // Fetch address details based on addressId and fill the form
+      // Assuming you have an endpoint to get address details by ID
+      // Use JavaScript or an AJAX request to fetch data and populate the form fields
 
-    // Example using vanilla JavaScript and assuming you have an endpoint '/get_address_details/'
-    fetch(`/get_address_details/?address_id=${addressId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Fill the form fields with data received from the server
-            document.getElementById('first_name').value = data.first_name;
-            // Repeat similar lines for other form fields
-        });
+      // Example using vanilla JavaScript and assuming you have an endpoint '/get_address_details/'
+      fetch(`/get_address_details/?address_id=${addressId}`)
+          .then(response => response.json())
+          .then(data => {
+              // Fill the form fields with data received from the server
+              document.getElementById('first_name').value = data.first_name;
+              // Repeat similar lines for other form fields
+          });
 
-    // Show the modal
-    document.getElementById('edit-modal').classList.remove('hidden');
-}
-
-function closeEditModal() {
-    // Close the modal
-    document.getElementById('edit-modal').classList.add('hidden');
-}  
- 
-
-
-function confirmDelete(url) {
-  console.log("URL:", url);  // Check if the URL is correct
-  var userConfirmed = window.confirm("Are you sure you want to delete?");
-  
-  if (userConfirmed) {
-      console.log("User confirmed. Redirecting...");
-      window.location.href = url;
-  } else {
-      console.log("Delete canceled by user.");
+      // Show the modal
+      document.getElementById('edit-modal').classList.remove('hidden');
   }
-}
+
+  function closeEditModal() {
+      // Close the modal
+      document.getElementById('edit-modal').classList.add('hidden');
+  }  
+  
+
+
+  function confirmDelete(url) {
+    console.log("URL:", url);  // Check if the URL is correct
+    var userConfirmed = window.confirm("Are you sure you want to delete?");
+    
+    if (userConfirmed) {
+        console.log("User confirmed. Redirecting...");
+        window.location.href = url;
+    } else {
+        console.log("Delete canceled by user.");
+    }
+  }
 
 
 
@@ -428,8 +415,6 @@ function confirmDelete(url) {
     }
   });
 </script>
-
-
 <script>
   function openPromoModal() {
     document.getElementById('promoModal').classList.remove('hidden');
@@ -447,8 +432,6 @@ function confirmDelete(url) {
   } 
 
 </script>
-
-
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     var options = {
@@ -573,9 +556,6 @@ function confirmDelete(url) {
     payment_mode.value = mode
   }
 </script>
-
-
-
 <script>
 
 
@@ -614,7 +594,36 @@ function confirmDelete(url) {
       }
   }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+
+
+<script>
+  document.getElementById('form1').addEventListener('submit', function (event) {
+    //event.preventDefault()
+    console.log("naayi")
+    var numberValue = document.getElementById("number").value;
+    var pinValue = document.getElementById("pincode").value;
+
+    var numberRegex = /^\d{10}$/;
+    var pinRegex = /^\d{6}$/;
+
+    var errorMessages = [];
+
+    if (!numberRegex.test(numberValue)) {
+        errorMessages.push("Invalid number. Please enter a 10-digit number.");
+    }
+
+    if (!pinRegex.test(pinValue)) {
+        errorMessages.push("Invalid pin code. Please enter a 6-digit pin code.");
+    }
+
+    if (errorMessages.length > 0) {
+        event.preventDefault(); // Prevent form submission
+        document.getElementById('errorMessages').innerHTML = errorMessages.join('<br>');
+    }
+});
+</script>
 
 
 

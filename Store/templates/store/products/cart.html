@@ -28,7 +28,7 @@
             </div>
             <div class="flex items-center space-x-4">
               <p class="text-sm">{{ item.total_price }}</p>
-              <button id="remove-item" data-slug="{{ item.slug }}" class="font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</button>
+              <button id="remove-item" data-slug="{{ item.slug }}" class="remove-item font-semibold hover:text-red-500 text-gray-500 text-xs">Remove</button>
             
             </div>
           </div>
@@ -91,7 +91,7 @@
 
     <script>
       $(document).ready(function() {
-        $('#remove-item').click(function() {
+        $('.remove-item').click(function() {
           var slug = $(this).data('slug');
           removeItemFromCart(slug);
         });

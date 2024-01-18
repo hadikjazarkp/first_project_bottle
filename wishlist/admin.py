@@ -3,11 +3,11 @@ from .models import *
 from django.contrib.auth.models import Group
 
 # Register your models here.
-class WishlistAdmin(admin.ModelAdmin):
-    list_display = ('id',)
+# class WishlistAdmin(admin.ModelAdmin):
+#     list_display = ('id',)
     
 
-admin.site.register(WishlistModel, WishlistAdmin)    
+# admin.site.register(WishlistModel, WishlistAdmin)    
 
 class CustomGroupAdmin(admin.ModelAdmin):
     def has_module_permission(self, request):

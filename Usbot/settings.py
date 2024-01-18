@@ -177,8 +177,6 @@ DEFAULT_FROM_EMAIL='usbotbottle@gmail.com'
 
 
 
-
-
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_CONFIGS = {
