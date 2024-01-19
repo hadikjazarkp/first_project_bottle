@@ -1,0 +1,28 @@
+
+{% extends "layouts/main.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto">
+    <div class="flex flex-wrap">
+        <div class="w-full">
+            <h1 class="text-2xl font-bold mb-4">SHOP</h1>
+            <hr>
+            <div class="flex flex-wrap">
+                {% for item in category %}
+                <div class="w-full md:w-1/4 p-2">
+                <a href="{% url 'shopview' item.slug %}">
+                    <div class="bg-white shadow-lg rounded-lg p-4">
+                        <div class="category-images">
+                            <img src="{{ item.image.url }}" alt="Category image" class="w-full h-auto" />
+                        </div>
+                        <h4 class="text-center mt-4"> {{ item.name }} </h4>
+                    </div>
+                </a>    
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+  {% endblock content %}    
