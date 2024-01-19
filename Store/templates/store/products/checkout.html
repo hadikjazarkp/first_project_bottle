@@ -298,7 +298,7 @@
   
 
   <div id="promoModal" class="modal fixed hidden inset-0 flex items-center justify-center">
-    <form action="{% url 'promocode_view' %}" method="post">
+    <form id="myform" method="post">
         {% csrf_token %}
         <input type="hidden" name="cart_total" value="{{ cart_total }}">
         <div class="modal-content bg-white border rounded-lg shadow-md p-8 ">
@@ -416,20 +416,38 @@
   });
 </script>
 <script>
-  function openPromoModal() {
-    document.getElementById('promoModal').classList.remove('hidden');
-  }
-
   function closePromoModal() {
-    document.getElementById('promoModal').classList.add('hidden');
-  }
+    $('#promoModal').addClass('hidden');
+}
 
-  function applyPromoCode() {
-    // Add logic to handle applying the promo code
-    console.log('Promo code applied!');
-    // Close the modal
-    closePromoModal();
-  } 
+const promocodeForm = $('#myform');
+
+promocodeForm.submit((e) => {
+    e.preventDefault();
+
+    $.ajax({
+        type: 'POST',
+        url: '/promocode_view/',
+        data: promocodeForm.serialize(),
+        success: function(response) {
+            console.log(response);
+            alert('Promo code applied successfully');
+            location.reload();
+        },
+        error: function(error) {
+            if (error.status === 403) {
+                alert('Please login to add items to the cart');
+                window.location.href = '/loginpage/';
+            } else {
+                console.error('Error applying promo code', error);
+            }
+        },
+        complete: closePromoModal
+    });
+});
+
+// Close the modal
+closePromoModal();
 
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -600,8 +618,6 @@
 
 <script>
   document.getElementById('form1').addEventListener('submit', function (event) {
-    //event.preventDefault()
-    console.log("naayi")
     var numberValue = document.getElementById("number").value;
     var pinValue = document.getElementById("pincode").value;
 

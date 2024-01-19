@@ -291,7 +291,91 @@ def delete_address(request, address_id):
 
 
         
+# def promocode_view(request):
+#     if request.method == 'POST':
+#         promocode_value = request.POST.get('promocodevalue')
+#         cart_total_price = request.POST.get('cart_total')
+#         print(promocode_value,cart_total_price)
+#         try:
+#             discount = float(promocode_value)
+#         except ValueError:
+#             # Handle the case where promocode_value is not a valid float
+#             discount = 0  # Set a default value or handle the error accordingly
 
+#         request.session['discount'] = discount
+
+    # return redirect(request.META.get('HTTP_REFERER'))
+
+# <script>
+#   function openPromoModal() {
+#     document.getElementById('promoModal').classList.remove('hidden');
+#   }
+
+#   function closePromoModal() {
+#     $('#promoModal').addClass('hidden');
+# }
+
+# const promocodeForm = $('#myform');
+
+# promocodeForm.submit((e) => {
+#     e.preventDefault();
+
+#     const formData = promocodeForm.serialize();
+
+#     $.ajax({
+#         type: 'POST',
+#         url: '/promocode_view/',
+#         data: formData,
+#         success: function(response) {
+#             console.log(response);
+#             alert('Promo code applied successfully');
+#             location.reload();
+#         },
+#         error: function(error) {
+#             if (error.status === 403) {
+#                 alert('Please login to add items to the cart');
+#                 window.location.href = '/loginpage/';
+#             } else {
+#                 console.error('Error applying promo code', error);
+#             }
+#         },
+#         complete: function() {
+#             closePromoModal();
+#         }
+#     });
+# });
+
+# // Close the modal
+# closePromoModal();
+
+  
+  
+  
+  
+#  <div id="promoModal" class="modal fixed hidden inset-0 flex items-center justify-center">
+#     <form id="myform" method="post">
+#         {% csrf_token %}
+#         <input type="hidden" name="cart_total" value="{{ cart_total }}">
+#         <div class="modal-content bg-white border rounded-lg shadow-md p-8 ">
+#             <span onclick="closePromoModal()" class="close text-3xl font-semibold cursor-pointer">&times;</span>
+
+#             <div class="mb-6">
+#                 <label for="promoCode" class="block text-gray-700 text-sm font-bold mb-2">Select Promo Code:</label>
+#                 <select name="promocodevalue" id="promoCode" class="w-full border rounded py-2 px-3 focus:outline-none focus:shadow-outline-blue focus:border-blue-300">
+#                     {% for promocode in promocodes %}
+#                         <option id="idd" value="{{ promocode.discount_price }}">{{ promocode.code }} - {{ promocode.discount_price }}</option>
+#                     {% endfor %}
+#                 </select>
+#             </div>
+
+#             <div class="text-center">
+#                 <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+#                     Apply
+#                 </button>
+#             </div>
+#         </div>
+#     </form>
+# </div>
   
   
 def promocode_view(request):
@@ -308,13 +392,6 @@ def promocode_view(request):
         # discount = cart_total_price - promocode_value
     request.session['discount']= discount
 
-   
-    
-    
-    
-    
-
-    
     return redirect(request.META.get('HTTP_REFERER'))
 
 
